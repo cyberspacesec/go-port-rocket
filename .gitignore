@@ -16,6 +16,10 @@
 *.json
 *.xml
 *.csv
+*.html
+result.*
+
+# 排除website目录中的文件（这些不会被忽略）
 !website/**/*.html
 !website/**/*.css
 !website/**/*.js
@@ -24,8 +28,6 @@
 !website/**/*.jpeg
 !website/**/*.gif
 !website/**/*.svg
-*.html
-result.*
 
 # IDE 相关
 .idea/
