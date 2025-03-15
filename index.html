@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Rocket - 高性能端口扫描与网络服务分析工具</title>
+    <meta name="description" content="Port Rocket是一款高性能的端口扫描工具，支持TCP/UDP扫描、服务识别、操作系统检测、协议解析等功能，为网络安全评估和故障排查提供强大支持。">
+    <meta name="keywords" content="端口扫描,网络安全,服务识别,UDP扫描,协议解析,安全评估">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 网站更新提示 -->
+    <div style="background-color: #f6ffed; color: #52c41a; text-align: center; padding: 12px; font-weight: bold; border-bottom: 1px solid #b7eb8f;">
+        🚀 重要通知：网站部署流程升级完成！内容自动部署中，敬请关注最新功能和文档更新。
+    </div>
+
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <a href="index.html">
+                        <i class="fas fa-rocket"></i>
+                        <span>Port Rocket</span>
+                    </a>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html" class="active">首页</a>
+                    <a href="docs/installation.html">安装指南</a>
+                    <a href="docs/cli.html">CLI 文档</a>
+                    <a href="docs/http-api.html">HTTP API</a>
+                    <a href="docs/golang-api.html">Golang API</a>
+                    <a href="docs/mcp.html">MCP（AI集成）</a>
+                    <a href="https://github.com/cyberspacesec/go-port-rocket" target="_blank" class="github-link">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 开发状态提示 -->
+    <section class="dev-notice">
+        <div class="container">
+            <div class="dev-notice-content">
+                <div class="dev-notice-icon">
+                    <i class="fas fa-code-branch"></i>
+                </div>
+                <div class="dev-notice-text">
+                    <h2>🚧 开发进行中</h2>
+                    <p><strong>重要提示：</strong>Port Rocket 目前处于活跃开发阶段，尚未发布 v0.1 正式版本。部分功能可能不完整或存在问题，完整功能将在正式版本中提供。</p>
+                    <p>预计发布时间：2024年第二季度。如果您对此项目感兴趣，欢迎在 <a href="https://github.com/cyberspacesec/go-port-rocket" target="_blank">GitHub <i class="fab fa-github"></i></a> 上关注项目进展、贡献代码或提交问题反馈。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Port Rocket</h1>
+                <p class="hero-subtitle">全功能网络扫描与协议分析工具，为安全评估、网络监控和故障排查而设计</p>
+                <div class="hero-buttons">
+                    <a href="docs/installation.html" class="btn btn-primary">立即安装</a>
+                    <a href="https://github.com/cyberspacesec/go-port-rocket" class="btn btn-secondary" target="_blank">
+                        <i class="fab fa-github"></i> Star on GitHub
+                    </a>
+                </div>
+            </div>
+            <div class="terminal" style="width: 169%; max-width: 1040px; margin: 0 auto;">
+                <div class="terminal-header">
+                    <div class="terminal-button red"></div>
+                    <div class="terminal-button yellow"></div>
+                    <div class="terminal-button green"></div>
+                </div>
+                <div class="terminal-body" style="padding: 0.5rem; line-height: 1.8; max-height: none;">
+                    <div class="terminal-content" style="padding: 0; line-height: 1.65; display: block;">
+                        <div style="padding-left: 0.3rem; margin-left: 0; display: block; white-space: nowrap;"><span class="prompt">user@go-port-rocket:~$</span> <span class="command">go-port-rocket</span> <span class="param">scan -t scanme.nmap.org -p 21-25,80,443 -s tcp</span></div>
+                        <div class="terminal-output" style="padding-left: 0.3rem; margin-left: 0; line-height: 1.8; margin-top: 0; display: block;">
+                            <div style="margin:0; padding:0; line-height:1.8;" class="info-header">GO-PORT-ROCKET v1.6.2</div>
+                            <div style="margin:0; padding:0; line-height:1.8;">Scanning <span class="highlight">scanme.nmap.org (45.33.32.156)</span> - <span class="highlight">7</span> ports</div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="progress">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 100%</div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="scan-header">TCP PORTS:</div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="port-line"><span class="port-open">OPEN</span> <span class="port-num">22/tcp</span> <span class="service">ssh</span> <span class="version">OpenSSH 7.4p1</span></div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="port-line"><span class="port-open">OPEN</span> <span class="port-num">80/tcp</span> <span class="service">http</span> <span class="version">Apache 2.4.52</span></div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="port-line"><span class="port-open">OPEN</span> <span class="port-num">443/tcp</span> <span class="service">https</span> <span class="version">Apache (TLS)</span></div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="port-line"><span class="port-closed">CLOSED</span> <span class="port-num">21,23-25/tcp</span></div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="scan-header">UDP PORTS:</div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="port-line"><span class="port-filtered">FILTERED</span> <span class="port-num">53,123,161/udp</span></div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="os-header">OS DETECTION:</div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="os-line">OS: <span class="highlight">Linux 4.9 - 5.8</span> (94%)</div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="summary">Scan: <span class="highlight">3.78s</span> | Report: <a href="demo-report.html" class="filepath" style="text-decoration:none; cursor:pointer;" target="_blank">scan-report.html</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo区域：展示示例报告 -->
+    <section class="demo" id="demo">
+        <div class="container">
+            <h2 class="section-title">在线演示报告</h2>
+            <p class="section-description">查看Port Rocket生成的各种扫描报告示例，体验强大的功能和直观的可视化效果</p>
+            
+            <div class="demo-grid">
+                <div class="demo-card">
+                    <div class="demo-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>常规TCP扫描报告</h3>
+                    <p>查看针对Web服务器的完整TCP端口扫描，包含服务检测和系统识别，详细展示开放端口、服务信息和安全建议</p>
+                    <a href="demo-report.html" class="btn btn-primary" target="_blank">查看报告</a>
+                </div>
+                
+                <div class="demo-card">
+                    <div class="demo-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>UDP协议解析报告</h3>
+                    <p>体验高级UDP扫描报告，查看详细的协议解析，包括NTP时间同步数据、DNS查询分析和SNMP设备信息</p>
+                    <a href="demo-report-udp.html" class="btn btn-primary" target="_blank">查看报告</a>
+                </div>
+                
+                <div class="demo-card">
+                    <div class="demo-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>大型网络扫描报告</h3>
+                    <p>查看大范围端口扫描的数据可视化和统计分析效果，包括端口状态分布图、服务类型分析和安全评估</p>
+                    <a href="demo-report-large.html" class="btn btn-primary" target="_blank">查看报告</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">核心功能</h2>
+            <p class="section-description">Port Rocket提供全面而强大的扫描功能，满足各种网络安全评估和网络管理需求</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>高性能扫描</h3>
+                    <p>采用Go语言并发设计，支持大规模扫描，单机可达每秒数千端口，高效完成大型网络资产探测</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>全协议支持</h3>
+                    <p>同时支持TCP和UDP协议扫描，可指定端口范围或组合，支持CIDR格式的网段扫描</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>服务精确识别</h3>
+                    <p>内置指纹库精确识别数百种服务及其版本信息，无需依赖外部工具，支持自定义探测规则</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>操作系统检测</h3>
+                    <p>通过TCP/IP特征和TTL值分析，准确识别目标主机的操作系统类型和版本，支持Windows、Linux、macOS等多种平台</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-export"></i>
+                    </div>
+                    <h3>多种输出格式</h3>
+                    <p>支持文本、JSON、XML和HTML格式的扫描结果输出，便于集成到其他系统或进行后续分析</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <h3>交互式结果过滤</h3>
+                    <p>HTML报告支持实时过滤和搜索功能，快速定位关注的端口、服务或漏洞信息</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="advanced-features" id="advanced-features">
+        <div class="container">
+            <h2 class="section-title">高级功能</h2>
+            <p class="section-description">超越基本端口扫描，提供全方位的网络分析与安全评估工具</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h3>UDP协议深度探测</h3>
+                    <p>特别优化的UDP扫描技术，为DNS、NTP、SNMP等常见UDP服务提供专用探测包，大幅提高识别准确性</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>安全漏洞评估</h3>
+                    <p>基于服务版本信息，自动提供潜在安全问题分析和缓解建议，帮助用户快速识别风险点</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>内置指纹库</h3>
+                    <p>无需外部依赖，集成了来自Nmap的精简服务和操作系统指纹数据库，确保离线环境下也能准确识别</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3>HTTP API服务</h3>
+                    <p>提供RESTful API接口，支持远程调用和集成到其他系统，包含JWT认证和任务队列管理</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3>批量扫描任务</h3>
+                    <p>支持批量导入目标和定时任务，适合大型网络定期安全评估和资产管理</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>MCP支持</h3>
+                    <p>多行命令处理功能，专为人工智能助手设计的接口，支持复杂参数和JSON格式配置</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="protocol-parsing" id="protocol-parsing">
+        <div class="container">
+            <h2 class="section-title">协议数据解析</h2>
+            <p class="section-description">深入分析网络协议数据，提供直观的十六进制视图和字段解释</p>
+            
+            <div class="protocol-features">
+                <div class="protocol-description">
+                    <h3>支持的网络协议</h3>
+                    <p>Port Rocket提供先进的协议数据解析功能，目前支持以下协议的深度分析：</p>
+                    <ul class="protocol-list">
+                        <li><strong>网络时间协议 (NTP)</strong> - 解析版本、层级、轮询间隔和各种时间戳</li>
+                        <li><strong>域名系统 (DNS)</strong> - 分析查询标识、标志位、记录类型和域名信息</li>
+                        <li><strong>简单网络管理协议 (SNMP)</strong> - 解析版本、社区字符串和PDU结构</li>
+                        <li><strong>通用十六进制分析</strong> - 为所有其他协议提供基础的十六进制和ASCII视图</li>
+                    </ul>
+                    <p>每种协议都有专门的解析器，提供颜色标记的字段视图，鼠标悬停时显示详细的字段解释，帮助用户深入理解协议数据。</p>
+                </div>
+                
+                <div class="protocol-image">
+                    <img src="img/protocol-parser.png" alt="协议解析器示例" class="protocol-screenshot">
+                    <div class="protocol-caption">
+                        <p>协议解析器示例：NTP数据包分析，显示字段结构和值</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="protocol-applications">
+                <h3>实际应用场景</h3>
+                
+                <div class="application-cards">
+                    <div class="application-card">
+                        <div class="application-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <h4>网络故障排除</h4>
+                        <p>通过分析NTP响应确认时间同步问题，检查DNS回复中的记录类型，验证SNMP配置正确性</p>
+                    </div>
+                    
+                    <div class="application-card">
+                        <div class="application-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h4>安全分析</h4>
+                        <p>检测DNS投毒尝试，识别配置错误的SNMP社区字符串，发现异常的时钟数据同步源</p>
+                    </div>
+                    
+                    <div class="application-card">
+                        <div class="application-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h4>网络协议学习</h4>
+                        <p>作为网络工程师培训工具，直观展示协议结构和字段含义，辅助理解网络协议工作原理</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="installation">
+        <div class="container">
+            <h2 class="section-title">快速安装</h2>
+            <p class="section-description">多种安装方式，快速部署Port Rocket到您的环境</p>
+            <div class="installation-options">
+                <div class="install-option">
+                    <h3><i class="fab fa-apple"></i> macOS 安装</h3>
+                    <p>使用 Homebrew 包管理器一键安装</p>
+                    <div class="code-block">
+                        <pre><code># 添加 tap（首次使用）
+brew tap cyberspacesec/go-port-rocket
+
+# 安装工具
+brew install go-port-rocket</code></pre>
+                        <button class="copy-btn" data-clipboard-text="brew tap cyberspacesec/go-port-rocket
+brew install go-port-rocket">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="install-option">
+                    <h3><i class="fab fa-windows"></i> Windows 安装</h3>
+                    <p>使用 Scoop 或 Chocolatey 包管理器</p>
+                    <div class="code-block">
+                        <pre><code># 使用 Scoop 安装
+scoop bucket add cyberspacesec https://github.com/cyberspacesec/go-port-rocket
+scoop install go-port-rocket
+
+# 使用 Chocolatey 安装
+choco install go-port-rocket</code></pre>
+                        <button class="copy-btn" data-clipboard-text="scoop bucket add cyberspacesec https://github.com/cyberspacesec/go-port-rocket
+scoop install go-port-rocket">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="install-option">
+                    <h3><i class="fab fa-linux"></i> Linux 安装</h3>
+                    <p>多种Linux发行版安装选项</p>
+                    <div class="code-block">
+                        <pre><code># Debian/Ubuntu
+wget https://github.com/cyberspacesec/go-port-rocket/releases/download/v1.0.0/go-port-rocket_1.0.0_linux_amd64.deb
+sudo apt install ./go-port-rocket_1.0.0_linux_amd64.deb
+
+# RedHat/Fedora/CentOS
+sudo dnf install https://github.com/cyberspacesec/go-port-rocket/releases/download/v1.0.0/go-port-rocket_1.0.0_linux_amd64.rpm
+
+# Arch Linux
+yay -S go-port-rocket-bin</code></pre>
+                        <button class="copy-btn" data-clipboard-text="wget https://github.com/cyberspacesec/go-port-rocket/releases/download/v1.0.0/go-port-rocket_1.0.0_linux_amd64.deb
+sudo apt install ./go-port-rocket_1.0.0_linux_amd64.deb">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="install-option">
+                    <h3><i class="fab fa-docker"></i> Docker 安装</h3>
+                    <p>使用Docker容器一键部署</p>
+                    <div class="code-block">
+                        <pre><code># 拉取镜像
+docker pull cyberspacesec/go-port-rocket:latest
+
+# 运行（网络扫描需要特殊权限）
+docker run --rm --network host --cap-add=NET_RAW --cap-add=NET_ADMIN cyberspacesec/go-port-rocket</code></pre>
+                        <button class="copy-btn" data-clipboard-text="docker pull cyberspacesec/go-port-rocket:latest
+docker run --rm --network host --cap-add=NET_RAW --cap-add=NET_ADMIN cyberspacesec/go-port-rocket">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="install-option">
+                    <h3><i class="fab fa-golang"></i> 使用Go安装</h3>
+                    <p>通过Go官方包管理器安装最新版本</p>
+                    <div class="code-block">
+                        <pre><code>go install github.com/cyberspacesec/go-port-rocket@latest</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go install github.com/cyberspacesec/go-port-rocket@latest">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="install-option">
+                    <h3><i class="fas fa-download"></i> 二进制下载</h3>
+                    <p>从GitHub发布页下载预编译的二进制文件</p>
+                    <div class="github-download">
+                        <a href="https://github.com/cyberspacesec/go-port-rocket/releases" class="btn btn-primary" target="_blank">
+                            <i class="fas fa-download"></i> 下载最新版本
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="install-more">
+                    <a href="docs/installation.html" class="btn btn-secondary">
+                        <i class="fas fa-book"></i> 查看完整安装文档
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="usage-examples">
+        <div class="container">
+            <h2 class="section-title">使用示例</h2>
+            <p class="section-description">常见使用场景的命令行示例</p>
+            
+            <div class="examples-grid">
+                <div class="example-card">
+                    <h3>基本TCP端口扫描</h3>
+                    <div class="code-block">
+                        <pre><code>go-port-rocket scan -t 192.168.1.1 -p 80,443,8080 -s tcp</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 80,443,8080 -s tcp">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <p>扫描目标IP上的特定TCP端口（常见Web服务）</p>
+                </div>
+                
+                <div class="example-card">
+                    <h3>网段扫描</h3>
+                    <div class="code-block">
+                        <pre><code>go-port-rocket scan -t 192.168.1.0/24 -p 22 -s tcp --timeout 100ms</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.0/24 -p 22 -s tcp --timeout 100ms">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <p>扫描整个子网的SSH服务（端口22），使用更快的超时设置</p>
+                </div>
+                
+                <div class="example-card">
+                    <h3>服务识别</h3>
+                    <div class="code-block">
+                        <pre><code>go-port-rocket scan -t scanme.nmap.org -p 1-1000 -s tcp --service-detection</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t scanme.nmap.org -p 1-1000 -s tcp --service-detection">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <p>扫描目标的前1000个TCP端口并进行服务及版本识别</p>
+                </div>
+                
+                <div class="example-card">
+                    <h3>操作系统检测</h3>
+                    <div class="code-block">
+                        <pre><code>go-port-rocket scan -t 192.168.1.1 -p 22,80,443 -O</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 22,80,443 -O">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <p>对目标进行操作系统检测（-O参数）</p>
+                </div>
+                
+                <div class="example-card">
+                    <h3>UDP服务扫描</h3>
+                    <div class="code-block">
+                        <pre><code>go-port-rocket scan -t 192.168.1.1 -p 53,123,161 -s udp --service-detection</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 53,123,161 -s udp --service-detection">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <p>检测常见UDP服务（DNS、NTP、SNMP）并进行服务识别</p>
+                </div>
+                
+                <div class="example-card">
+                    <h3>完整扫描与报告</h3>
+                    <div class="code-block">
+                        <pre><code>go-port-rocket scan -t example.com -p 1-1000 --scan-both -O --service-detection --banner-grab -o report.html</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t example.com -p 1-1000 --scan-both -O --service-detection --banner-grab -o report.html">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <p>进行全面扫描（TCP+UDP、操作系统检测、服务识别、Banner抓取）并输出HTML报告</p>
+                </div>
+                
+                <div class="example-card">
+                    <h3>HTTP API服务</h3>
+                    <div class="code-block">
+                        <pre><code>go-port-rocket api --port 8080 --auth-key "your-secret-key"</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket api --port 8080 --auth-key &quot;your-secret-key&quot;">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <p>启动HTTP API服务，可通过RESTful接口远程调用扫描功能</p>
+                </div>
+                
+                <div class="example-card">
+                    <h3>并发控制</h3>
+                    <div class="code-block">
+                        <pre><code>go-port-rocket scan -t 192.168.1.1 -p 1-10000 --rate-limit 1000</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 1-10000 --rate-limit 1000">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <p>大范围扫描时通过--rate-limit参数控制并发速率，避免过度占用网络带宽</p>
+                </div>
+            </div>
+            
+            <div class="examples-more">
+                <a href="docs/cli.html" class="btn btn-primary">
+                    <i class="fas fa-terminal"></i> 查看更多命令行示例
+                </a>
+                <a href="docs/installation.html" class="btn btn-secondary">
+                    <i class="fas fa-book"></i> 查看安装指南
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="documentation">
+        <div class="container">
+            <h2 class="section-title">详细文档</h2>
+            <p class="section-description">全面了解Port Rocket的各项功能和使用方法</p>
+            <div class="doc-grid">
+                <a href="docs/cli.html" class="doc-card">
+                    <div class="doc-icon">
+                        <i class="fas fa-terminal"></i>
+                    </div>
+                    <h3>命令行文档</h3>
+                    <p>详细介绍命令行界面的所有参数和选项，包括扫描配置、输出格式设置和高级功能</p>
+                </a>
+                <a href="docs/http-api.html" class="doc-card">
+                    <div class="doc-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3>HTTP API 文档</h3>
+                    <p>全面解析API端点、请求参数、认证方式和响应格式，包含丰富的使用示例</p>
+                </a>
+                <a href="docs/golang-api.html" class="doc-card">
+                    <div class="doc-icon">
+                        <i class="fab fa-golang"></i>
+                    </div>
+                    <h3>Golang API 文档</h3>
+                    <p>学习如何将Port Rocket作为库集成到你的Go项目中，包含代码示例和最佳实践</p>
+                </a>
+                <a href="docs/mcp.html" class="doc-card">
+                    <div class="doc-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>MCP 文档</h3>
+                    <p>多行命令处理功能详解，适用于AI系统和批量任务，包含JSON格式规范和使用案例</p>
+                </a>
+                <a href="docs/UDP-SCANNING.md" class="doc-card">
+                    <div class="doc-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>UDP扫描指南</h3>
+                    <p>深入了解UDP扫描技术、支持的服务类型和协议特性，掌握高级UDP服务探测技巧</p>
+                </a>
+                <a href="docs/PROTOCOL-PARSING.md" class="doc-card">
+                    <div class="doc-icon">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h3>协议解析指南</h3>
+                    <p>详细说明协议数据解析功能，包括支持的协议、字段解释和使用方法</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison">
+        <div class="container">
+            <h2 class="section-title">性能对比</h2>
+            <p class="section-description">与其他知名端口扫描工具的功能和性能对比</p>
+            
+            <div class="comparison-table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>特性</th>
+                            <th>Port Rocket</th>
+                            <th>Nmap</th>
+                            <th>Masscan</th>
+                            <th>RustScan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>TCP扫描</td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                        </tr>
+                        <tr>
+                            <td>UDP扫描</td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                        </tr>
+                        <tr>
+                            <td>服务识别</td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                            <td><i class="fas fa-check text-success"></i>*</td>
+                        </tr>
+                        <tr>
+                            <td>操作系统检测</td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                        </tr>
+                        <tr>
+                            <td>协议解析器</td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                        </tr>
+                        <tr>
+                            <td>内置指纹库</td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                        </tr>
+                        <tr>
+                            <td>HTML报告</td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                            <td><i class="fas fa-check text-success"></i>*</td>
+                        </tr>
+                        <tr>
+                            <td>扫描速度</td>
+                            <td>快</td>
+                            <td>中</td>
+                            <td>极快</td>
+                            <td>极快</td>
+                        </tr>
+                        <tr>
+                            <td>HTTP API</td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                        </tr>
+                        <tr>
+                            <td>AI/MCP支持</td>
+                            <td><i class="fas fa-check text-success"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                            <td><i class="fas fa-times text-danger"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="comparison-note">* 通过调用Nmap完成，不是原生功能</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-rocket"></i>
+                    <span>Port Rocket</span>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>文档</h4>
+                        <a href="docs/cli.html">CLI 文档</a>
+                        <a href="docs/http-api.html">HTTP API</a>
+                        <a href="docs/golang-api.html">Golang API</a>
+                        <a href="docs/mcp.html">MCP（AI集成）</a>
+                        <a href="docs/UDP-SCANNING.md">UDP扫描指南</a>
+                        <a href="docs/PROTOCOL-PARSING.md">协议解析指南</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>资源</h4>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket" target="_blank">GitHub</a>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket/issues" target="_blank">问题反馈</a>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket/blob/main/LICENSE" target="_blank">许可证</a>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket/releases" target="_blank">下载</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>使用案例</h4>
+                        <a href="#demo">演示报告</a>
+                        <a href="#protocol-parsing">协议解析</a>
+                        <a href="#advanced-features">高级功能</a>
+                        <a href="#usage-examples">使用示例</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023-2024 Port Rocket. 采用 MIT 许可证开源。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+    <script>
+        new ClipboardJS('.copy-btn');
+        
+        // 添加平滑滚动效果
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+<script src="js/code-copy.js"></script>
+</body>
+</html> 

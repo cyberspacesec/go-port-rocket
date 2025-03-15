@@ -1,0 +1,411 @@
+/* 文档页面样式 */
+.docs-container {
+    display: flex;
+    margin-top: 70px; /* Matches navbar height */
+    min-height: calc(100vh - 70px - 300px); /* 减去导航栏和页脚高度 */
+}
+
+/* 侧边栏样式 */
+.docs-sidebar {
+    width: 280px;
+    background-color: white;
+    border-right: 1px solid #e2e8f0;
+    position: sticky;
+    top: 70px; /* Matches navbar height */
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+    padding: 2rem 0;
+}
+
+.sidebar-header {
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.sidebar-header h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: 1.5rem 0;
+}
+
+.sidebar-nav li {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-nav a {
+    display: block;
+    padding: 0.5rem 1.5rem;
+    color: var(--gray-color);
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.sidebar-nav a:hover, 
+.sidebar-nav a.active {
+    color: var(--primary-color);
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+/* 主内容区域样式 */
+.docs-content {
+    flex: 1;
+    padding: 2rem;
+    max-width: 100%;
+}
+
+.docs-header {
+    margin-bottom: 3rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 1.5rem;
+}
+
+.docs-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--dark-color);
+}
+
+.docs-header p {
+    font-size: 1.25rem;
+    color: var(--gray-color);
+}
+
+.docs-section {
+    margin-bottom: 4rem;
+}
+
+.docs-section h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--dark-color);
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.5rem;
+}
+
+.docs-section h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem;
+    color: var(--dark-color);
+}
+
+.docs-section p {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+}
+
+.docs-section ul, 
+.docs-section ol {
+    margin: 1rem 0 1.5rem 1.5rem;
+    line-height: 1.7;
+}
+
+.docs-section li {
+    margin-bottom: 0.5rem;
+}
+
+/* 代码块和命令样式 */
+.code-block {
+    background-color: #1e1e1e;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin: 1rem 0 2rem;
+    position: relative;
+}
+
+.code-block pre {
+    margin: 0;
+    color: #f8f8f2;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    overflow-x: auto;
+}
+
+code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    background-color: #f1f5f9;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: var(--dark-color);
+}
+
+.copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 4px;
+    color: #f8f8f2;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.copy-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* 表格样式 */
+.table-container {
+    overflow-x: auto;
+    margin: 1.5rem 0 2.5rem;
+}
+
+.options-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.options-table th,
+.options-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.options-table th {
+    background-color: #f8fafc;
+    font-weight: 600;
+}
+
+.options-table tr:last-child td {
+    border-bottom: none;
+}
+
+.options-table tr:hover td {
+    background-color: #f1f5f9;
+}
+
+/* 命令列表样式 */
+.command-list {
+    list-style: none;
+    margin: 1.5rem 0 2rem !important;
+    padding: 0;
+}
+
+.command-list li {
+    display: flex;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.command-list code {
+    background-color: #f1f5f9;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    margin-right: 1rem;
+    min-width: 120px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.command-list span {
+    color: var(--gray-color);
+}
+
+/* 响应式设计 */
+@media (max-width: 992px) {
+    .docs-container {
+        flex-direction: column;
+    }
+    
+    .docs-sidebar {
+        width: 100%;
+        position: relative;
+        top: 0;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 1rem 0;
+    }
+    
+    .docs-content {
+        padding: 1.5rem;
+    }
+    
+    .docs-header h1 {
+        font-size: 2rem;
+    }
+} 
+
+/* 快速安装样式 */
+.alert {
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-start;
+}
+
+.alert-info {
+    background-color: rgba(37, 99, 235, 0.1);
+    border-left: 4px solid var(--primary-color);
+}
+
+.alert i {
+    margin-right: 1rem;
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+.alert p {
+    margin: 0;
+}
+
+.alert a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.install-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.install-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--box-shadow);
+}
+
+.install-card h3 {
+    display: flex;
+    align-items: center;
+    margin-top: 0 !important;
+    font-size: 1.1rem;
+}
+
+.install-card h3 i {
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+}
+
+.install-card .code-block {
+    margin-bottom: 1rem;
+}
+
+/* 快速示例样式 */
+.quick-examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.quick-example {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--box-shadow);
+}
+
+.quick-example h3 {
+    margin-top: 0 !important;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+/* 命令速查样式 */
+.command-table-wrapper {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+.command-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.command-table th,
+.command-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.command-table th {
+    background-color: #f8fafc;
+    font-weight: 600;
+}
+
+.command-table tr:last-child td {
+    border-bottom: none;
+}
+
+.command-shortcuts {
+    margin-top: 2rem;
+}
+
+.shortcuts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.shortcut-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--box-shadow);
+}
+
+.shortcut-card h4 {
+    margin-top: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.shortcut-card ul {
+    margin: 0 !important;
+    padding-left: 1rem;
+}
+
+.shortcut-card li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* 笔记样式 */
+.docs-note {
+    background-color: #fff8c5;
+    border-left: 4px solid #f59f00;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.docs-note p {
+    margin: 0;
+}
+
+/* 响应式设计调整 */
+@media (max-width: 992px) {
+    .install-grid, 
+    .quick-examples,
+    .shortcuts-grid {
+        grid-template-columns: 1fr;
+    }
+} 

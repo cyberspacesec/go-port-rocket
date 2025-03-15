@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安装指南 - Port Rocket</title>
+    <meta name="description" content="了解如何在各种平台上安装Port Rocket，包括Windows、Linux、macOS等。">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" />
+    <style>
+        /* 安装页面特定样式 */
+        .os-tabs {
+            display: flex;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+            background-color: #ffffff !important;
+            color: var(--dark-color) !important;
+        }
+        
+        .os-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .os-tab {
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-right: 0.5rem;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            background-color: transparent !important;
+            color: inherit !important;
+        }
+        
+        .os-tab.active {
+            border-bottom: 3px solid var(--primary-color);
+            color: var(--primary-color) !important;
+        }
+        
+        .os-tab:hover:not(.active) {
+            border-bottom-color: #cbd5e1;
+        }
+        
+        .os-content {
+            display: none;
+            padding: 1.5rem;
+            background-color: white !important;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            color: var(--dark-color) !important;
+        }
+        
+        .os-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        /* 重写所有黑色背景 */
+        body, section, .documentation, .container, .doc-content, 
+        .os-tabs, .os-tab, .os-content, .install-method {
+            background-color: #ffffff !important;
+            color: var(--dark-color) !important;
+        }
+        
+        /* 只保留代码块的黑色背景 */
+        pre[class*="language-"], pre[class*="language-"] code, 
+        .code-block pre, .code-block code {
+            background-color: #282c34 !important;
+            color: #abb2bf !important;
+        }
+        
+        /* 完全移除语言标签BASH */
+        section > .language-label, 
+        .doc-content > .language-label, 
+        .os-content > .language-label,
+        body > .language-label {
+            display: none !important;
+        }
+        
+        /* 确保代码块内部的语言标签正常显示 */
+        .code-block .language-label {
+            display: block !important;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.5) !important;
+            color: white !important;
+            padding: 2px 8px;
+            font-size: 12px;
+            border-bottom-right-radius: 6px;
+            z-index: 5;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .install-method {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .install-method:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-color: #cbd5e1;
+        }
+        
+        .install-method h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .install-method p {
+            margin-bottom: 1rem;
+            color: var(--gray-color);
+        }
+        
+        /* 操作系统检测横幅 */
+        .os-detection-banner {
+            display: none;
+            background-color: #f8fafc;
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 6px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .os-detection-message {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .os-detection-message i {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+        
+        .os-detection-action {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .os-detection-action:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* 代码块相关样式 */
+        .code-block {
+            position: relative;
+            margin: 1.5em 0;
+            border-radius: 6px;
+            overflow: visible;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* 高亮关键字和注释 */
+        .token.keyword {
+            color: #c792ea;
+            font-weight: 500;
+        }
+        
+        .token.comment {
+            color: #7b8ba3;
+        }
+        
+        /* 复制按钮样式 */
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.2);
+            color: #eee;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.7;
+            z-index: 10;
+        }
+        
+        .copy-btn:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+            opacity: 1;
+        }
+        
+        /* 命令关键字高亮 */
+        .token.command {
+            color: #5ab3ff;
+            font-weight: bold;
+        }
+        
+        /* 参数高亮 */
+        .token.parameter {
+            color: #98c379;
+        }
+        
+        /* 命令文本高亮 */
+        .highlight-bash {
+            background-color: transparent;
+            color: inherit;
+            border-radius: 6px;
+            font-family: monospace;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <a href="../index.html">
+                        <i class="fas fa-rocket"></i>
+                        <span>Port Rocket</span>
+                    </a>
+                </div>
+                <div class="nav-links">
+                    <a href="../index.html">首页</a>
+                    <a href="installation.html" class="active">安装指南</a>
+                    <a href="cli.html">CLI 文档</a>
+                    <a href="http-api.html">HTTP API</a>
+                    <a href="golang-api.html">Golang API</a>
+                    <a href="mcp.html">MCP（AI集成）</a>
+                    <a href="https://github.com/cyberspacesec/go-port-rocket" target="_blank" class="github-link">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="documentation">
+        <div class="container">
+            <div class="doc-content" style="margin-left: 0; width: 100%; background-color: #ffffff;">
+                
+                <!-- 操作系统检测横幅 -->
+                <div id="os-detection-banner" class="os-detection-banner" style="display: none;">
+                    <div class="os-detection-message">
+                        <i class="fas fa-info-circle"></i>
+                        <span>检测到您正在使用 <strong id="detected-os">Windows</strong> 系统，是否查看对应的安装指南？</span>
+                    </div>
+                    <div id="os-detection-action" class="os-detection-action">
+                        查看安装指南
+                    </div>
+                </div>
+                
+                <!-- 操作系统选项卡 -->
+                <div class="os-tabs" style="background-color: #ffffff !important; color: var(--dark-color) !important;">
+                    <div class="os-tab active" data-os="windows" style="background-color: transparent !important;">
+                        <i class="fab fa-windows"></i> Windows
+                    </div>
+                    <div class="os-tab" data-os="macos" style="background-color: transparent !important;">
+                        <i class="fab fa-apple"></i> macOS
+                    </div>
+                    <div class="os-tab" data-os="linux" style="background-color: transparent !important;">
+                        <i class="fab fa-linux"></i> Linux
+                    </div>
+                    <div class="os-tab" data-os="docker" style="background-color: transparent !important;">
+                        <i class="fab fa-docker"></i> Docker
+                    </div>
+                    <div class="os-tab" data-os="from-source" style="background-color: transparent !important;">
+                        <i class="fas fa-code"></i> 从源码安装
+                    </div>
+                    <div class="os-tab" data-os="golang" style="background-color: transparent !important;">
+                        <i class="fab fa-golang"></i> Golang
+                    </div>
+                </div>
+                
+                <!-- Windows 安装指南 -->
+                <div id="windows" class="os-content active" style="background-color: #ffffff !important; color: var(--dark-color) !important;">
+                    <h3>Windows 安装指南</h3>
+                    <p>Port Rocket 可以通过多种方式在 Windows 上安装。选择最适合您需求的方法。</p>
+                    
+                    <div class="install-method">
+                        <h3><i class="fab fa-windows"></i> 使用 MSI 安装程序</h3>
+                        <p>对于大多数 Windows 用户，推荐使用 MSI 安装程序进行安装。</p>
+                        <ol>
+                            <li>访问 <a href="https://github.com/cyberspacesec/go-port-rocket/releases" target="_blank">GitHub Releases</a> 页面</li>
+                            <li>下载最新的 <code>go-port-rocket-windows-amd64.msi</code> 文件</li>
+                            <li>双击安装程序并按照向导进行安装</li>
+                            <li>安装完成后，Port Rocket 将自动添加到系统 PATH 中</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="install-method">
+                        <h3><i class="fas fa-terminal"></i> 使用 Scoop</h3>
+                        <p>Scoop 是 Windows 的命令行安装程序，提供了简单的方式安装应用程序。</p>
+                        <pre><code class="language-powershell"># 安装 Scoop（如果尚未安装）
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+
+# 安装 Port Rocket
+scoop bucket add extras
+scoop install go-port-rocket</code></pre>
+                    </div>
+                    
+                    <div class="install-method">
+                        <h3><i class="fas fa-box"></i> 使用 Chocolatey</h3>
+                        <p>Chocolatey 是另一个流行的 Windows 包管理器。</p>
+                        <pre><code class="language-powershell"># 安装 Chocolatey（如果尚未安装）
+Set-ExecutionPolicy Bypass -Scope Process -Force
+[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+# 安装 Port Rocket
+choco install go-port-rocket</code></pre>
+                    </div>
+                    
+                    <div class="install-method">
+                        <h3><i class="fas fa-file-archive"></i> 便携版（免安装）</h3>
+                        <p>如果您希望不进行安装而直接使用，可以下载便携版本。</p>
+                        <ol>
+                            <li>访问 <a href="https://github.com/cyberspacesec/go-port-rocket/releases" target="_blank">GitHub Releases</a> 页面</li>
+                            <li>下载最新的 <code>go-port-rocket-windows-amd64.zip</code> 文件</li>
+                            <li>解压缩到您选择的目录</li>
+                            <li>您可以直接运行 <code>go-port-rocket.exe</code>，或者将其目录添加到 PATH 环境变量中以便全局访问</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <!-- macOS 安装指南 -->
+                <div id="macos" class="os-content">
+                    <h3>macOS 安装指南</h3>
+                    <p>在 macOS 上，您可以使用 Homebrew 包管理器轻松安装 Port Rocket，也可以使用其他方法。</p>
+                    
+                    <div class="install-method">
+                        <h3><i class="fab fa-apple"></i> 使用 Homebrew</h3>
+                        <p>使用 Homebrew 是在 macOS 上安装 Port Rocket 的最简单方法。</p>
+                        <pre><code class="language-bash"># 安装 Homebrew（如果尚未安装）
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# 安装 Port Rocket
+brew tap cyberspacesec/go-port-rocket
+brew install go-port-rocket</code></pre>
+                    </div>
+                    
+                    <div class="install-method">
+                        <h3><i class="fas fa-file-archive"></i> 使用预编译二进制文件</h3>
+                        <p>您也可以下载预编译的二进制文件并手动安装。</p>
+                        <pre><code class="language-bash"># 下载最新版本
+curl -L https://github.com/cyberspacesec/go-port-rocket/releases/latest/download/go-port-rocket-darwin-amd64.tar.gz -o go-port-rocket.tar.gz
+
+# 解压缩
+tar -xzf go-port-rocket.tar.gz
+
+# 移动到 /usr/local/bin 目录（需要管理员权限）
+sudo mv go-port-rocket /usr/local/bin/
+
+# 验证安装
+go-port-rocket --version</code></pre>
+                    </div>
+                    
+                    <div class="install-method">
+                        <h3><i class="fas fa-file-download"></i> 使用 MacPorts</h3>
+                        <p>如果您使用 MacPorts 而不是 Homebrew，可以通过以下方式安装：</p>
+                        <pre><code class="language-bash"># 安装 Port Rocket
+sudo port install go-port-rocket</code></pre>
+                    </div>
+                </div>
+                
+                <!-- Linux 安装指南 -->
+                <div id="linux" class="os-content">
+                    <h3>Linux 安装指南</h3>
+                    <p>Linux 有多种发行版，您可以根据自己使用的发行版选择适当的安装方法。</p>
+                    
+                    <div class="install-method">
+                        <h3><i class="fab fa-ubuntu"></i> Ubuntu/Debian</h3>
+                        <p>在 Ubuntu、Debian 及其衍生发行版上，您可以使用 DEB 包安装。</p>
+                        <pre><code class="language-bash"># 下载 DEB 包
+wget https://github.com/cyberspacesec/go-port-rocket/releases/latest/download/go-port-rocket_amd64.deb
+
+# 安装
+sudo dpkg -i go-port-rocket_amd64.deb
+
+# 如果有依赖问题，运行
+sudo apt-get -f install</code></pre>
+                        <p>或者使用 APT 仓库（推荐）：</p>
+                        <pre><code class="language-bash"># 添加 GPG 密钥
+wget -qO- https://repo.cyberspacesec.io/gpg | sudo apt-key add -
+
+# 添加仓库
+echo "deb https://repo.cyberspacesec.io/apt stable main" | sudo tee /etc/apt/sources.list.d/go-port-rocket.list
+
+# 更新仓库并安装
+sudo apt update
+sudo apt install go-port-rocket</code></pre>
+                    </div>
+                    
+                    <div class="install-method">
+                        <h3><i class="fab fa-fedora"></i> Fedora/RHEL/CentOS</h3>
+                        <p>在 Fedora、RHEL、CentOS 及其衍生发行版上，您可以使用 RPM 包安装。</p>
+                        <pre><code class="language-bash"># 下载 RPM 包
+wget https://github.com/cyberspacesec/go-port-rocket/releases/latest/download/go-port-rocket_amd64.rpm
+
+# 安装
+sudo rpm -i go-port-rocket_amd64.rpm</code></pre>
+                        <p>或者使用 YUM/DNF 仓库（推荐）：</p>
+                        <pre><code class="language-bash"># 添加仓库
+sudo tee /etc/yum.repos.d/go-port-rocket.repo << EOF
+[go-port-rocket]
+name=Port Rocket Repository
+baseurl=https://repo.cyberspacesec.io/yum/
+enabled=1
+gpgcheck=1
+gpgkey=https://repo.cyberspacesec.io/gpg
+EOF
+
+# 安装
+sudo dnf install go-port-rocket
+# 或者在旧版系统上
+# sudo yum install go-port-rocket</code></pre>
+                    </div>
+                    
+                    <div class="install-method">
+                        <h3><i class="fab fa-linux"></i> Arch Linux</h3>
+                        <p>在 Arch Linux 上，您可以从 AUR 安装。</p>
+                        <pre><code class="language-bash"># 使用 yay（如果已安装）
+yay -S go-port-rocket
+
+# 或者手动从 AUR 安装
+git clone https://aur.archlinux.org/go-port-rocket.git
+cd go-port-rocket
+makepkg -si</code></pre>
+                    </div>
+                    
+                    <div class="install-method">
+                        <h3><i class="fas fa-cube"></i> Snap 包</h3>
+                        <p>如果您的发行版支持 Snap，可以使用以下命令安装：</p>
+                        <pre><code class="language-bash"># 安装 Port Rocket
+sudo snap install go-port-rocket</code></pre>
+                    </div>
+                    
+                    <div class="install-method">
+                        <h3><i class="fas fa-file-archive"></i> 通用 Linux 二进制文件</h3>
+                        <p>对于其他 Linux 发行版，您可以下载预编译的二进制文件：</p>
+                        <pre><code class="language-bash"># 下载最新版本
+wget https://github.com/cyberspacesec/go-port-rocket/releases/latest/download/go-port-rocket-linux-amd64.tar.gz
+
+# 解压缩
+tar -xzf go-port-rocket-linux-amd64.tar.gz
+
+# 移动到 /usr/local/bin 目录
+sudo mv go-port-rocket /usr/local/bin/
+
+# 添加执行权限
+sudo chmod +x /usr/local/bin/go-port-rocket
+
+# 验证安装
+go-port-rocket --version</code></pre>
+                    </div>
+                </div>
+                
+                <!-- Docker 安装指南 -->
+                <div id="docker" class="os-content">
+                    <h3>Docker 安装指南</h3>
+                    <p>如果您熟悉 Docker，可以使用容器化版本的 Port Rocket。这种方法适用于任何支持 Docker 的平台。</p>
+                    
+                    <div class="install-method">
+                        <h3><i class="fab fa-docker"></i> 拉取并运行 Docker 镜像</h3>
+                        <p>使用以下命令拉取最新的 Docker 镜像：</p>
+                        <pre><code class="language-bash"># 拉取镜像
+docker pull cyberspacesec/go-port-rocket:latest
+
+# 运行（网络扫描需要特殊权限）
+docker run --rm --network host --cap-add=NET_RAW --cap-add=NET_ADMIN cyberspacesec/go-port-rocket
+
+# 执行扫描示例
+docker run --rm --network host --cap-add=NET_RAW --cap-add=NET_ADMIN cyberspacesec/go-port-rocket scan -t 192.168.1.1 -p 80,443,8080</code></pre>
+                    </div>
+                    
+                    <div class="install-method">
+                        <h3><i class="fas fa-file-alt"></i> 使用 Docker Compose</h3>
+                        <p>创建 docker-compose.yml 文件：</p>
+                        <pre><code class="language-yaml">version: '3'
+services:
+  go-port-rocket:
+    image: cyberspacesec/go-port-rocket:latest
+    network_mode: host
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    command: scan -t 192.168.1.1 -p 80,443,8080</code></pre>
+                        <p>然后运行：</p>
+                        <pre><code class="language-bash">docker-compose up</code></pre>
+                    </div>
+
+                    <div class="install-method">
+                        <h3><i class="fas fa-shield-alt"></i> 为什么Docker容器需要特权模式</h3>
+                        <p>Port Rocket作为一个端口扫描工具，需要执行一些低级网络操作，这些操作在Docker容器中默认是受限的。</p>
+                        
+                        <h4>特权需求的技术原因</h4>
+                        <ul>
+                            <li><strong>原始套接字（Raw Sockets）操作</strong>：SYN扫描、FIN扫描、NULL扫描等高级端口扫描方式需要使用原始套接字，这需要<code>NET_RAW</code>权限。</li>
+                            <li><strong>网络数据包捕获</strong>：项目使用libpcap库来捕获和解析网络数据包，这也需要特殊权限。</li>
+                            <li><strong>TCP/IP协议栈操作</strong>：一些扫描技术需要直接控制TCP/IP协议栈，这些操作需要额外的网络权限。</li>
+                        </ul>
+                    </div>
+
+                    <div class="install-method">
+                        <h3><i class="fas fa-lock"></i> Docker安全机制</h3>
+                        <p>Docker默认使用一套受限的权限运行容器，以提高安全性。虽然我们在Dockerfile中通过<code>setcap</code>命令设置了二进制文件的capabilities，但这些权限在容器内仍然需要显式授予给容器本身。</p>
+                    </div>
+
+                    <div class="install-method">
+                        <h3><i class="fas fa-terminal"></i> 推荐的Docker运行方式</h3>
+                        <p>建议使用最小权限原则，只授予必要的capabilities：</p>
+                        <pre><code class="language-bash">docker run --rm --cap-add=NET_RAW --cap-add=NET_ADMIN --network host go-port-rocket scan -t 127.0.0.1 -p 80,443</code></pre>
+                        
+                        <p>如果上述方法不起作用，可以使用完全特权模式，但这在安全性方面不是最佳实践：</p>
+                        <pre><code class="language-bash">docker run --rm --privileged --network host go-port-rocket scan -t 127.0.0.1 -p 80,443</code></pre>
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p><strong>注意</strong>：使用特权模式运行Docker容器会赋予容器几乎与宿主机相同的权限，这可能带来安全风险。请在受信任的环境中谨慎使用。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 从源码安装 -->
+                <div id="from-source" class="os-content">
+                    <h3>从源码安装</h3>
+                    <p>如果您希望从源代码构建最新版本，可以按照以下步骤操作：</p>
+
+                    <div class="install-method">
+                        <h3><i class="fas fa-code"></i> 从源码构建</h3>
+                        <p>获取最新版本的源代码并自行编译：</p>
+                        <pre><code class="language-bash"># 克隆仓库
+git clone https://github.com/cyberspacesec/go-port-rocket.git
+cd go-port-rocket
+
+# 安装依赖（根据您的操作系统选择合适的命令）
+# macOS:      brew install libpcap
+# Ubuntu:     sudo apt install libpcap-dev
+# CentOS:     sudo yum install libpcap-devel
+# Arch Linux: sudo pacman -S libpcap
+
+# 构建项目
+go build -o go-port-rocket
+
+# 可选：安装到系统路径
+sudo install -m755 go-port-rocket /usr/local/bin/</code></pre>
+                    </div>
+                </div>
+
+                <!-- Golang 安装指南 -->
+                <div id="golang" class="os-content">
+                    <h3>Golang 安装指南</h3>
+                    <p>如果您是 Golang 开发者，可以直接使用 Go 工具链安装 Port Rocket：</p>
+
+                    <div class="install-method">
+                        <h3><i class="fab fa-golang"></i> 使用 go install</h3>
+                        <p>可以使用 Go 的包管理工具直接安装最新版本：</p>
+                        <pre><code class="language-bash"># 安装最新版本
+go install github.com/cyberspacesec/go-port-rocket@latest
+
+# 如果您需要安装特定版本
+go install github.com/cyberspacesec/go-port-rocket@v1.0.0</code></pre>
+                        <p>安装后可执行文件将位于您的 GOPATH/bin 目录下。</p>
+                    </div>
+
+                    <div class="install-method">
+                        <h3><i class="fas fa-puzzle-piece"></i> 作为依赖引入您的项目</h3>
+                        <p>如果您想在自己的 Go 项目中使用 Port Rocket 作为库：</p>
+                        <pre><code class="language-bash"># 添加依赖
+go get github.com/cyberspacesec/go-port-rocket
+
+# 更新到最新版本
+go get -u github.com/cyberspacesec/go-port-rocket</code></pre>
+
+                        <p>然后在代码中引入：</p>
+                        <pre><code class="language-go">import "github.com/cyberspacesec/go-port-rocket/pkg/scanner"
+
+func main() {
+    // 创建新的扫描器
+    scanner := scanner.New()
+    
+    // 配置扫描选项
+    options := scanner.DefaultOptions()
+    options.Target = "192.168.1.1"
+    options.Ports = []int{80, 443, 8080}
+    
+    // 执行扫描
+    results, err := scanner.Scan(options)
+    if err != nil {
+        panic(err)
+    }
+    
+    // 处理结果
+    for _, result := range results {
+        fmt.Printf("Port %d: %s\n", result.Port, result.State)
+    }
+}</code></pre>
+                    </div>
+
+                    <div class="install-method">
+                        <h3><i class="fas fa-code-branch"></i> 开发版本</h3>
+                        <p>如果您想使用最新的开发版本，可以直接从代码库构建：</p>
+                        <pre><code class="language-bash"># 克隆仓库
+git clone https://github.com/cyberspacesec/go-port-rocket.git
+cd go-port-rocket
+
+# 安装依赖
+go mod download
+
+# 构建
+go build -o go-port-rocket cmd/go-port-rocket/main.go
+
+# 运行
+./go-port-rocket --help</code></pre>
+                    </div>
+                </div>
+
+                <h2 id="verify">验证安装</h2>
+                <p>安装完成后，您可以使用以下命令验证安装：</p>
+
+                <pre><code class="language-bash"># 显示版本信息
+go-port-rocket --version
+
+# 显示帮助信息
+go-port-rocket --help</code></pre>
+
+                <h2 id="troubleshooting">故障排除</h2>
+                <p>如果您在安装过程中遇到问题，请参考以下常见问题及解决方法：</p>
+                
+                <div class="install-method">
+                    <h3><i class="fas fa-exclamation-triangle"></i> 权限问题</h3>
+                    <p>某些扫描功能需要管理员/root权限才能运行。如果遇到权限错误，请尝试使用管理员权限运行程序。</p>
+                    <ul>
+                        <li>Windows: 右键点击程序，选择"以管理员身份运行"</li>
+                        <li>Linux/macOS: 使用 <code>sudo go-port-rocket</code></li>
+                    </ul>
+                </div>
+                
+                <div class="install-method">
+                    <h3><i class="fas fa-puzzle-piece"></i> 缺少依赖</h3>
+                    <p>如果遇到缺少依赖的错误，请确保安装了所需的依赖项：</p>
+                    <ul>
+                        <li>Windows: 确保已安装 Microsoft Visual C++ Redistributable</li>
+                        <li>Linux: 安装 libpcap 库（<code>libpcap-dev</code> 或 <code>libpcap-devel</code>）</li>
+                        <li>macOS: 安装 libpcap（<code>brew install libpcap</code>）</li>
+                    </ul>
+                </div>
+                
+                <div class="install-method">
+                    <h3><i class="fas fa-question-circle"></i> 其他问题</h3>
+                    <p>如果您遇到其他问题，可以：</p>
+                    <ul>
+                        <li>查看 <a href="https://github.com/cyberspacesec/go-port-rocket/issues">GitHub Issues</a> 是否有人报告了类似的问题</li>
+                        <li>在 GitHub 上 <a href="https://github.com/cyberspacesec/go-port-rocket/issues/new">提交新的 Issue</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-rocket"></i>
+                    <span>Port Rocket</span>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/cyberspacesec/go-port-rocket" target="_blank">GitHub</a>
+                    <a href="https://github.com/cyberspacesec/go-port-rocket/issues" target="_blank">报告问题</a>
+                    <a href="https://github.com/cyberspacesec/go-port-rocket/blob/main/LICENSE" target="_blank">许可证</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Port Rocket. 使用 MIT 许可证发布。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 移除顶部可能错误添加的标签
+            const topLabels = document.querySelectorAll('body > .language-label');
+            topLabels.forEach(label => label.remove());
+            
+            // 移除非代码区的黑色背景和BASH标签
+            removeNonCodeBlockStyles();
+            
+            // 设置定时器确保样式正确应用
+            setTimeout(removeNonCodeBlockStyles, 100);
+            setTimeout(removeNonCodeBlockStyles, 500);
+            setTimeout(removeNonCodeBlockStyles, 1000);
+            
+            // 代码高亮
+            hljs.highlightAll();
+            
+            // 操作系统标签切换
+            const osTabs = document.querySelectorAll('.os-tab');
+            const osContents = document.querySelectorAll('.os-content');
+            
+            // localStorage key定义
+            const STORAGE_KEY = 'port_rocket_selected_os';
+            
+            // 根据选择的操作系统激活对应标签和内容
+            function activateTab(os) {
+                // 移除所有活动状态
+                osTabs.forEach(t => t.classList.remove('active'));
+                osContents.forEach(c => c.classList.remove('active'));
+                
+                // 激活选中的标签和内容
+                const selectedTab = document.querySelector(`.os-tab[data-os="${os}"]`);
+                if (selectedTab) {
+                    selectedTab.classList.add('active');
+                    const content = document.getElementById(os);
+                    if (content) {
+                        content.classList.add('active');
+                    }
+                }
+                
+                // 保存选择到localStorage
+                localStorage.setItem(STORAGE_KEY, os);
+                
+                // 更新URL参数，而不是哈希值
+                const url = new URL(window.location);
+                url.searchParams.set('tab', os);
+                history.pushState(null, null, url);
+            }
+            
+            // 为每个tab注册点击事件
+            osTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const os = tab.getAttribute('data-os');
+                    activateTab(os);
+                });
+            });
+            
+            // 检测操作系统
+            function detectOperatingSystem() {
+                const userAgent = navigator.userAgent.toLowerCase();
+                let os = 'unknown';
+                
+                if (userAgent.indexOf('win') !== -1) {
+                    os = 'windows';
+                } else if (userAgent.indexOf('mac') !== -1) {
+                    os = 'macos';
+                } else if (userAgent.indexOf('linux') !== -1 || userAgent.indexOf('x11') !== -1) {
+                    os = 'linux';
+                } else if (userAgent.indexOf('android') !== -1) {
+                    os = 'linux'; // Android 基于 Linux
+                } else if (userAgent.indexOf('ios') !== -1) {
+                    os = 'macos'; // iOS 与 macOS 相似
+                }
+                
+                return os;
+            }
+            
+            // 决定使用哪个tab（localStorage > URL参数 > URL哈希 > 操作系统 > 默认）
+            function decideInitialTab() {
+                // 1. 检查localStorage中是否有保存的选择
+                const savedOs = localStorage.getItem(STORAGE_KEY);
+                if (savedOs && document.querySelector(`.os-tab[data-os="${savedOs}"]`)) {
+                    console.log('使用localStorage保存的tab:', savedOs);
+                    return savedOs;
+                }
+                
+                // 2. 检查URL中的tab参数
+                const urlParams = new URLSearchParams(window.location.search);
+                const tabParam = urlParams.get('tab');
+                if (tabParam && document.querySelector(`.os-tab[data-os="${tabParam}"]`)) {
+                    console.log('使用URL参数中的tab:', tabParam);
+                    return tabParam;
+                }
+                
+                // 3. 检查URL中的哈希值
+                if (window.location.hash) {
+                    const hash = window.location.hash.substring(1);
+                    if (document.querySelector(`.os-tab[data-os="${hash}"]`)) {
+                        console.log('使用URL哈希中的tab:', hash);
+                        return hash;
+                    }
+                }
+                
+                // 4. 检测用户操作系统
+                const detectedOs = detectOperatingSystem();
+                if (detectedOs !== 'unknown' && document.querySelector(`.os-tab[data-os="${detectedOs}"]`)) {
+                    console.log('根据操作系统自动选择tab:', detectedOs);
+                    return detectedOs;
+                }
+                
+                // 5. 默认选择 Windows
+                console.log('使用默认tab: windows');
+                return 'windows';
+            }
+            
+            // 初始化选择的tab
+            const initialTab = decideInitialTab();
+            activateTab(initialTab);
+            
+            // 操作系统检测横幅（仅在首次访问时显示）
+            const detectedOS = detectOperatingSystem();
+            const isFirstVisit = !localStorage.getItem(STORAGE_KEY);
+            
+            if (detectedOS !== 'unknown' && isFirstVisit) {
+                const banner = document.getElementById('os-detection-banner');
+                const osText = document.getElementById('detected-os');
+                const actionBtn = document.getElementById('os-detection-action');
+                
+                if (banner && osText && actionBtn) {
+                    // 设置操作系统名称
+                    let osName = '';
+                    if (detectedOS === 'windows') osName = 'Windows';
+                    else if (detectedOS === 'macos') osName = 'macOS';
+                    else if (detectedOS === 'linux') osName = 'Linux';
+                    
+                    osText.textContent = osName;
+                    banner.style.display = 'flex';
+                    
+                    // 点击按钮跳转到对应操作系统的安装说明
+                    actionBtn.addEventListener('click', () => {
+                        // 激活对应的标签
+                        activateTab(detectedOS);
+                        
+                        // 滚动到该部分
+                        document.getElementById(detectedOS).scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        
+                        // 隐藏横幅
+                        banner.style.display = 'none';
+                    });
+                }
+            }
+            
+            // OS 链接点击处理
+            document.querySelectorAll('.os-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const os = link.getAttribute('data-os');
+                    activateTab(os);
+                });
+            });
+            
+            // 为所有代码块添加复制按钮和语言标签
+            document.querySelectorAll('pre code').forEach(block => {
+                // 添加相对定位以便放置复制按钮
+                block.parentNode.style.position = 'relative';
+                
+                // 为代码块添加类
+                block.parentNode.parentNode.classList.add('code-block');
+                
+                // 创建复制按钮
+                const button = document.createElement('button');
+                button.className = 'copy-btn';
+                button.innerHTML = '<i class="fas fa-copy"></i> 复制';
+                button.setAttribute('data-clipboard-text', block.textContent.trim());
+                
+                // 添加按钮到代码块
+                block.parentNode.appendChild(button);
+                
+                // 获取语言类
+                const classes = block.className.split(' ');
+                let lang = '';
+                for (const cls of classes) {
+                    if (cls.startsWith('language-')) {
+                        lang = cls.replace('language-', '').toUpperCase();
+                        break;
+                    }
+                }
+                
+                // 如果找到语言，添加语言标签
+                if (lang) {
+                    const langLabel = document.createElement('div');
+                    langLabel.className = 'language-label';
+                    langLabel.textContent = lang;
+                    block.parentNode.parentNode.appendChild(langLabel);
+                }
+                
+                // 为bash添加特殊高亮
+                if (block.classList.contains('language-bash')) {
+                    block.parentNode.classList.add('highlight-bash');
+                }
+            });
+        });
+    </script>
+    <script src="../js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+    <!-- 添加Prism.js脚本 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <!-- 手动添加必要的语言组件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-powershell.min.js"></script>
+    
+    <script>
+        // 初始化代码高亮和复制功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 移除非代码区的黑色背景
+            removeNonCodeBlockStyles();
+            
+            // 初始化复制按钮
+            initCopyButtons();
+            
+            // 代码高亮处理
+            enhanceCodeHighlighting();
+            
+            // 手动触发Prism.js高亮
+            if (typeof Prism !== 'undefined') {
+                Prism.highlightAll();
+            }
+        });
+        
+        // 移除非代码区的黑色背景和BASH标签
+        function removeNonCodeBlockStyles() {
+            // 删除所有页面上的BASH标签
+            document.querySelectorAll('body > .language-label, section > .language-label, .os-tabs > .language-label, .os-content > .language-label').forEach(el => {
+                el.remove();
+            });
+            
+            // 重置所有非代码区域的背景颜色
+            document.querySelectorAll('body, .documentation, section, .container, .os-tabs, .os-tab, .os-content').forEach(el => {
+                // 排除代码块
+                if(!el.closest('.code-block') && !el.classList.contains('code-block')) {
+                    el.style.backgroundColor = '';
+                    // 在主内容区设置白色背景，以防万一
+                    if(el.classList.contains('os-tabs') || 
+                       el.classList.contains('os-content') || 
+                       el.classList.contains('documentation')) {
+                        el.style.backgroundColor = '#ffffff';
+                    }
+                }
+            });
+            
+            // 删除任何直接添加到body或主区域的黑色背景样式
+            const bodyStyle = document.body.getAttribute('style') || '';
+            if(bodyStyle.includes('background-color')) {
+                document.body.style.backgroundColor = '#ffffff';
+            }
+            
+            // 修复tab和内容区域样式
+            document.querySelectorAll('.os-tab').forEach(tab => {
+                tab.style.backgroundColor = 'transparent';
+                if(tab.classList.contains('active')) {
+                    tab.style.color = 'var(--primary-color)';
+                } else {
+                    tab.style.color = 'var(--dark-color)';
+                }
+            });
+            
+            // 确保内容区域是白色背景
+            document.querySelectorAll('.os-content').forEach(content => {
+                content.style.backgroundColor = '#ffffff';
+                content.style.color = 'var(--dark-color)';
+            });
+        }
+        
+        // 初始化复制按钮
+        function initCopyButtons() {
+            // 为所有代码块添加复制按钮
+            document.querySelectorAll('pre code').forEach(block => {
+                // 添加父容器样式
+                const parent = block.parentElement.parentElement;
+                if (!parent.classList.contains('code-block')) {
+                    parent.classList.add('code-block');
+                }
+                
+                // 创建复制按钮
+                const button = document.createElement('button');
+                button.className = 'copy-btn';
+                button.innerHTML = '<i class="fas fa-copy"></i> 复制';
+                button.setAttribute('data-clipboard-text', block.textContent.trim());
+                
+                // 添加按钮到代码块
+                block.parentElement.appendChild(button);
+                
+                // 语言标签处理
+                const classes = block.className.split(' ');
+                let lang = '';
+                for (const cls of classes) {
+                    if (cls.startsWith('language-')) {
+                        lang = cls.replace('language-', '').toUpperCase();
+                        break;
+                    }
+                }
+                
+                // 为代码块添加语言标签
+                if (lang && !parent.querySelector('.language-label')) {
+                    const langLabel = document.createElement('div');
+                    langLabel.className = 'language-label';
+                    langLabel.textContent = lang;
+                    parent.appendChild(langLabel);
+                }
+            });
+            
+            // 初始化ClipboardJS
+            const clipboard = new ClipboardJS('.copy-btn');
+            
+            // 复制成功效果
+            clipboard.on('success', function(e) {
+                const btn = e.trigger;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> 已复制';
+                
+                setTimeout(function() {
+                    btn.innerHTML = originalText;
+                }, 2000);
+                
+                e.clearSelection();
+            });
+        }
+        
+        // 增强代码高亮
+        function enhanceCodeHighlighting() {
+            // 特别处理bash代码
+            document.querySelectorAll('pre code.language-bash').forEach(function(element) {
+                // 确保代码块有正确的样式
+                element.parentElement.style.backgroundColor = '#282c34';
+                element.style.backgroundColor = '#282c34';
+                
+                // 获取代码内容
+                const content = element.textContent;
+                
+                // 分离命令行
+                const lines = content.split('\n');
+                let enhancedContent = '';
+                
+                lines.forEach(line => {
+                    if (line.trim().startsWith('#')) {
+                        // 注释行
+                        enhancedContent += `<span class="token comment">${line}</span>\n`;
+                    } else if (line.trim()) {
+                        // 命令行
+                        const parts = line.split(' ');
+                        const command = parts[0];
+                        const params = parts.slice(1).join(' ');
+                        
+                        enhancedContent += `<span class="token command">${command}</span> <span class="token parameter">${params}</span>\n`;
+                    } else {
+                        enhancedContent += '\n';
+                    }
+                });
+                
+                if (enhancedContent) {
+                    element.innerHTML = enhancedContent;
+                }
+            });
+            
+            // 确保所有代码块有正确的样式
+            document.querySelectorAll('pre code').forEach(function(element) {
+                element.parentElement.style.backgroundColor = '#282c34';
+                element.style.backgroundColor = '#282c34';
+                element.style.color = '#abb2bf';
+            });
+        }
+    </script>
+    <script src="../js/code-copy.js"></script>
+    
+    <script>
+        // 确保在所有脚本加载完成后执行最终清理
+        window.addEventListener('load', function() {
+            // 延迟执行以确保所有DOM操作完成
+            setTimeout(function() {
+                // 移除顶部错误的BASH标签
+                document.querySelectorAll('body > .language-label').forEach(label => label.remove());
+                
+                // 移除os-tabs区域内错误的背景颜色
+                document.querySelectorAll('.os-tabs, .os-tab').forEach(el => {
+                    el.style.backgroundColor = '';
+                    el.style.color = '';
+                });
+                
+                // 修复标签区域样式
+                const tabsArea = document.querySelector('.os-tabs');
+                if (tabsArea) {
+                    tabsArea.style.backgroundColor = 'white';
+                    tabsArea.style.color = 'inherit';
+                }
+                
+                // 移除任何不应该存在的BASH标签
+                document.querySelectorAll('.language-label').forEach(label => {
+                    if (label.textContent === 'BASH' && !label.closest('.code-block')) {
+                        label.remove();
+                    }
+                });
+                
+                console.log('最终清理完成');
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 
