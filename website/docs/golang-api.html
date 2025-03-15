@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golang API 文档 - Go Port Rocket</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/docs.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <a href="../index.html">
+                        <i class="fas fa-rocket"></i>
+                        <span>Go Port Rocket</span>
+                    </a>
+                </div>
+                <div class="nav-links">
+                    <a href="../index.html#features">功能</a>
+                    <a href="cli.html">CLI 文档</a>
+                    <a href="http-api.html">HTTP API</a>
+                    <a href="golang-api.html" class="active">Golang API</a>
+                    <a href="mcp.html">MCP</a>
+                    <a href="https://github.com/cc11001100/go-port-rocket" target="_blank" class="github-link">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="docs-container">
+        <aside class="docs-sidebar">
+            <div class="sidebar-header">
+                <h3>Golang API 文档</h3>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#getting-started">开始使用</a></li>
+                <li><a href="#scanner">扫描器</a></li>
+                <li><a href="#service-detection">服务检测</a></li>
+                <li><a href="#os-detection">操作系统检测</a></li>
+                <li><a href="#output">输出处理</a></li>
+                <li><a href="#examples">示例</a></li>
+            </ul>
+        </aside>
+
+        <main class="docs-content">
+            <div class="docs-header">
+                <h1>Golang API 文档</h1>
+                <p>学习如何在你的 Go 项目中集成和使用 Go Port Rocket 的核心功能</p>
+            </div>
+
+            <section id="getting-started" class="docs-section">
+                <h2>开始使用</h2>
+                <p>要在你的 Go 项目中使用 Go Port Rocket，首先需要安装依赖：</p>
+
+                <div class="code-block">
+                    <pre><code>go get github.com/cc11001100/go-port-rocket</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go get github.com/cc11001100/go-port-rocket">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <p>然后，你可以导入必要的包：</p>
+                <div class="code-block">
+                    <pre><code>import (
+    "github.com/cc11001100/go-port-rocket/pkg/scanner"
+    "github.com/cc11001100/go-port-rocket/pkg/fingerprint"
+    "github.com/cc11001100/go-port-rocket/pkg/output"
+)</code></pre>
+                    <button class="copy-btn" data-clipboard-text="import (
+    &quot;github.com/cc11001100/go-port-rocket/pkg/scanner&quot;
+    &quot;github.com/cc11001100/go-port-rocket/pkg/fingerprint&quot;
+    &quot;github.com/cc11001100/go-port-rocket/pkg/output&quot;
+)">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <p>基本的项目结构如下：</p>
+                <ul>
+                    <li><code>pkg/scanner</code> - 端口扫描实现</li>
+                    <li><code>pkg/fingerprint</code> - 指纹识别 (服务和操作系统)</li>
+                    <li><code>pkg/output</code> - 输出处理 (格式化和保存)</li>
+                    <li><code>pkg/api</code> - HTTP API 实现</li>
+                    <li><code>pkg/config</code> - 配置管理</li>
+                    <li><code>pkg/utils</code> - 工具函数</li>
+                    <li><code>pkg/logger</code> - 日志处理</li>
+                </ul>
+            </section>
+
+            <section id="scanner" class="docs-section">
+                <h2>扫描器</h2>
+                <p>扫描器是 Go Port Rocket 的核心组件，用于执行端口扫描操作。</p>
+
+                <h3>创建扫描器</h3>
+                <div class="code-block">
+                    <pre><code>import "github.com/cc11001100/go-port-rocket/pkg/scanner"
+
+// 创建扫描器实例
+s, err := scanner.NewScanner(&scanner.Options{
+    Target:           "scanme.nmap.org",
+    Ports:            "21-25,80,443",
+    ScanType:         "tcp",
+    Timeout:          "5s",
+    Workers:          100,
+    ServiceDetection: true,
+    OSDetection:      true,
+    VersionIntensity: 7,
+})
+if err != nil {
+    log.Fatalf("Failed to create scanner: %v", err)
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="import &quot;github.com/cc11001100/go-port-rocket/pkg/scanner&quot;
+
+// 创建扫描器实例
+s, err := scanner.NewScanner(&scanner.Options{
+    Target:           &quot;scanme.nmap.org&quot;,
+    Ports:            &quot;21-25,80,443&quot;,
+    ScanType:         &quot;tcp&quot;,
+    Timeout:          &quot;5s&quot;,
+    Workers:          100,
+    ServiceDetection: true,
+    OSDetection:      true,
+    VersionIntensity: 7,
+})
+if err != nil {
+    log.Fatalf(&quot;Failed to create scanner: %v&quot;, err)
+}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>扫描选项</h3>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>选项</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>默认值</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>Target</code></td>
+                                <td>string</td>
+                                <td>扫描目标 (IP或域名)</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td><code>Ports</code></td>
+                                <td>string</td>
+                                <td>端口范围 (例如: "80,443" 或 "1-1024")</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td><code>ScanType</code></td>
+                                <td>string</td>
+                                <td>扫描类型 ("tcp" 或 "udp")</td>
+                                <td>"tcp"</td>
+                            </tr>
+                            <tr>
+                                <td><code>Timeout</code></td>
+                                <td>string</td>
+                                <td>超时时间 (例如: "5s")</td>
+                                <td>"5s"</td>
+                            </tr>
+                            <tr>
+                                <td><code>Workers</code></td>
+                                <td>int</td>
+                                <td>工作线程数</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td><code>ServiceDetection</code></td>
+                                <td>bool</td>
+                                <td>启用服务检测</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>OSDetection</code></td>
+                                <td>bool</td>
+                                <td>启用操作系统检测</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>VersionIntensity</code></td>
+                                <td>int</td>
+                                <td>版本检测强度 (0-9)</td>
+                                <td>7</td>
+                            </tr>
+                            <tr>
+                                <td><code>GuessOS</code></td>
+                                <td>bool</td>
+                                <td>推测操作系统</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>LimitOS</code></td>
+                                <td>bool</td>
+                                <td>限制操作系统扫描</td>
+                                <td>false</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>执行扫描</h3>
+                <div class="code-block">
+                    <pre><code>// 开始扫描
+result, err := s.Scan()
+if err != nil {
+    log.Fatalf("Scan failed: %v", err)
+}
+
+// 处理扫描结果
+for _, port := range result.Ports {
+    fmt.Printf("Port %d/%s: %s\n", port.Port, port.Protocol, port.State)
+    if port.Service != "" {
+        fmt.Printf("  Service: %s\n", port.Service)
+    }
+    if port.Version != "" {
+        fmt.Printf("  Version: %s\n", port.Version)
+    }
+}
+
+// 处理操作系统检测结果
+if result.OS != nil {
+    fmt.Printf("OS: %s %s (%d%%)\n", result.OS.Name, result.OS.Version, result.OS.Confidence)
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="// 开始扫描
+result, err := s.Scan()
+if err != nil {
+    log.Fatalf(&quot;Scan failed: %v&quot;, err)
+}
+
+// 处理扫描结果
+for _, port := range result.Ports {
+    fmt.Printf(&quot;Port %d/%s: %s\n&quot;, port.Port, port.Protocol, port.State)
+    if port.Service != &quot;&quot; {
+        fmt.Printf(&quot;  Service: %s\n&quot;, port.Service)
+    }
+    if port.Version != &quot;&quot; {
+        fmt.Printf(&quot;  Version: %s\n&quot;, port.Version)
+    }
+}
+
+// 处理操作系统检测结果
+if result.OS != nil {
+    fmt.Printf(&quot;OS: %s %s (%d%%)\n&quot;, result.OS.Name, result.OS.Version, result.OS.Confidence)
+}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>扫描器方法</h3>
+                <ul class="method-list">
+                    <li>
+                        <code>NewScanner(opts *Options) (*Scanner, error)</code>
+                        <p>创建新的扫描器实例</p>
+                    </li>
+                    <li>
+                        <code>Scan() (*ScanResult, error)</code>
+                        <p>执行端口扫描并返回结果</p>
+                    </li>
+                    <li>
+                        <code>ScanAsync() (chan *PortResult, chan *ScanResult, chan error)</code>
+                        <p>异步执行扫描并通过通道返回结果</p>
+                    </li>
+                    <li>
+                        <code>Stop()</code>
+                        <p>停止正在进行的扫描</p>
+                    </li>
+                </ul>
+            </section>
+
+            <section id="service-detection" class="docs-section">
+                <h2>服务检测</h2>
+                <p>服务检测模块用于识别开放端口上运行的服务和版本。</p>
+
+                <h3>使用服务检测</h3>
+                <div class="code-block">
+                    <pre><code>import "github.com/cc11001100/go-port-rocket/pkg/fingerprint"
+
+// 创建服务检测器
+detector := fingerprint.NewServiceDetector(&fingerprint.ServiceOptions{
+    Intensity: 7,
+})
+
+// 对特定端口执行服务检测
+service, version, err := detector.Detect("192.168.1.1", 80, "tcp")
+if err != nil {
+    log.Printf("Service detection failed: %v", err)
+} else {
+    fmt.Printf("Detected service: %s %s\n", service, version)
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="import &quot;github.com/cc11001100/go-port-rocket/pkg/fingerprint&quot;
+
+// 创建服务检测器
+detector := fingerprint.NewServiceDetector(&fingerprint.ServiceOptions{
+    Intensity: 7,
+})
+
+// 对特定端口执行服务检测
+service, version, err := detector.Detect(&quot;192.168.1.1&quot;, 80, &quot;tcp&quot;)
+if err != nil {
+    log.Printf(&quot;Service detection failed: %v&quot;, err)
+} else {
+    fmt.Printf(&quot;Detected service: %s %s\n&quot;, service, version)
+}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>服务检测选项</h3>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>选项</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>默认值</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>Intensity</code></td>
+                                <td>int</td>
+                                <td>检测强度 (0-9)</td>
+                                <td>7</td>
+                            </tr>
+                            <tr>
+                                <td><code>Timeout</code></td>
+                                <td>string</td>
+                                <td>每次探测的超时时间</td>
+                                <td>"2s"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="os-detection" class="docs-section">
+                <h2>操作系统检测</h2>
+                <p>操作系统检测模块用于识别目标主机的操作系统类型和版本。</p>
+
+                <h3>使用操作系统检测</h3>
+                <div class="code-block">
+                    <pre><code>import "github.com/cc11001100/go-port-rocket/pkg/fingerprint"
+
+// 创建操作系统检测器
+osDetector := fingerprint.NewOSDetector(&fingerprint.OSOptions{
+    GuessOS: true,
+    LimitOS: false,
+})
+
+// 执行操作系统检测
+osInfo, err := osDetector.Detect("192.168.1.1", openPorts)
+if err != nil {
+    log.Printf("OS detection failed: %v", err)
+} else {
+    fmt.Printf("Detected OS: %s %s (Confidence: %d%%)\n", 
+        osInfo.Name, osInfo.Version, osInfo.Confidence)
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="import &quot;github.com/cc11001100/go-port-rocket/pkg/fingerprint&quot;
+
+// 创建操作系统检测器
+osDetector := fingerprint.NewOSDetector(&fingerprint.OSOptions{
+    GuessOS: true,
+    LimitOS: false,
+})
+
+// 执行操作系统检测
+osInfo, err := osDetector.Detect(&quot;192.168.1.1&quot;, openPorts)
+if err != nil {
+    log.Printf(&quot;OS detection failed: %v&quot;, err)
+} else {
+    fmt.Printf(&quot;Detected OS: %s %s (Confidence: %d%%)\n&quot;, 
+        osInfo.Name, osInfo.Version, osInfo.Confidence)
+}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>操作系统检测选项</h3>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>选项</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>默认值</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>GuessOS</code></td>
+                                <td>bool</td>
+                                <td>启用操作系统推测</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>LimitOS</code></td>
+                                <td>bool</td>
+                                <td>限制操作系统扫描范围</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>Timeout</code></td>
+                                <td>string</td>
+                                <td>探测超时时间</td>
+                                <td>"3s"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="output" class="docs-section">
+                <h2>输出处理</h2>
+                <p>输出处理模块用于格式化和保存扫描结果。</p>
+
+                <h3>使用输出处理</h3>
+                <div class="code-block">
+                    <pre><code>import "github.com/cc11001100/go-port-rocket/pkg/output"
+
+// 创建输出处理器
+outputter, err := output.NewOutputter(&output.Options{
+    Format:    "json",
+    OutputFile: "result.json",
+    Pretty:    true,
+})
+if err != nil {
+    log.Fatalf("Failed to create outputter: %v", err)
+}
+
+// 处理并保存扫描结果
+err = outputter.Process(scanResult)
+if err != nil {
+    log.Fatalf("Failed to process output: %v", err)
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="import &quot;github.com/cc11001100/go-port-rocket/pkg/output&quot;
+
+// 创建输出处理器
+outputter, err := output.NewOutputter(&output.Options{
+    Format:    &quot;json&quot;,
+    OutputFile: &quot;result.json&quot;,
+    Pretty:    true,
+})
+if err != nil {
+    log.Fatalf(&quot;Failed to create outputter: %v&quot;, err)
+}
+
+// 处理并保存扫描结果
+err = outputter.Process(scanResult)
+if err != nil {
+    log.Fatalf(&quot;Failed to process output: %v&quot;, err)
+}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>输出处理选项</h3>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>选项</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>默认值</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>Format</code></td>
+                                <td>string</td>
+                                <td>输出格式 (text, json, xml, html)</td>
+                                <td>"text"</td>
+                            </tr>
+                            <tr>
+                                <td><code>OutputFile</code></td>
+                                <td>string</td>
+                                <td>输出文件路径</td>
+                                <td>""</td>
+                            </tr>
+                            <tr>
+                                <td><code>Pretty</code></td>
+                                <td>bool</td>
+                                <td>美化输出</td>
+                                <td>false</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>支持的输出格式</h3>
+                <ul>
+                    <li><code>text</code> - 纯文本格式，适合命令行显示</li>
+                    <li><code>json</code> - JSON 格式，适合程序处理</li>
+                    <li><code>xml</code> - XML 格式，适合与其他系统集成</li>
+                    <li><code>html</code> - HTML 格式，适合生成报告</li>
+                </ul>
+            </section>
+
+            <section id="examples" class="docs-section">
+                <h2>示例</h2>
+                
+                <h3>基本扫描示例</h3>
+                <div class="code-block">
+                    <pre><code>package main
+
+import (
+    "fmt"
+    "log"
+
+    "github.com/cc11001100/go-port-rocket/pkg/scanner"
+    "github.com/cc11001100/go-port-rocket/pkg/output"
+)
+
+func main() {
+    // 创建扫描器
+    s, err := scanner.NewScanner(&scanner.Options{
+        Target:   "example.com",
+        Ports:    "80,443",
+        ScanType: "tcp",
+        Timeout:  "5s",
+        Workers:  100,
+    })
+    if err != nil {
+        log.Fatalf("Failed to create scanner: %v", err)
+    }
+
+    // 执行扫描
+    result, err := s.Scan()
+    if err != nil {
+        log.Fatalf("Scan failed: %v", err)
+    }
+
+    // 创建输出处理器
+    outputter, err := output.NewOutputter(&output.Options{
+        Format: "text",
+    })
+    if err != nil {
+        log.Fatalf("Failed to create outputter: %v", err)
+    }
+
+    // 处理输出
+    err = outputter.Process(result)
+    if err != nil {
+        log.Fatalf("Failed to process output: %v", err)
+    }
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="package main
+
+import (
+    &quot;fmt&quot;
+    &quot;log&quot;
+
+    &quot;github.com/cc11001100/go-port-rocket/pkg/scanner&quot;
+    &quot;github.com/cc11001100/go-port-rocket/pkg/output&quot;
+)
+
+func main() {
+    // 创建扫描器
+    s, err := scanner.NewScanner(&scanner.Options{
+        Target:   &quot;example.com&quot;,
+        Ports:    &quot;80,443&quot;,
+        ScanType: &quot;tcp&quot;,
+        Timeout:  &quot;5s&quot;,
+        Workers:  100,
+    })
+    if err != nil {
+        log.Fatalf(&quot;Failed to create scanner: %v&quot;, err)
+    }
+
+    // 执行扫描
+    result, err := s.Scan()
+    if err != nil {
+        log.Fatalf(&quot;Scan failed: %v&quot;, err)
+    }
+
+    // 创建输出处理器
+    outputter, err := output.NewOutputter(&output.Options{
+        Format: &quot;text&quot;,
+    })
+    if err != nil {
+        log.Fatalf(&quot;Failed to create outputter: %v&quot;, err)
+    }
+
+    // 处理输出
+    err = outputter.Process(result)
+    if err != nil {
+        log.Fatalf(&quot;Failed to process output: %v&quot;, err)
+    }
+}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+                
+                <h3>带服务检测的扫描示例</h3>
+                <div class="code-block">
+                    <pre><code>package main
+
+import (
+    "fmt"
+    "log"
+
+    "github.com/cc11001100/go-port-rocket/pkg/scanner"
+    "github.com/cc11001100/go-port-rocket/pkg/output"
+)
+
+func main() {
+    // 创建扫描器
+    s, err := scanner.NewScanner(&scanner.Options{
+        Target:           "scanme.nmap.org",
+        Ports:            "21-25,80,443",
+        ScanType:         "tcp",
+        ServiceDetection: true,
+        VersionIntensity: 7,
+    })
+    if err != nil {
+        log.Fatalf("Failed to create scanner: %v", err)
+    }
+
+    // 执行扫描
+    result, err := s.Scan()
+    if err != nil {
+        log.Fatalf("Scan failed: %v", err)
+    }
+
+    // 创建输出处理器
+    outputter, err := output.NewOutputter(&output.Options{
+        Format:     "json",
+        OutputFile: "result.json",
+        Pretty:     true,
+    })
+    if err != nil {
+        log.Fatalf("Failed to create outputter: %v", err)
+    }
+
+    // 处理输出
+    err = outputter.Process(result)
+    if err != nil {
+        log.Fatalf("Failed to process output: %v", err)
+    }
+
+    fmt.Println("Scan completed and results saved to result.json")
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="package main
+
+import (
+    &quot;fmt&quot;
+    &quot;log&quot;
+
+    &quot;github.com/cc11001100/go-port-rocket/pkg/scanner&quot;
+    &quot;github.com/cc11001100/go-port-rocket/pkg/output&quot;
+)
+
+func main() {
+    // 创建扫描器
+    s, err := scanner.NewScanner(&scanner.Options{
+        Target:           &quot;scanme.nmap.org&quot;,
+        Ports:            &quot;21-25,80,443&quot;,
+        ScanType:         &quot;tcp&quot;,
+        ServiceDetection: true,
+        VersionIntensity: 7,
+    })
+    if err != nil {
+        log.Fatalf(&quot;Failed to create scanner: %v&quot;, err)
+    }
+
+    // 执行扫描
+    result, err := s.Scan()
+    if err != nil {
+        log.Fatalf(&quot;Scan failed: %v&quot;, err)
+    }
+
+    // 创建输出处理器
+    outputter, err := output.NewOutputter(&output.Options{
+        Format:     &quot;json&quot;,
+        OutputFile: &quot;result.json&quot;,
+        Pretty:     true,
+    })
+    if err != nil {
+        log.Fatalf(&quot;Failed to create outputter: %v&quot;, err)
+    }
+
+    // 处理输出
+    err = outputter.Process(result)
+    if err != nil {
+        log.Fatalf(&quot;Failed to process output: %v&quot;, err)
+    }
+
+    fmt.Println(&quot;Scan completed and results saved to result.json&quot;)
+}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+                
+                <h3>异步扫描示例</h3>
+                <div class="code-block">
+                    <pre><code>package main
+
+import (
+    "fmt"
+    "log"
+    "time"
+
+    "github.com/cc11001100/go-port-rocket/pkg/scanner"
+)
+
+func main() {
+    // 创建扫描器
+    s, err := scanner.NewScanner(&scanner.Options{
+        Target:           "example.com",
+        Ports:            "1-1000",
+        ScanType:         "tcp",
+        Workers:          200,
+        ServiceDetection: true,
+    })
+    if err != nil {
+        log.Fatalf("Failed to create scanner: %v", err)
+    }
+
+    // 启动异步扫描
+    portChan, resultChan, errChan := s.ScanAsync()
+
+    // 处理端口结果
+    go func() {
+        for port := range portChan {
+            fmt.Printf("Port %d/%s: %s", port.Port, port.Protocol, port.State)
+            if port.Service != "" {
+                fmt.Printf(" (%s %s)", port.Service, port.Version)
+            }
+            fmt.Println()
+        }
+    }()
+
+    // 处理错误
+    go func() {
+        for err := range errChan {
+            log.Printf("Error: %v", err)
+        }
+    }()
+
+    // 获取最终结果
+    result := <-resultChan
+    fmt.Printf("\nScan completed in %s\n", result.ScanTime)
+    fmt.Printf("Found %d open ports\n", len(result.Ports))
+    
+    // 等待所有处理完成
+    time.Sleep(time.Second)
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="package main
+
+import (
+    &quot;fmt&quot;
+    &quot;log&quot;
+    &quot;time&quot;
+
+    &quot;github.com/cc11001100/go-port-rocket/pkg/scanner&quot;
+)
+
+func main() {
+    // 创建扫描器
+    s, err := scanner.NewScanner(&scanner.Options{
+        Target:           &quot;example.com&quot;,
+        Ports:            &quot;1-1000&quot;,
+        ScanType:         &quot;tcp&quot;,
+        Workers:          200,
+        ServiceDetection: true,
+    })
+    if err != nil {
+        log.Fatalf(&quot;Failed to create scanner: %v&quot;, err)
+    }
+
+    // 启动异步扫描
+    portChan, resultChan, errChan := s.ScanAsync()
+
+    // 处理端口结果
+    go func() {
+        for port := range portChan {
+            fmt.Printf(&quot;Port %d/%s: %s&quot;, port.Port, port.Protocol, port.State)
+            if port.Service != &quot;&quot; {
+                fmt.Printf(&quot; (%s %s)&quot;, port.Service, port.Version)
+            }
+            fmt.Println()
+        }
+    }()
+
+    // 处理错误
+    go func() {
+        for err := range errChan {
+            log.Printf(&quot;Error: %v&quot;, err)
+        }
+    }()
+
+    // 获取最终结果
+    result := &lt;-resultChan
+    fmt.Printf(&quot;\nScan completed in %s\n&quot;, result.ScanTime)
+    fmt.Printf(&quot;Found %d open ports\n&quot;, len(result.Ports))
+    
+    // 等待所有处理完成
+    time.Sleep(time.Second)
+}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-rocket"></i>
+                    <span>Go Port Rocket</span>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>文档</h4>
+                        <a href="cli.html">CLI 文档</a>
+                        <a href="http-api.html">HTTP API</a>
+                        <a href="golang-api.html" class="active">Golang API</a>
+                        <a href="mcp.html">MCP</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>资源</h4>
+                        <a href="https://github.com/cc11001100/go-port-rocket" target="_blank">GitHub</a>
+                        <a href="https://github.com/cc11001100/go-port-rocket/issues" target="_blank">问题反馈</a>
+                        <a href="https://github.com/cc11001100/go-port-rocket/blob/main/LICENSE" target="_blank">许可证</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Go Port Rocket. 采用 MIT 许可证。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+    <script>
+        new ClipboardJS('.copy-btn');
+    </script>
+</body>
+</html> 

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Port Rocket - 强大的端口扫描工具</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <a href="index.html">
+                        <i class="fas fa-rocket"></i>
+                        <span>Go Port Rocket</span>
+                    </a>
+                </div>
+                <div class="nav-links">
+                    <a href="#features">功能</a>
+                    <a href="docs/cli.html">CLI 文档</a>
+                    <a href="docs/http-api.html">HTTP API</a>
+                    <a href="docs/golang-api.html">Golang API</a>
+                    <a href="docs/mcp.html">MCP</a>
+                    <a href="https://github.com/cc11001100/go-port-rocket" target="_blank" class="github-link">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Go Port Rocket</h1>
+                <p class="hero-subtitle">高性能端口扫描工具，为安全评估和网络诊断而设计</p>
+                <div class="hero-buttons">
+                    <a href="docs/cli.html" class="btn btn-primary">开始使用</a>
+                    <a href="https://github.com/cc11001100/go-port-rocket" class="btn btn-secondary" target="_blank">
+                        <i class="fab fa-github"></i> Star on GitHub
+                    </a>
+                </div>
+            </div>
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span class="terminal-button red"></span>
+                    <span class="terminal-button yellow"></span>
+                    <span class="terminal-button green"></span>
+                </div>
+                <div class="terminal-body">
+                    <pre><code>$ go-port-rocket scan -t scanme.nmap.org -p 21-25,80,443 -s tcp --service-detection -O
+[INFO] Starting scan against scanme.nmap.org...
+[INFO] Scanning ports: 21-25,80,443
+[INFO] Service detection enabled
+[INFO] OS detection enabled
+
+PORT   STATE  SERVICE       VERSION
+21/tcp open   ftp           vsftpd 3.0.3
+22/tcp open   ssh           OpenSSH 7.4
+23/tcp closed telnet
+24/tcp closed unknown
+25/tcp closed smtp
+80/tcp open   http          Apache httpd 2.4.46
+443/tcp open   https         Apache httpd 2.4.46
+
+OS: Linux 4.15.0-99-generic (96%)
+
+[INFO] Scan completed in 3.76s</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">强大功能</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>TCP/UDP 扫描</h3>
+                    <p>支持 TCP 和 UDP 协议的端口扫描，可指定端口范围或特定端口</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>服务识别</h3>
+                    <p>精确识别运行在目标端口上的服务及其版本信息</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>操作系统检测</h3>
+                    <p>通过网络指纹识别目标主机的操作系统类型和版本</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-export"></i>
+                    </div>
+                    <h3>多种输出格式</h3>
+                    <p>支持文本、JSON、XML 和 HTML 格式的扫描结果输出</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3>HTTP API</h3>
+                    <p>提供 RESTful API，支持远程调用和集成到其他系统</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>MCP 支持</h3>
+                    <p>多行命令处理功能，方便 AI 系统调用和批量任务处理</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="installation">
+        <div class="container">
+            <h2 class="section-title">快速安装</h2>
+            <div class="installation-options">
+                <div class="install-option">
+                    <h3>使用 Go 安装</h3>
+                    <div class="code-block">
+                        <pre><code>go install github.com/cc11001100/go-port-rocket@latest</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go install github.com/cc11001100/go-port-rocket@latest">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="install-option">
+                    <h3>从源码编译</h3>
+                    <div class="code-block">
+                        <pre><code>git clone https://github.com/cc11001100/go-port-rocket.git
+cd go-port-rocket
+go build -o go-port-rocket</code></pre>
+                        <button class="copy-btn" data-clipboard-text="git clone https://github.com/cc11001100/go-port-rocket.git
+cd go-port-rocket
+go build -o go-port-rocket">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="documentation">
+        <div class="container">
+            <h2 class="section-title">详细文档</h2>
+            <div class="doc-grid">
+                <a href="docs/cli.html" class="doc-card">
+                    <div class="doc-icon">
+                        <i class="fas fa-terminal"></i>
+                    </div>
+                    <h3>命令行文档</h3>
+                    <p>学习如何使用命令行接口进行扫描和高级配置</p>
+                </a>
+                <a href="docs/http-api.html" class="doc-card">
+                    <div class="doc-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h3>HTTP API 文档</h3>
+                    <p>了解 API 端点、请求参数和认证方式</p>
+                </a>
+                <a href="docs/golang-api.html" class="doc-card">
+                    <div class="doc-icon">
+                        <i class="fab fa-golang"></i>
+                    </div>
+                    <h3>Golang API 文档</h3>
+                    <p>将 Go Port Rocket 作为库集成到你的 Go 项目中</p>
+                </a>
+                <a href="docs/mcp.html" class="doc-card">
+                    <div class="doc-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>MCP 文档</h3>
+                    <p>多行命令处理功能，适用于 AI 系统和批量任务</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-rocket"></i>
+                    <span>Go Port Rocket</span>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>文档</h4>
+                        <a href="docs/cli.html">CLI 文档</a>
+                        <a href="docs/http-api.html">HTTP API</a>
+                        <a href="docs/golang-api.html">Golang API</a>
+                        <a href="docs/mcp.html">MCP</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>资源</h4>
+                        <a href="https://github.com/cc11001100/go-port-rocket" target="_blank">GitHub</a>
+                        <a href="https://github.com/cc11001100/go-port-rocket/issues" target="_blank">问题反馈</a>
+                        <a href="https://github.com/cc11001100/go-port-rocket/blob/main/LICENSE" target="_blank">许可证</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Go Port Rocket. 采用 MIT 许可证。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+    <script>
+        new ClipboardJS('.copy-btn');
+    </script>
+</body>
+</html> 

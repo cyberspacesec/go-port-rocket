@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>命令行文档 - Go Port Rocket</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/docs.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <a href="../index.html">
+                        <i class="fas fa-rocket"></i>
+                        <span>Go Port Rocket</span>
+                    </a>
+                </div>
+                <div class="nav-links">
+                    <a href="../index.html#features">功能</a>
+                    <a href="cli.html" class="active">CLI 文档</a>
+                    <a href="http-api.html">HTTP API</a>
+                    <a href="golang-api.html">Golang API</a>
+                    <a href="mcp.html">MCP</a>
+                    <a href="https://github.com/cc11001100/go-port-rocket" target="_blank" class="github-link">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="docs-container">
+        <aside class="docs-sidebar">
+            <div class="sidebar-header">
+                <h3>命令行文档</h3>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#installation">安装</a></li>
+                <li><a href="#basic-usage">基本使用</a></li>
+                <li><a href="#scan-options">扫描选项</a></li>
+                <li><a href="#advanced-usage">高级用法</a></li>
+                <li><a href="#output-formats">输出格式</a></li>
+                <li><a href="#examples">示例</a></li>
+            </ul>
+        </aside>
+
+        <main class="docs-content">
+            <div class="docs-header">
+                <h1>命令行接口文档</h1>
+                <p>学习如何通过命令行使用 Go Port Rocket 进行端口扫描和网络探测</p>
+            </div>
+
+            <section id="installation" class="docs-section">
+                <h2>安装</h2>
+                <p>使用 Go 工具链安装 Go Port Rocket：</p>
+                <div class="code-block">
+                    <pre><code>go install github.com/cc11001100/go-port-rocket@latest</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go install github.com/cc11001100/go-port-rocket@latest">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <p>或者从源码编译：</p>
+                <div class="code-block">
+                    <pre><code>git clone https://github.com/cc11001100/go-port-rocket.git
+cd go-port-rocket
+go build -o go-port-rocket</code></pre>
+                    <button class="copy-btn" data-clipboard-text="git clone https://github.com/cc11001100/go-port-rocket.git
+cd go-port-rocket
+go build -o go-port-rocket">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </section>
+
+            <section id="basic-usage" class="docs-section">
+                <h2>基本使用</h2>
+                <p>Go Port Rocket 的基本命令结构如下：</p>
+                <div class="code-block">
+                    <pre><code>go-port-rocket [命令] [选项]</code></pre>
+                </div>
+
+                <p>主要命令包括：</p>
+                <ul class="command-list">
+                    <li>
+                        <code>scan</code>
+                        <span>执行端口扫描</span>
+                    </li>
+                    <li>
+                        <code>api</code>
+                        <span>启动 HTTP API 服务</span>
+                    </li>
+                    <li>
+                        <code>mcpscan</code>
+                        <span>使用 MCP 格式执行扫描</span>
+                    </li>
+                    <li>
+                        <code>mcpapi</code>
+                        <span>启动 MCP API 服务</span>
+                    </li>
+                </ul>
+
+                <p>最基本的扫描命令示例：</p>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </section>
+
+            <section id="scan-options" class="docs-section">
+                <h2>扫描选项</h2>
+                <p>扫描命令支持多种选项，以下是详细说明：</p>
+
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>选项</th>
+                                <th>缩写</th>
+                                <th>描述</th>
+                                <th>默认值</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>--target</code></td>
+                                <td><code>-t</code></td>
+                                <td>扫描目标 (IP地址或域名)</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td><code>--ports</code></td>
+                                <td><code>-p</code></td>
+                                <td>端口范围 (例如: 80,443 或 1-1024)</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td><code>--scan-type</code></td>
+                                <td><code>-s</code></td>
+                                <td>扫描类型 (tcp 或 udp)</td>
+                                <td>tcp</td>
+                            </tr>
+                            <tr>
+                                <td><code>--timeout</code></td>
+                                <td>-</td>
+                                <td>超时时间</td>
+                                <td>5s</td>
+                            </tr>
+                            <tr>
+                                <td><code>--workers</code></td>
+                                <td><code>-w</code></td>
+                                <td>工作线程数</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td><code>--format</code></td>
+                                <td><code>-f</code></td>
+                                <td>输出格式 (text, json, xml, html)</td>
+                                <td>text</td>
+                            </tr>
+                            <tr>
+                                <td><code>--output</code></td>
+                                <td><code>-o</code></td>
+                                <td>输出文件路径</td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td><code>--pretty</code></td>
+                                <td><code>-P</code></td>
+                                <td>美化输出</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>--os-detection</code></td>
+                                <td><code>-O</code></td>
+                                <td>启用操作系统检测</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>--service-detection</code></td>
+                                <td>-</td>
+                                <td>启用服务检测</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>--version-intensity</code></td>
+                                <td>-</td>
+                                <td>版本检测强度 (0-9)</td>
+                                <td>7</td>
+                            </tr>
+                            <tr>
+                                <td><code>--guess-os</code></td>
+                                <td>-</td>
+                                <td>推测操作系统</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>--limit-os</code></td>
+                                <td>-</td>
+                                <td>限制操作系统扫描</td>
+                                <td>false</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="advanced-usage" class="docs-section">
+                <h2>高级用法</h2>
+                
+                <h3>服务检测</h3>
+                <p>启用服务检测功能可以识别运行在开放端口上的服务类型和版本：</p>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp --service-detection</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp --service-detection">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+                
+                <h3>操作系统检测</h3>
+                <p>启用操作系统检测功能可以识别目标主机的操作系统类型和版本：</p>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp -O</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp -O">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+                
+                <h3>版本检测强度</h3>
+                <p>调整版本检测的强度级别 (0-9)，值越高，检测越详细但耗时也越长：</p>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp --service-detection --version-intensity 9</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp --service-detection --version-intensity 9">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+                
+                <h3>完整扫描</h3>
+                <p>进行全面的扫描，包括端口扫描、服务检测和操作系统检测：</p>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t 192.168.1.1 -p 1-1024 -s tcp -O --service-detection --version-intensity 9 --guess-os</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 1-1024 -s tcp -O --service-detection --version-intensity 9 --guess-os">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </section>
+
+            <section id="output-formats" class="docs-section">
+                <h2>输出格式</h2>
+                <p>Go Port Rocket 支持多种输出格式，便于后续处理和分析：</p>
+                
+                <h3>文本格式 (默认)</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp -f text</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp -f text">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+                
+                <h3>JSON 格式</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp -f json -o result.json --pretty</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp -f json -o result.json --pretty">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+                
+                <h3>XML 格式</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp -f xml -o result.xml</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp -f xml -o result.xml">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+                
+                <h3>HTML 格式</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp -f html -o result.html</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 80,443 -s tcp -f html -o result.html">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </section>
+
+            <section id="examples" class="docs-section">
+                <h2>示例</h2>
+                
+                <h3>扫描特定端口</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t example.com -p 80,443,8080 -s tcp</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t example.com -p 80,443,8080 -s tcp">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+                
+                <h3>扫描端口范围</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t 192.168.1.1 -p 1-1000 -s tcp</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 1-1000 -s tcp">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+                
+                <h3>UDP 扫描</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t 192.168.1.1 -p 53,123,161 -s udp</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 53,123,161 -s udp">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+                
+                <h3>保存为 JSON 格式</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t scanme.nmap.org -p 1-100 -s tcp -f json -o scan_result.json --pretty</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t scanme.nmap.org -p 1-100 -s tcp -f json -o scan_result.json --pretty">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+                
+                <h3>完整扫描示例</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket scan -t scanme.nmap.org -p 21-25,80,443 -s tcp --service-detection -O --version-intensity 7 -f html -o scan_result.html</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t scanme.nmap.org -p 21-25,80,443 -s tcp --service-detection -O --version-intensity 7 -f html -o scan_result.html">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-rocket"></i>
+                    <span>Go Port Rocket</span>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>文档</h4>
+                        <a href="cli.html" class="active">CLI 文档</a>
+                        <a href="http-api.html">HTTP API</a>
+                        <a href="golang-api.html">Golang API</a>
+                        <a href="mcp.html">MCP</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>资源</h4>
+                        <a href="https://github.com/cc11001100/go-port-rocket" target="_blank">GitHub</a>
+                        <a href="https://github.com/cc11001100/go-port-rocket/issues" target="_blank">问题反馈</a>
+                        <a href="https://github.com/cc11001100/go-port-rocket/blob/main/LICENSE" target="_blank">许可证</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Go Port Rocket. 采用 MIT 许可证。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+    <script>
+        new ClipboardJS('.copy-btn');
+    </script>
+</body>
+</html> 

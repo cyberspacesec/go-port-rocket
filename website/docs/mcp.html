@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Context Protocol - Go Port Rocket</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/docs.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <a href="../index.html">
+                        <i class="fas fa-rocket"></i>
+                        <span>Go Port Rocket</span>
+                    </a>
+                </div>
+                <div class="nav-links">
+                    <a href="../index.html#features">功能</a>
+                    <a href="cli.html">CLI 文档</a>
+                    <a href="http-api.html">HTTP API</a>
+                    <a href="golang-api.html">Golang API</a>
+                    <a href="mcp.html" class="active">MCP</a>
+                    <a href="https://github.com/cc11001100/go-port-rocket" target="_blank" class="github-link">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="docs-container">
+        <aside class="docs-sidebar">
+            <div class="sidebar-header">
+                <h3>Model Context Protocol</h3>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="#introduction">介绍</a></li>
+                <li><a href="#key-concepts">核心概念</a></li>
+                <li><a href="#benefits">优势</a></li>
+                <li><a href="#implementation">实现细节</a></li>
+                <li><a href="#usage">使用指南</a></li>
+                <li><a href="#examples">示例</a></li>
+                <li><a href="#integration">与AI系统集成</a></li>
+            </ul>
+        </aside>
+
+        <main class="docs-content">
+            <div class="docs-header">
+                <h1>Model Context Protocol (MCP)</h1>
+                <p>增强AI模型与上下文理解的通信协议，提升端口扫描智能化水平</p>
+            </div>
+
+            <section id="introduction" class="docs-section">
+                <h2>介绍</h2>
+                <p>Model Context Protocol (MCP) 是一个专门设计的协议，用于增强 AI 模型与网络扫描工具之间的通信能力。它解决了传统端口扫描工具在与智能系统集成时面临的上下文理解和语义传递问题。</p>
+                
+                <p>MCP 不仅仅是一个数据交换格式，它是一个完整的模型-上下文通信框架，使 Go Port Rocket 能够：</p>
+                <ul>
+                    <li>理解并保持扫描操作的上下文</li>
+                    <li>支持语义化的指令和响应</li>
+                    <li>实现与大型语言模型和其他 AI 系统的无缝集成</li>
+                    <li>在复杂任务中保持状态和记忆</li>
+                </ul>
+
+                <p>随着网络安全领域对智能化工具的需求不断增长，MCP 成为连接传统网络工具与现代 AI 能力的关键桥梁。</p>
+            </section>
+
+            <section id="key-concepts" class="docs-section">
+                <h2>核心概念</h2>
+                
+                <h3>上下文感知</h3>
+                <p>MCP 的核心理念是上下文感知（Context Awareness）。不同于传统的命令行工具，使用 MCP 的扫描操作能够：</p>
+                <ul>
+                    <li>记住之前的操作历史</li>
+                    <li>理解当前操作与之前操作的关系</li>
+                    <li>根据上下文调整行为和输出</li>
+                </ul>
+
+                <h3>语义通信</h3>
+                <p>MCP 使用语义化的数据结构，不仅传递数据，还传递意图和含义：</p>
+                <ul>
+                    <li>指令携带操作意图</li>
+                    <li>响应包含丰富的上下文信息</li>
+                    <li>支持自然语言描述与技术参数的映射</li>
+                </ul>
+
+                <h3>会话模型</h3>
+                <p>MCP 引入会话（Session）概念，允许多个操作在同一上下文中执行：</p>
+                <ul>
+                    <li>会话维护状态信息</li>
+                    <li>支持连续对话式操作</li>
+                    <li>实现任务的渐进式细化</li>
+                </ul>
+
+                <h3>推理能力</h3>
+                <p>通过与大型语言模型的集成，MCP 赋予了扫描工具基本的推理能力：</p>
+                <ul>
+                    <li>根据部分结果推断潜在目标</li>
+                    <li>识别异常模式并给出解释</li>
+                    <li>生成人类可理解的分析报告</li>
+                </ul>
+            </section>
+
+            <section id="benefits" class="docs-section">
+                <h2>优势</h2>
+                
+                <div class="feature-grid" style="margin-top: 2rem;">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>增强理解能力</h3>
+                        <p>使扫描工具能够理解更复杂、更自然的指令，减少用户需要学习的专业语法</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-comment-dots"></i>
+                        </div>
+                        <h3>对话式交互</h3>
+                        <p>支持基于对话的扫描操作，用户可以通过自然对话逐步细化和调整扫描策略</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>智能分析</h3>
+                        <p>自动分析扫描结果，提供见解和建议，而不仅仅是原始数据</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <h3>生态系统集成</h3>
+                        <p>轻松与现有的AI助手、自动化工具和安全流程集成</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="implementation" class="docs-section">
+                <h2>实现细节</h2>
+                
+                <h3>协议规范</h3>
+                <p>MCP 协议基于 JSON 格式，包含四个主要部分：</p>
+                <div class="code-block">
+                    <pre><code>{
+  "meta": {
+    "version": "1.0",
+    "session_id": "550e8400-e29b-41d4-a716-446655440000",
+    "timestamp": "2023-07-15T12:34:56Z"
+  },
+  "context": {
+    "history": [...],
+    "environment": {...},
+    "state": {...}
+  },
+  "instruction": {
+    "type": "scan",
+    "intent": "discover_services",
+    "parameters": {...}
+  },
+  "response": {
+    "status": "success",
+    "data": {...},
+    "analysis": {...},
+    "next_steps": [...]
+  }
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="{
+  &quot;meta&quot;: {
+    &quot;version&quot;: &quot;1.0&quot;,
+    &quot;session_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440000&quot;,
+    &quot;timestamp&quot;: &quot;2023-07-15T12:34:56Z&quot;
+  },
+  &quot;context&quot;: {
+    &quot;history&quot;: [...],
+    &quot;environment&quot;: {...},
+    &quot;state&quot;: {...}
+  },
+  &quot;instruction&quot;: {
+    &quot;type&quot;: &quot;scan&quot;,
+    &quot;intent&quot;: &quot;discover_services&quot;,
+    &quot;parameters&quot;: {...}
+  },
+  &quot;response&quot;: {
+    &quot;status&quot;: &quot;success&quot;,
+    &quot;data&quot;: {...},
+    &quot;analysis&quot;: {...},
+    &quot;next_steps&quot;: [...]
+  }
+}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>元数据 (Meta)</h3>
+                <p>包含协议版本、会话标识和时间戳等基本信息，用于确保通信的可追踪性和兼容性。</p>
+                
+                <h3>上下文 (Context)</h3>
+                <p>存储当前会话的历史记录、环境信息和状态数据，使模型能够理解请求的背景。</p>
+                
+                <h3>指令 (Instruction)</h3>
+                <p>描述用户或系统希望执行的操作，包括操作类型、意图和具体参数。</p>
+                
+                <h3>响应 (Response)</h3>
+                <p>包含操作结果、数据分析和推荐的下一步操作，形成一个完整的信息闭环。</p>
+
+                <h3>上下文持久化</h3>
+                <p>MCP 实现了会话上下文的持久化机制，支持：</p>
+                <ul>
+                    <li>内存中的会话缓存</li>
+                    <li>基于数据库的长期存储</li>
+                    <li>会话导出和导入</li>
+                </ul>
+                
+                <h3>集成接口</h3>
+                <p>提供了与多种AI服务的集成接口：</p>
+                <ul>
+                    <li>OpenAI API 集成</li>
+                    <li>本地模型支持</li>
+                    <li>自定义模型适配器</li>
+                </ul>
+            </section>
+
+            <section id="usage" class="docs-section">
+                <h2>使用指南</h2>
+                
+                <h3>启动 MCP 会话</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket mcp --start-session</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket mcp --start-session">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>使用自然语言进行扫描</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket mcp --query "扫描 example.com 上的 HTTP 和 HTTPS 服务，并分析安全风险"</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket mcp --query &quot;扫描 example.com 上的 HTTP 和 HTTPS 服务，并分析安全风险&quot;">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>延续上下文的对话式扫描</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket mcp --query "检查这些服务是否存在已知漏洞"</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket mcp --query &quot;检查这些服务是否存在已知漏洞&quot;">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>配置 AI 模型</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket mcp --config-model --type openai --api-key YOUR_API_KEY --model gpt-4</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket mcp --config-model --type openai --api-key YOUR_API_KEY --model gpt-4">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>查看会话历史</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket mcp --show-history</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket mcp --show-history">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>导出会话</h3>
+                <div class="code-block">
+                    <pre><code>go-port-rocket mcp --export-session --output session.json</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket mcp --export-session --output session.json">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </section>
+
+            <section id="examples" class="docs-section">
+                <h2>示例</h2>
+                
+                <h3>基础扫描示例</h3>
+                <p>以下是一个基本的 MCP 会话示例：</p>
+                <div class="code-block">
+                    <pre><code># 启动会话
+$ go-port-rocket mcp --start-session
+[INFO] 会话已创建: 550e8400-e29b-41d4-a716-446655440000
+
+# 执行自然语言查询
+$ go-port-rocket mcp --query "扫描 example.com 找出开放的端口"
+[INFO] 正在分析您的请求...
+[INFO] 将扫描 example.com 的常用端口
+[INFO] 扫描中...
+
+已发现开放端口:
+- 80/tcp (HTTP)
+- 443/tcp (HTTPS)
+- 22/tcp (SSH)
+
+分析: 这是一个典型的网站服务器配置，包含Web服务和SSH远程管理功能。
+
+# 继续询问
+$ go-port-rocket mcp --query "SSH服务有什么版本信息？"
+[INFO] 正在获取SSH服务详情...
+
+SSH服务信息:
+- 协议版本: SSH-2.0
+- 软件版本: OpenSSH 8.4p1
+- 加密算法: chacha20-poly1305, aes256-gcm
+- 认证方式: publickey, password
+
+分析: 这是较新版本的OpenSSH，包含现代加密算法，建议禁用密码认证，仅使用密钥认证。</code></pre>
+                </div>
+
+                <h3>高级分析示例</h3>
+                <p>利用MCP进行更深入的安全分析：</p>
+                <div class="code-block">
+                    <pre><code>$ go-port-rocket mcp --query "扫描 scanme.nmap.org 并评估其安全状况"
+[INFO] 正在执行全面安全评估...
+[INFO] 这可能需要几分钟时间...
+
+发现服务:
+- 22/tcp: OpenSSH 6.6.1p1 (安全级别: 中等)
+- 80/tcp: Apache httpd 2.4.7 (安全级别: 低)
+- 9929/tcp: 未知服务 (安全级别: 未知)
+
+安全评估:
+1. 发现Apache服务版本已过时，存在潜在CVE-2021-44790漏洞
+2. SSH服务配置允许密码认证，建议仅使用密钥认证
+3. 端口9929运行的未知服务可能存在风险
+
+建议操作:
+1. 更新Apache至最新版本
+2. 禁用SSH密码认证
+3. 进一步调查端口9929运行的服务
+
+安全评分: 65/100 (需要注意)</code></pre>
+                </div>
+
+                <h3>与其他工具对比</h3>
+                <p>对比传统端口扫描与MCP增强的扫描：</p>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>功能</th>
+                                <th>传统端口扫描</th>
+                                <th>MCP增强扫描</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>输入方式</td>
+                                <td>命令行参数</td>
+                                <td>自然语言、命令行、API</td>
+                            </tr>
+                            <tr>
+                                <td>上下文维护</td>
+                                <td>无</td>
+                                <td>全面支持</td>
+                            </tr>
+                            <tr>
+                                <td>结果解释</td>
+                                <td>原始数据</td>
+                                <td>分析性解释与建议</td>
+                            </tr>
+                            <tr>
+                                <td>连续操作</td>
+                                <td>需要重新指定所有参数</td>
+                                <td>自动维护上下文</td>
+                            </tr>
+                            <tr>
+                                <td>学习曲线</td>
+                                <td>陡峭</td>
+                                <td>平缓</td>
+                            </tr>
+                            <tr>
+                                <td>与AI集成</td>
+                                <td>需要定制开发</td>
+                                <td>原生支持</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="integration" class="docs-section">
+                <h2>与AI系统集成</h2>
+                
+                <h3>Python集成示例</h3>
+                <p>使用Python与MCP接口交互：</p>
+                <div class="code-block">
+                    <pre><code>import requests
+import json
+
+def mcp_query(query, session_id=None):
+    """与MCP服务交互的函数"""
+    url = "http://localhost:8080/api/v1/mcp"
+    
+    headers = {
+        "Content-Type": "application/json"
+    }
+    
+    data = {
+        "query": query
+    }
+    
+    if session_id:
+        data["session_id"] = session_id
+    
+    response = requests.post(url, headers=headers, json=data)
+    return response.json()
+
+# 开始新会话
+result = mcp_query("扫描 example.com 的 HTTP 和 HTTPS 服务")
+session_id = result["meta"]["session_id"]
+print(f"扫描结果:\n{json.dumps(result['response']['data'], indent=2)}")
+
+# 在同一会话中继续查询
+follow_up = mcp_query("有检测到任何安全风险吗?", session_id)
+print(f"安全分析:\n{json.dumps(follow_up['response']['analysis'], indent=2)}")</code></pre>
+                    <button class="copy-btn" data-clipboard-text="import requests
+import json
+
+def mcp_query(query, session_id=None):
+    &quot;&quot;&quot;与MCP服务交互的函数&quot;&quot;&quot;
+    url = &quot;http://localhost:8080/api/v1/mcp&quot;
+    
+    headers = {
+        &quot;Content-Type&quot;: &quot;application/json&quot;
+    }
+    
+    data = {
+        &quot;query&quot;: query
+    }
+    
+    if session_id:
+        data[&quot;session_id&quot;] = session_id
+    
+    response = requests.post(url, headers=headers, json=data)
+    return response.json()
+
+# 开始新会话
+result = mcp_query(&quot;扫描 example.com 的 HTTP 和 HTTPS 服务&quot;)
+session_id = result[&quot;meta&quot;][&quot;session_id&quot;]
+print(f&quot;扫描结果:\n{json.dumps(result['response']['data'], indent=2)}&quot;)
+
+# 在同一会话中继续查询
+follow_up = mcp_query(&quot;有检测到任何安全风险吗?&quot;, session_id)
+print(f&quot;安全分析:\n{json.dumps(follow_up['response']['analysis'], indent=2)}&quot;)">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>与ChatGPT插件集成</h3>
+                <p>为ChatGPT创建一个Go Port Rocket插件：</p>
+                <div class="code-block">
+                    <pre><code># 插件配置文件 (ai-plugin.json)
+{
+  "schema_version": "v1",
+  "name_for_human": "Go Port Rocket",
+  "name_for_model": "goPortRocket",
+  "description_for_human": "进行高级端口扫描和网络安全分析。",
+  "description_for_model": "该插件允许用户使用Go Port Rocket进行端口扫描和网络安全分析。它支持MCP协议与模型交互，可以将自然语言请求转换为扫描操作并提供结果分析。",
+  "auth": {
+    "type": "service_http",
+    "authorization_type": "bearer"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://api.example.com/goPortRocket/openapi.yaml"
+  },
+  "logo_url": "https://example.com/logo.png",
+  "contact_email": "support@example.com",
+  "legal_info_url": "https://example.com/legal"
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="{
+  &quot;schema_version&quot;: &quot;v1&quot;,
+  &quot;name_for_human&quot;: &quot;Go Port Rocket&quot;,
+  &quot;name_for_model&quot;: &quot;goPortRocket&quot;,
+  &quot;description_for_human&quot;: &quot;进行高级端口扫描和网络安全分析。&quot;,
+  &quot;description_for_model&quot;: &quot;该插件允许用户使用Go Port Rocket进行端口扫描和网络安全分析。它支持MCP协议与模型交互，可以将自然语言请求转换为扫描操作并提供结果分析。&quot;,
+  &quot;auth&quot;: {
+    &quot;type&quot;: &quot;service_http&quot;,
+    &quot;authorization_type&quot;: &quot;bearer&quot;
+  },
+  &quot;api&quot;: {
+    &quot;type&quot;: &quot;openapi&quot;,
+    &quot;url&quot;: &quot;https://api.example.com/goPortRocket/openapi.yaml&quot;
+  },
+  &quot;logo_url&quot;: &quot;https://example.com/logo.png&quot;,
+  &quot;contact_email&quot;: &quot;support@example.com&quot;,
+  &quot;legal_info_url&quot;: &quot;https://example.com/legal&quot;
+}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>自动化工作流集成</h3>
+                <p>将MCP与CI/CD工作流集成：</p>
+                <div class="code-block">
+                    <pre><code># Github Actions 工作流示例
+name: Security Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  security_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Setup Go Port Rocket
+        run: |
+          curl -o gpr.tar.gz -L https://github.com/cc11001100/go-port-rocket/releases/latest/download/go-port-rocket-linux-amd64.tar.gz
+          tar -xzf gpr.tar.gz
+          chmod +x go-port-rocket
+      
+      - name: Run MCP Security Scan
+        run: |
+          ./go-port-rocket mcp --query "全面扫描 ${{ github.event.repository.name }}.example.com 的安全状况，详细评估所有发现的服务" --output-format json > scan_results.json
+      
+      - name: Check for Critical Issues
+        run: |
+          cat scan_results.json | jq '.response.analysis.critical_issues' | grep -q "null" || exit 1
+      
+      - name: Upload Scan Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: security-scan-results
+          path: scan_results.json</code></pre>
+                    <button class="copy-btn" data-clipboard-text="name: Security Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  security_scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Setup Go Port Rocket
+        run: |
+          curl -o gpr.tar.gz -L https://github.com/cc11001100/go-port-rocket/releases/latest/download/go-port-rocket-linux-amd64.tar.gz
+          tar -xzf gpr.tar.gz
+          chmod +x go-port-rocket
+      
+      - name: Run MCP Security Scan
+        run: |
+          ./go-port-rocket mcp --query &quot;全面扫描 ${{ github.event.repository.name }}.example.com 的安全状况，详细评估所有发现的服务&quot; --output-format json > scan_results.json
+      
+      - name: Check for Critical Issues
+        run: |
+          cat scan_results.json | jq '.response.analysis.critical_issues' | grep -q &quot;null&quot; || exit 1
+      
+      - name: Upload Scan Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: security-scan-results
+          path: scan_results.json">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-rocket"></i>
+                    <span>Go Port Rocket</span>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>文档</h4>
+                        <a href="cli.html">CLI 文档</a>
+                        <a href="http-api.html">HTTP API</a>
+                        <a href="golang-api.html">Golang API</a>
+                        <a href="mcp.html" class="active">MCP</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>资源</h4>
+                        <a href="https://github.com/cc11001100/go-port-rocket" target="_blank">GitHub</a>
+                        <a href="https://github.com/cc11001100/go-port-rocket/issues" target="_blank">问题反馈</a>
+                        <a href="https://github.com/cc11001100/go-port-rocket/blob/main/LICENSE" target="_blank">许可证</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Go Port Rocket. 采用 MIT 许可证。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+    <script>
+        new ClipboardJS('.copy-btn');
+    </script>
+</body>
+</html> 
