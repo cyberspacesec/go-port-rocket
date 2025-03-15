@@ -1,82 +1,83 @@
-name: Update Chocolatey Package
+# 暂时禁用此工作流，因为它使用了出问题的actions/upload-artifact@v3
+# name: Update Chocolatey Package
 
-on:
-  release:
-    types: [published]
+# on:
+#   release:
+#     types: [published]
 
-jobs:
-  update-chocolatey:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+# jobs:
+#   update-chocolatey:
+#     runs-on: windows-latest
+#     steps:
+#       - uses: actions/checkout@v2
+#         with:
+#           fetch-depth: 0
 
-      - name: Get release info
-        id: release
-        shell: bash
-        run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+#       - name: Get release info
+#         id: release
+#         shell: bash
+#         run: |
+#           VERSION=${GITHUB_REF#refs/tags/v}
+#           echo "version=$VERSION" >> $GITHUB_OUTPUT
+#           echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-      - name: Get checksums
-        id: checksums
-        shell: bash
-        run: |
-          SHA256_64=$(curl -s https://github.com/cyberspacesec/go-port-rocket/releases/download/v${{ steps.release.outputs.version }}/go-port-rocket_${{ steps.release.outputs.version }}_windows_amd64.zip.sha256 | cut -d ' ' -f 1)
-          SHA256_32=$(curl -s https://github.com/cyberspacesec/go-port-rocket/releases/download/v${{ steps.release.outputs.version }}/go-port-rocket_${{ steps.release.outputs.version }}_windows_386.zip.sha256 | cut -d ' ' -f 1)
-          echo "sha256_64=$SHA256_64" >> $GITHUB_OUTPUT
-          echo "sha256_32=$SHA256_32" >> $GITHUB_OUTPUT
+#       - name: Get checksums
+#         id: checksums
+#         shell: bash
+#         run: |
+#           SHA256_64=$(curl -s https://github.com/cyberspacesec/go-port-rocket/releases/download/v${{ steps.release.outputs.version }}/go-port-rocket_${{ steps.release.outputs.version }}_windows_amd64.zip.sha256 | cut -d ' ' -f 1)
+#           SHA256_32=$(curl -s https://github.com/cyberspacesec/go-port-rocket/releases/download/v${{ steps.release.outputs.version }}/go-port-rocket_${{ steps.release.outputs.version }}_windows_386.zip.sha256 | cut -d ' ' -f 1)
+#           echo "sha256_64=$SHA256_64" >> $GITHUB_OUTPUT
+#           echo "sha256_32=$SHA256_32" >> $GITHUB_OUTPUT
 
-      - name: Update nuspec and scripts
-        shell: pwsh
-        run: |
-          # 更新nuspec文件
-          $content = Get-Content chocolatey/go-port-rocket.nuspec -Raw
-          $content = $content -replace '\$version\$', '${{ steps.release.outputs.version }}'
-          Set-Content chocolatey/go-port-rocket.nuspec $content -NoNewline
+#       - name: Update nuspec and scripts
+#         shell: pwsh
+#         run: |
+#           # 更新nuspec文件
+#           $content = Get-Content chocolatey/go-port-rocket.nuspec -Raw
+#           $content = $content -replace '\$version\$', '${{ steps.release.outputs.version }}'
+#           Set-Content chocolatey/go-port-rocket.nuspec $content -NoNewline
 
-          # 更新安装脚本
-          $content = Get-Content chocolatey/tools/chocolateyinstall.ps1 -Raw
-          $content = $content -replace '\$version', '${{ steps.release.outputs.version }}'
-          $content = $content -replace '\$sha256_32', '${{ steps.checksums.outputs.sha256_32 }}'
-          $content = $content -replace '\$sha256_64', '${{ steps.checksums.outputs.sha256_64 }}'
-          Set-Content chocolatey/tools/chocolateyinstall.ps1 $content -NoNewline
+#           # 更新安装脚本
+#           $content = Get-Content chocolatey/tools/chocolateyinstall.ps1 -Raw
+#           $content = $content -replace '\$version', '${{ steps.release.outputs.version }}'
+#           $content = $content -replace '\$sha256_32', '${{ steps.checksums.outputs.sha256_32 }}'
+#           $content = $content -replace '\$sha256_64', '${{ steps.checksums.outputs.sha256_64 }}'
+#           Set-Content chocolatey/tools/chocolateyinstall.ps1 $content -NoNewline
 
-      - name: Setup Chocolatey
-        shell: pwsh
-        run: |
-          Set-ExecutionPolicy Bypass -Scope Process -Force
-          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-          iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+#       - name: Setup Chocolatey
+#         shell: pwsh
+#         run: |
+#           Set-ExecutionPolicy Bypass -Scope Process -Force
+#           [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+#           iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-      - name: Pack Chocolatey package
-        shell: pwsh
-        run: |
-          cd chocolatey
-          choco pack
+#       - name: Pack Chocolatey package
+#         shell: pwsh
+#         run: |
+#           cd chocolatey
+#           choco pack
 
-      - name: Upload package artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: chocolatey-package
-          path: chocolatey/*.nupkg
+#       - name: Upload package artifact
+#         uses: actions/upload-artifact@v2
+#         with:
+#           name: chocolatey-package
+#           path: chocolatey/*.nupkg
           
-      - name: Upload package to release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: chocolatey/*.nupkg
-          tag_name: v${{ steps.release.outputs.version }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Upload package to release
+#         uses: softprops/action-gh-release@v1
+#         with:
+#           files: chocolatey/*.nupkg
+#           tag_name: v${{ steps.release.outputs.version }}
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 自动推送到Chocolatey社区仓库 (需要CHOCO_API_KEY)
-      - name: Push to Chocolatey
-        if: env.CHOCO_API_KEY != ''
-        shell: pwsh
-        run: |
-          cd chocolatey
-          choco push *.nupkg --api-key $env:CHOCO_API_KEY --source https://push.chocolatey.org/
-        env:
-          CHOCO_API_KEY: ${{ secrets.CHOCO_API_KEY }} 
+#       # 自动推送到Chocolatey社区仓库 (需要CHOCO_API_KEY)
+#       - name: Push to Chocolatey
+#         if: env.CHOCO_API_KEY != ''
+#         shell: pwsh
+#         run: |
+#           cd chocolatey
+#           choco push *.nupkg --api-key $env:CHOCO_API_KEY --source https://push.chocolatey.org/
+#         env:
+#           CHOCO_API_KEY: ${{ secrets.CHOCO_API_KEY }} 

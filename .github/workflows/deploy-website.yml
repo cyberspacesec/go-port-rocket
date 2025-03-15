@@ -1,54 +1,55 @@
-name: Deploy to GitHub Pages
+# 暂时禁用此工作流，使用gh-pages分支直接部署
+# name: Deploy to GitHub Pages
 
-on:
-  push:
-    branches:
-      - main  # 当主分支有推送时触发
-    paths:
-      - 'website/**'  # 仅当website目录下的文件发生变化时触发
+# on:
+#   push:
+#     branches:
+#       - main  # 当主分支有推送时触发
+#     paths:
+#       - 'website/**'  # 仅当website目录下的文件发生变化时触发
 
-  # 允许手动触发工作流
-  workflow_dispatch:
+#   # 允许手动触发工作流
+#   workflow_dispatch:
 
-# 设置GITHUB_TOKEN的权限
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+# # 设置GITHUB_TOKEN的权限
+# permissions:
+#   contents: read
+#   pages: write
+#   id-token: write
 
-# 同一时间只允许一次部署
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+# # 同一时间只允许一次部署
+# concurrency:
+#   group: "pages"
+#   cancel-in-progress: false
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+#     environment:
+#       name: github-pages
+#       url: ${{ steps.deployment.outputs.page_url }}
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v2
         
-      # 使用自定义命令进行构建和部署，避免使用可能有问题的actions
-      - name: Setup Pages
-        run: echo "Setting up GitHub Pages..."
+#       # 使用自定义命令进行构建和部署，避免使用可能有问题的actions
+#       - name: Setup Pages
+#         run: echo "Setting up GitHub Pages..."
       
-      - name: Prepare Artifact
-        run: |
-          echo "Preparing website artifact..."
-          mkdir -p _site
-          cp -r website/* _site/
+#       - name: Prepare Artifact
+#         run: |
+#           echo "Preparing website artifact..."
+#           mkdir -p _site
+#           cp -r website/* _site/
       
-      - name: Setup GitHub Pages
-        uses: actions/configure-pages@v2
+#       - name: Setup GitHub Pages
+#         uses: actions/configure-pages@v2
       
-      - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: '_site'
+#       - name: Upload GitHub Pages artifact
+#         uses: actions/upload-pages-artifact@v1
+#         with:
+#           path: '_site'
       
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1 
+#       - name: Deploy to GitHub Pages
+#         id: deployment
+#         uses: actions/deploy-pages@v1 
