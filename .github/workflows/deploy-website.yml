@@ -12,43 +12,25 @@ on:
 
 # 设置GITHUB_TOKEN的权限
 permissions:
-  contents: read
+  contents: write
   pages: write
-  id-token: write
-
-# 同一时间只允许一次部署
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         
-      # 使用自定义命令进行构建和部署，避免使用可能有问题的actions
-      - name: Setup Pages
-        run: echo "Setting up GitHub Pages..."
-      
-      - name: Prepare Artifact
+      - name: Prepare Website
         run: |
-          echo "Preparing website artifact..."
-          mkdir -p _site
-          cp -r website/* _site/
-      
-      - name: Setup GitHub Pages
-        uses: actions/configure-pages@v2
-      
-      - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: '_site'
+          echo "Preparing website..."
+          mkdir -p build
+          cp -r website/* build/
       
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1 
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build      # 要部署的文件夹
+          branch: gh-pages   # 部署到的分支
+          clean: true        # 自动清理旧文件 
