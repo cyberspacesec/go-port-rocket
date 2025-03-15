@@ -1,0 +1,165 @@
+# OS Fingerprinting Database
+# Format:
+# Fingerprint <OS name>
+# Class <OS class>
+# <fingerprint characteristics>
+
+Fingerprint Windows 10
+Class Windows Windows 10 NT kernel
+SEQ(SP=4)
+OPS(O1=M|O2=M|O3=M|O4=M|O5=M|O6=M)
+WIN(W1=2048|W2=128)
+ECN(R=Y|DF=Y|T=0|TG=6|W=8192|O=M|CC=Y|Q=)
+T1(DF=Y|R=Y|TG=6|S=O|A=Z|F=A|RD=0|Q=)
+T2(R=N|DF=N|T=0|TG=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T3(R=Y|DF=Y|T=0|TG=6|W=32768|S=Z|A=O|F=A|O=M|RD=0|Q=)
+T4(DF=N|R=Y|TG=6|W=5840|S=A|A=Z|F=R|O=|RD=0|Q=)
+T5(DF=N|R=Y|TG=6|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+T6(DF=N|R=Y|TG=6|W=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T7(DF=N|R=Y|TG=6|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+U1(R=Y|DF=N|T=255|TG=|IPL=164|UN=0|RIPL=G|RID=G|RIPCK=G|RUCK=G|RUD=G)
+IE(DFI=N|T=0|TG=0|CD=Z)
+
+Fingerprint Windows 7
+Class Windows Windows 7 NT kernel
+SEQ(SP=4-8)
+OPS(O1=M|O2=M|O3=M|O4=M|O5=M|O6=M)
+WIN(W1=2048|W2=128)
+ECN(R=Y|DF=Y|T=0|TG=6|W=8192|O=M|CC=Y|Q=)
+T1(DF=Y|R=Y|TG=6|S=O|A=Z|F=A|RD=0|Q=)
+T2(R=N|DF=N|T=0|TG=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T3(R=Y|DF=Y|T=0|TG=6|W=32768|S=Z|A=O|F=A|O=M|RD=0|Q=)
+T4(DF=N|R=Y|TG=6|W=5840|S=A|A=Z|F=R|O=|RD=0|Q=)
+T5(DF=N|R=Y|TG=6|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+T6(DF=N|R=Y|TG=6|W=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+
+Fingerprint Ubuntu 20.04
+Class Linux Ubuntu Linux kernel 5.4
+SEQ(SP=0-5)
+OPS(O1=M|O2=M|O3=M|O4=M|O5=M|O6=M)
+WIN(W1=4096|W2=32)
+ECN(R=Y|DF=Y|T=0|TG=64|W=16384|O=M|CC=Y|Q=)
+T1(DF=Y|R=Y|TG=64|S=O|A=S+|F=AS|RD=0|Q=)
+T2(R=N|DF=N|T=0|TG=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T3(R=Y|DF=Y|T=0|TG=64|W=65535|S=Z|A=O|F=A|O=|RD=0|Q=)
+T4(DF=N|R=N|TG=64|W=0|S=A|A=Z|F=R|O=|RD=0|Q=)
+T5(DF=N|R=Y|TG=0|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+T6(DF=N|R=Y|TG=0|W=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T7(DF=N|R=Y|TG=0|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+
+Fingerprint Debian 10
+Class Linux Debian Linux kernel
+SEQ(SP=0-5)
+OPS(O1=M|O2=M|O3=M|O4=M|O5=M|O6=M)
+WIN(W1=4096|W2=32)
+ECN(R=Y|DF=Y|T=0|TG=64|W=16384|O=M|CC=Y|Q=)
+T1(DF=Y|R=Y|TG=64|S=O|A=S+|F=AS|RD=0|Q=)
+T2(R=N|DF=N|T=0|TG=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T3(R=Y|DF=Y|T=0|TG=64|W=65535|S=Z|A=O|F=A|O=|RD=0|Q=)
+T4(DF=N|R=N|TG=64|W=0|S=A|A=Z|F=R|O=|RD=0|Q=)
+T5(DF=N|R=Y|TG=0|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+T6(DF=N|R=Y|TG=0|W=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+
+Fingerprint macOS 11 Big Sur
+Class macOS|macOS X macOS Big Sur Darwin kernel
+SEQ(SP=0-5)
+OPS(O1=M|O2=M|O3=M|O4=M|O5=M|O6=M)
+WIN(W1=8192|W2=64)
+ECN(R=Y|DF=Y|T=0|TG=65|W=16384|O=M|CC=Y|Q=)
+T1(DF=Y|R=Y|TG=65|S=O|A=S+|F=AS|RD=0|Q=)
+T2(R=N|DF=N|T=0|TG=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T3(R=Y|DF=Y|T=0|TG=65|W=65535|S=Z|A=O|F=A|O=|RD=0|Q=)
+T4(DF=N|R=N|TG=0|W=0|S=A|A=Z|F=R|O=|RD=0|Q=)
+T5(DF=N|R=Y|TG=0|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+T6(DF=N|R=Y|TG=0|W=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+
+Fingerprint FreeBSD 12.0
+Class BSD FreeBSD BSD kernel
+SEQ(SP=2-6)
+OPS(O1=M|O2=M|O3=S|O4=M|O5=M|O6=M)
+WIN(W1=4096|W2=64)
+ECN(R=Y|DF=Y|T=0|TG=64|W=65535|O=S|CC=N|Q=)
+T1(DF=Y|R=Y|TG=64|S=O|A=S+|F=AS|RD=0|Q=)
+T2(R=N|DF=N|T=0|TG=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T3(R=Y|DF=Y|T=0|TG=64|W=65535|S=Z|A=O|F=A|O=S|RD=0|Q=)
+T4(DF=N|R=N|TG=64|W=0|S=A|A=Z|F=R|O=|RD=0|Q=)
+T5(DF=N|R=Y|TG=0|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+T6(DF=N|R=Y|TG=0|W=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+
+Fingerprint CentOS 8
+Class Linux CentOS Linux kernel
+SEQ(SP=0-5)
+OPS(O1=M|O2=M|O3=M|O4=M|O5=M|O6=M)
+WIN(W1=4096|W2=32)
+ECN(R=Y|DF=Y|T=0|TG=64|W=16384|O=M|CC=Y|Q=)
+T1(DF=Y|R=Y|TG=64|S=O|A=S+|F=AS|RD=0|Q=)
+T2(R=N|DF=N|T=0|TG=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T3(R=Y|DF=Y|T=0|TG=64|W=65535|S=Z|A=O|F=A|O=|RD=0|Q=)
+T4(DF=N|R=N|TG=64|W=0|S=A|A=Z|F=R|O=|RD=0|Q=)
+T5(DF=N|R=Y|TG=0|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+T6(DF=N|R=Y|TG=0|W=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+
+Fingerprint Alpine Linux
+Class Linux Alpine Linux kernel
+SEQ(SP=0-5)
+OPS(O1=M|O2=M|O3=M|O4=M|O5=M|O6=M)
+WIN(W1=4096|W2=32)
+ECN(R=Y|DF=Y|T=0|TG=64|W=16384|O=M|CC=Y|Q=)
+T1(DF=Y|R=Y|TG=64|S=O|A=S+|F=AS|RD=0|Q=)
+T2(R=N|DF=N|T=0|TG=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T3(R=Y|DF=Y|T=0|TG=64|W=65535|S=Z|A=O|F=A|O=|RD=0|Q=)
+T4(DF=N|R=N|TG=64|W=0|S=A|A=Z|F=R|O=|RD=0|Q=)
+T5(DF=N|R=Y|TG=0|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+T6(DF=N|R=Y|TG=0|W=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+
+Fingerprint iOS 14
+Class iOS Apple iOS
+SEQ(SP=0-5)
+OPS(O1=M|O2=M|O3=M|O4=M|O5=M|O6=M)
+WIN(W1=8192|W2=64)
+ECN(R=Y|DF=Y|T=0|TG=65|W=16384|O=M|CC=Y|Q=)
+T1(DF=Y|R=Y|TG=65|S=O|A=S+|F=AS|RD=0|Q=)
+T2(R=N|DF=N|T=0|TG=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T3(R=Y|DF=Y|T=0|TG=65|W=65535|S=Z|A=O|F=A|O=|RD=0|Q=)
+T4(DF=N|R=N|TG=0|W=0|S=A|A=Z|F=R|O=|RD=0|Q=)
+T5(DF=N|R=Y|TG=0|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+T6(DF=N|R=Y|TG=0|W=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+
+Fingerprint Android 10
+Class Linux Android Embedded Linux kernel
+SEQ(SP=0-5)
+OPS(O1=M|O2=M|O3=M|O4=M|O5=M|O6=M)
+WIN(W1=4096|W2=32)
+ECN(R=Y|DF=Y|T=0|TG=64|W=32120|O=M|CC=Y|Q=)
+T1(DF=Y|R=Y|TG=64|S=O|A=S+|F=AS|RD=0|Q=)
+T2(R=N|DF=N|T=0|TG=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T3(R=Y|DF=Y|T=0|TG=64|W=65535|S=Z|A=O|F=A|O=|RD=0|Q=)
+T4(DF=N|R=N|TG=64|W=0|S=A|A=Z|F=R|O=|RD=0|Q=)
+T5(DF=N|R=Y|TG=0|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+T6(DF=N|R=Y|TG=0|W=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+
+Fingerprint Windows Server 2019
+Class Windows Server Windows Server NT kernel
+SEQ(SP=4-8)
+OPS(O1=M|O2=M|O3=M|O4=M|O5=M|O6=M)
+WIN(W1=2048|W2=128)
+ECN(R=Y|DF=Y|T=0|TG=6|W=8192|O=M|CC=Y|Q=)
+T1(DF=Y|R=Y|TG=6|S=O|A=Z|F=A|RD=0|Q=)
+T2(R=N|DF=N|T=0|TG=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T3(R=Y|DF=Y|T=0|TG=6|W=32768|S=Z|A=O|F=A|O=M|RD=0|Q=)
+T4(DF=N|R=Y|TG=6|W=5840|S=A|A=Z|F=R|O=|RD=0|Q=)
+T5(DF=N|R=Y|TG=6|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+T6(DF=N|R=Y|TG=6|W=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+
+Fingerprint OpenBSD 6.6
+Class BSD OpenBSD BSD kernel
+SEQ(SP=3-9)
+OPS(O1=M|O2=M|O3=M|O4=M|O5=M|O6=M)
+WIN(W1=16384|W2=64)
+ECN(R=Y|DF=Y|T=0|TG=44|W=16384|O=M|CC=N|Q=)
+T1(DF=Y|R=Y|TG=44|S=O|A=S+|F=AS|RD=0|Q=)
+T2(R=N|DF=N|T=0|TG=0|S=Z|A=S|F=AR|O=|RD=0|Q=)
+T3(R=Y|DF=Y|T=0|TG=44|W=16384|S=Z|A=O|F=A|O=M|RD=0|Q=)
+T4(DF=N|R=N|TG=0|W=0|S=Z|A=Z|F=AR|O=|RD=0|Q=)
+T5(DF=N|R=Y|TG=0|W=0|S=Z|A=S+|F=AR|O=|RD=0|Q=)
+T6(DF=N|R=Y|TG=0|W=0|S=Z|A=S|F=AR|O=|RD=0|Q=) 

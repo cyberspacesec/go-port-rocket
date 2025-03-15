@@ -1,0 +1,28 @@
+FROM ubuntu:22.04
+
+# 安装依赖
+RUN apt-get update && apt-get install -y \
+    libpcap0.8 \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# 创建非root用户
+RUN useradd -u 1000 -m rocket
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制二进制文件
+COPY go-port-rocket /app/
+
+# 设置可执行权限
+RUN chmod +x /app/go-port-rocket
+
+# 设置用户
+USER rocket
+
+# 设置入口点
+ENTRYPOINT ["/app/go-port-rocket"]
+
+# 默认命令，显示帮助信息
+CMD ["--help"] 

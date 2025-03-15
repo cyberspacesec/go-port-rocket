@@ -1,0 +1,9 @@
+端口,协议,状态,服务,原因
+22,tcp,open,,syn-ack
+80,tcp,open,,syn-ack
+25,tcp,closed,,reset
+443,tcp,closed,,reset
+23,tcp,closed,,reset
+3306,tcp,closed,,reset
+21,tcp,closed,,reset
+24,tcp,filtered,,no-response

@@ -3,13 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golang API 文档 - Go Port Rocket</title>
+    <title>Golang API 文档 - Port Rocket</title>
+    <!-- 测试编辑功能 -->
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/docs.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- 添加Prism.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/match-braces/prism-match-braces.min.css" />
+    <!-- 添加自定义代码样式 -->
+    <style>
+        .code-block {
+            position: relative;
+            margin: 1.5em 0;
+            border-radius: 6px;
+            overflow: visible;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        pre[class*="language-"] {
+            margin: 0;
+            padding: 1.5em;
+            padding-left: 4em;
+            font-size: 14px;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+        
+        /* 代码块行号样式 */
+        .line-numbers .line-numbers-rows {
+            border-right: 1px solid rgba(255,255,255,0.2);
+            padding-right: 0.8em;
+        }
+        
+        /* 高亮关键字和注释 */
+        .token.keyword {
+            color: #c792ea;
+            font-weight: 500;
+        }
+        
+        .token.comment {
+            color: #7b8ba3;
+        }
+        
+        /* 复制按钮样式 */
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.2);
+            color: #eee;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.7;
+            z-index: 10;
+        }
+        
+        .copy-btn:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+            opacity: 1;
+        }
+        
+        /* 语言标记 */
+        .code-block::before {
+            content: attr(data-language);
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.3);
+            color: #eee;
+            padding: 2px 8px;
+            font-size: 12px;
+            border-bottom-right-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            z-index: 1;
+        }
+        
+        /* 命令关键字高亮 */
+        .token.command {
+            color: #5ab3ff;
+            font-weight: bold;
+        }
+        
+        /* 参数高亮 */
+        .token.parameter {
+            color: #98c379;
+        }
+        
+        /* 命令文本高亮 */
+        .highlight-bash {
+            background-color: #282c34;
+            color: #abb2bf;
+            border-radius: 6px;
+            padding: 16px;
+            font-family: monospace;
+            position: relative;
+        }
+        
+        /* 语言标签 */
+        .language-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 2px 8px;
+            font-size: 12px;
+            border-bottom-right-radius: 6px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -18,16 +128,17 @@
                 <div class="logo">
                     <a href="../index.html">
                         <i class="fas fa-rocket"></i>
-                        <span>Go Port Rocket</span>
+                        <span>Port Rocket</span>
                     </a>
                 </div>
                 <div class="nav-links">
-                    <a href="../index.html#features">功能</a>
+                    <a href="../index.html">首页</a>
+                    <a href="installation.html">安装指南</a>
                     <a href="cli.html">CLI 文档</a>
                     <a href="http-api.html">HTTP API</a>
                     <a href="golang-api.html" class="active">Golang API</a>
-                    <a href="mcp.html">MCP</a>
-                    <a href="https://github.com/cc11001100/go-port-rocket" target="_blank" class="github-link">
+                    <a href="mcp.html">MCP（AI集成）</a>
+                    <a href="https://github.com/cyberspacesec/go-port-rocket" target="_blank" class="github-link">
                         <i class="fab fa-github"></i> GitHub
                     </a>
                 </div>
@@ -58,32 +169,113 @@
         <main class="docs-content">
             <div class="docs-header">
                 <h1>Golang API 文档</h1>
-                <p>学习如何在你的 Go 项目中集成和使用 Go Port Rocket 的核心功能</p>
+                <p>学习如何在你的 Go 项目中集成和使用 Port Rocket 的核心功能</p>
             </div>
 
             <section id="getting-started" class="docs-section">
                 <h2>开始使用</h2>
-                <p>要在你的 Go 项目中使用 Go Port Rocket，首先需要安装依赖：</p>
+                <p>要在你的 Go 项目中使用 Port Rocket，首先需要安装依赖：</p>
 
                 <div class="code-block">
-                    <pre><code>go get github.com/cc11001100/go-port-rocket</code></pre>
-                    <button class="copy-btn" data-clipboard-text="go get github.com/cc11001100/go-port-rocket">
+                    <pre><code class="language-bash">go get github.com/cyberspacesec/go-port-rocket</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go get github.com/cyberspacesec/go-port-rocket">
                         <i class="far fa-copy"></i>
                     </button>
                 </div>
 
                 <p>然后，你可以导入必要的包：</p>
                 <div class="code-block">
-                    <pre><code>import (
-    "github.com/cc11001100/go-port-rocket/pkg/scanner"
-    "github.com/cc11001100/go-port-rocket/pkg/fingerprint"
-    "github.com/cc11001100/go-port-rocket/pkg/output"
+                    <pre><code class="language-go">import (
+    "github.com/cyberspacesec/go-port-rocket/pkg/scanner"
+    "github.com/cyberspacesec/go-port-rocket/pkg/fingerprint"
+    "github.com/cyberspacesec/go-port-rocket/pkg/output"
 )</code></pre>
                     <button class="copy-btn" data-clipboard-text="import (
-    &quot;github.com/cc11001100/go-port-rocket/pkg/scanner&quot;
-    &quot;github.com/cc11001100/go-port-rocket/pkg/fingerprint&quot;
-    &quot;github.com/cc11001100/go-port-rocket/pkg/output&quot;
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/scanner&quot;
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/fingerprint&quot;
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/output&quot;
 )">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>快速开始示例</h3>
+                <p>下面是一个基础的端口扫描示例，可以帮助你快速开始使用：</p>
+                <div class="code-block">
+                    <pre><code class="language-go">package main
+
+import (
+    "fmt"
+    "log"
+    "time"
+
+    "github.com/cyberspacesec/go-port-rocket/pkg/scanner"
+)
+
+func main() {
+    // 创建简单的扫描配置
+    scanOpts := &scanner.ScanOptions{
+        Target:   "scanme.nmap.org",    // 扫描目标
+        Ports:    "22,80,443",          // 要扫描的端口
+        ScanType: scanner.ScanTypeTCP,  // 使用TCP扫描
+        Timeout:  5 * time.Second,      // 连接超时时间
+        Workers:  10,                   // 并发工作线程数
+    }
+
+    // 执行扫描
+    fmt.Println("开始扫描目标:", scanOpts.Target)
+    results, err := scanner.ExecuteScan(scanOpts)
+    if err != nil {
+        log.Fatalf("扫描失败: %v", err)
+    }
+
+    // 输出结果
+    fmt.Println("扫描结果:")
+    for _, result := range results {
+        state := "关闭"
+        if result.State == scanner.PortStateOpen {
+            state = "开放"
+        }
+        fmt.Printf("端口 %d: %s\n", result.Port, state)
+    }
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="package main
+
+import (
+    &quot;fmt&quot;
+    &quot;log&quot;
+    &quot;time&quot;
+
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/scanner&quot;
+)
+
+func main() {
+    // 创建简单的扫描配置
+    scanOpts := &scanner.ScanOptions{
+        Target:   &quot;scanme.nmap.org&quot;,    // 扫描目标
+        Ports:    &quot;22,80,443&quot;,          // 要扫描的端口
+        ScanType: scanner.ScanTypeTCP,  // 使用TCP扫描
+        Timeout:  5 * time.Second,      // 连接超时时间
+        Workers:  10,                   // 并发工作线程数
+    }
+
+    // 执行扫描
+    fmt.Println(&quot;开始扫描目标:&quot;, scanOpts.Target)
+    results, err := scanner.ExecuteScan(scanOpts)
+    if err != nil {
+        log.Fatalf(&quot;扫描失败: %v&quot;, err)
+    }
+
+    // 输出结果
+    fmt.Println(&quot;扫描结果:&quot;)
+    for _, result := range results {
+        state := &quot;关闭&quot;
+        if result.State == scanner.PortStateOpen {
+            state = &quot;开放&quot;
+        }
+        fmt.Printf(&quot;端口 %d: %s\n&quot;, result.Port, state)
+    }
+}">
                         <i class="far fa-copy"></i>
                     </button>
                 </div>
@@ -102,17 +294,103 @@
 
             <section id="scanner" class="docs-section">
                 <h2>扫描器</h2>
-                <p>扫描器是 Go Port Rocket 的核心组件，用于执行端口扫描操作。</p>
+                <p>扫描器是 Port Rocket 的核心组件，用于执行端口扫描操作。</p>
+
+                <h3>扫描类型常量</h3>
+                <p>Port Rocket 支持多种扫描类型，可以通过以下常量指定：</p>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>常量</th>
+                                <th>描述</th>
+                                <th>适用场景</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>ScanTypeTCP</code></td>
+                                <td>常规TCP连接扫描</td>
+                                <td>最基本的扫描方式，建立完整TCP连接</td>
+                            </tr>
+                            <tr>
+                                <td><code>ScanTypeSYN</code></td>
+                                <td>SYN半开放扫描</td>
+                                <td>更隐蔽的扫描方式，不完成完整的TCP握手</td>
+                            </tr>
+                            <tr>
+                                <td><code>ScanTypeFIN</code></td>
+                                <td>FIN扫描</td>
+                                <td>发送带有FIN标志的包，用于穿透某些防火墙</td>
+                            </tr>
+                            <tr>
+                                <td><code>ScanTypeNULL</code></td>
+                                <td>NULL扫描</td>
+                                <td>发送不带任何标志的TCP包</td>
+                            </tr>
+                            <tr>
+                                <td><code>ScanTypeXMAS</code></td>
+                                <td>XMAS扫描</td>
+                                <td>发送带有FIN, PSH, URG标志的TCP包</td>
+                            </tr>
+                            <tr>
+                                <td><code>ScanTypeACK</code></td>
+                                <td>ACK扫描</td>
+                                <td>用于检测防火墙规则</td>
+                            </tr>
+                            <tr>
+                                <td><code>ScanTypeUDP</code></td>
+                                <td>UDP扫描</td>
+                                <td>检测开放的UDP服务</td>
+                            </tr>
+                            <tr>
+                                <td><code>ScanTypeMAIMON</code></td>
+                                <td>Maimon扫描</td>
+                                <td>发送FIN/ACK标志，较为特殊的扫描技术</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>端口状态常量</h3>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>常量</th>
+                                <th>描述</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>PortStateOpen</code></td>
+                                <td>端口开放</td>
+                            </tr>
+                            <tr>
+                                <td><code>PortStateClosed</code></td>
+                                <td>端口关闭</td>
+                            </tr>
+                            <tr>
+                                <td><code>PortStateFiltered</code></td>
+                                <td>端口被过滤（防火墙或其他网络设备拦截）</td>
+                            </tr>
+                            <tr>
+                                <td><code>PortStateUnknown</code></td>
+                                <td>端口状态未知</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 <h3>创建扫描器</h3>
                 <div class="code-block">
-                    <pre><code>import "github.com/cc11001100/go-port-rocket/pkg/scanner"
+                    <pre><code class="language-go">import "github.com/cyberspacesec/go-port-rocket/pkg/scanner"
 
 // 创建扫描器实例
 s, err := scanner.NewScanner(&scanner.Options{
     Target:           "scanme.nmap.org",
     Ports:            "21-25,80,443",
-    ScanType:         "tcp",
+    ScanType:         scanner.ScanTypeTCP,
     Timeout:          "5s",
     Workers:          100,
     ServiceDetection: true,
@@ -122,13 +400,13 @@ s, err := scanner.NewScanner(&scanner.Options{
 if err != nil {
     log.Fatalf("Failed to create scanner: %v", err)
 }</code></pre>
-                    <button class="copy-btn" data-clipboard-text="import &quot;github.com/cc11001100/go-port-rocket/pkg/scanner&quot;
+                    <button class="copy-btn" data-clipboard-text="import &quot;github.com/cyberspacesec/go-port-rocket/pkg/scanner&quot;
 
 // 创建扫描器实例
 s, err := scanner.NewScanner(&scanner.Options{
     Target:           &quot;scanme.nmap.org&quot;,
     Ports:            &quot;21-25,80,443&quot;,
-    ScanType:         &quot;tcp&quot;,
+    ScanType:         scanner.ScanTypeTCP,
     Timeout:          &quot;5s&quot;,
     Workers:          100,
     ServiceDetection: true,
@@ -157,62 +435,174 @@ if err != nil {
                             <tr>
                                 <td><code>Target</code></td>
                                 <td>string</td>
-                                <td>扫描目标 (IP或域名)</td>
+                                <td>扫描目标 (IP, 域名, CIDR格式网段，如192.168.1.0/24)</td>
                                 <td>-</td>
                             </tr>
                             <tr>
                                 <td><code>Ports</code></td>
                                 <td>string</td>
-                                <td>端口范围 (例如: "80,443" 或 "1-1024")</td>
+                                <td>端口范围 (例如: "80,443" 或 "1-1024" 或 "22,80-90,443")</td>
                                 <td>-</td>
                             </tr>
                             <tr>
                                 <td><code>ScanType</code></td>
-                                <td>string</td>
-                                <td>扫描类型 ("tcp" 或 "udp")</td>
-                                <td>"tcp"</td>
+                                <td>ScanType</td>
+                                <td>扫描类型 (ScanTypeTCP, ScanTypeUDP, ScanTypeSYN等)</td>
+                                <td>ScanTypeTCP</td>
                             </tr>
                             <tr>
                                 <td><code>Timeout</code></td>
-                                <td>string</td>
-                                <td>超时时间 (例如: "5s")</td>
-                                <td>"5s"</td>
+                                <td>time.Duration</td>
+                                <td>连接超时时间，可以是时间字符串（如 "5s"）或 time.Duration 值</td>
+                                <td>5 * time.Second</td>
                             </tr>
                             <tr>
                                 <td><code>Workers</code></td>
                                 <td>int</td>
-                                <td>工作线程数</td>
+                                <td>并发工作线程数，影响扫描速度</td>
                                 <td>100</td>
                             </tr>
                             <tr>
-                                <td><code>ServiceDetection</code></td>
+                                <td><code>EnableService</code></td>
                                 <td>bool</td>
-                                <td>启用服务检测</td>
+                                <td>启用服务检测，识别端口上运行的服务</td>
                                 <td>false</td>
                             </tr>
                             <tr>
-                                <td><code>OSDetection</code></td>
+                                <td><code>EnableOS</code></td>
                                 <td>bool</td>
                                 <td>启用操作系统检测</td>
                                 <td>false</td>
                             </tr>
                             <tr>
+                                <td><code>ServiceProbe</code></td>
+                                <td>bool</td>
+                                <td>启用服务探测，发送特定数据包识别服务</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>BannerProbe</code></td>
+                                <td>bool</td>
+                                <td>获取服务banner信息</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
                                 <td><code>VersionIntensity</code></td>
                                 <td>int</td>
-                                <td>版本检测强度 (0-9)</td>
+                                <td>版本检测强度 (0-9)，值越大越详细但速度越慢</td>
                                 <td>7</td>
+                            </tr>
+                            <tr>
+                                <td><code>RateLimit</code></td>
+                                <td>int</td>
+                                <td>每秒请求数限制，用于控制扫描速度</td>
+                                <td>0 (无限制)</td>
+                            </tr>
+                            <tr>
+                                <td><code>Retries</code></td>
+                                <td>int</td>
+                                <td>重试次数</td>
+                                <td>2</td>
                             </tr>
                             <tr>
                                 <td><code>GuessOS</code></td>
                                 <td>bool</td>
-                                <td>推测操作系统</td>
+                                <td>推测操作系统，即使信息不足也尝试猜测</td>
                                 <td>false</td>
                             </tr>
                             <tr>
-                                <td><code>LimitOS</code></td>
+                                <td><code>LimitOSScan</code></td>
                                 <td>bool</td>
-                                <td>限制操作系统扫描</td>
+                                <td>限制操作系统扫描范围，减少探测数据包</td>
                                 <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>Verbose</code></td>
+                                <td>bool</td>
+                                <td>启用详细输出模式</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>Service</code></td>
+                                <td>*ServiceDetectionOptions</td>
+                                <td>服务检测的详细配置选项</td>
+                                <td>nil</td>
+                            </tr>
+                            <tr>
+                                <td><code>OutputFile</code></td>
+                                <td>string</td>
+                                <td>输出文件路径</td>
+                                <td>""</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>扫描结果结构体 (ScanResult)</h3>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>字段</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>Port</code></td>
+                                <td>int</td>
+                                <td>端口号</td>
+                            </tr>
+                            <tr>
+                                <td><code>State</code></td>
+                                <td>PortState</td>
+                                <td>端口状态 (open, closed, filtered, unknown)</td>
+                            </tr>
+                            <tr>
+                                <td><code>Service</code></td>
+                                <td>*fingerprint.Service</td>
+                                <td>服务信息，包含检测到的服务详情</td>
+                            </tr>
+                            <tr>
+                                <td><code>OS</code></td>
+                                <td>*fingerprint.OSInfo</td>
+                                <td>操作系统信息</td>
+                            </tr>
+                            <tr>
+                                <td><code>Banner</code></td>
+                                <td>string</td>
+                                <td>服务banner</td>
+                            </tr>
+                            <tr>
+                                <td><code>Version</code></td>
+                                <td>string</td>
+                                <td>版本信息</td>
+                            </tr>
+                            <tr>
+                                <td><code>ServiceName</code></td>
+                                <td>string</td>
+                                <td>服务名称</td>
+                            </tr>
+                            <tr>
+                                <td><code>Open</code></td>
+                                <td>bool</td>
+                                <td>端口是否开放</td>
+                            </tr>
+                            <tr>
+                                <td><code>Type</code></td>
+                                <td>ScanType</td>
+                                <td>扫描类型</td>
+                            </tr>
+                            <tr>
+                                <td><code>TTL</code></td>
+                                <td>int</td>
+                                <td>数据包TTL值，用于OS指纹识别</td>
+                            </tr>
+                            <tr>
+                                <td><code>Metadata</code></td>
+                                <td>map[string]interface{}</td>
+                                <td>元数据，存储额外信息</td>
                             </tr>
                         </tbody>
                     </table>
@@ -220,47 +610,55 @@ if err != nil {
 
                 <h3>执行扫描</h3>
                 <div class="code-block">
-                    <pre><code>// 开始扫描
+                    <pre><code class="language-go">// 开始扫描
 result, err := s.Scan()
 if err != nil {
     log.Fatalf("Scan failed: %v", err)
 }
 
 // 处理扫描结果
-for _, port := range result.Ports {
-    fmt.Printf("Port %d/%s: %s\n", port.Port, port.Protocol, port.State)
-    if port.Service != "" {
-        fmt.Printf("  Service: %s\n", port.Service)
+for _, port := range result {
+    fmt.Printf("Port %d/%s: %s\n", port.Port, port.Type, port.State)
+    if port.ServiceName != "" {
+        fmt.Printf("  Service: %s\n", port.ServiceName)
     }
     if port.Version != "" {
         fmt.Printf("  Version: %s\n", port.Version)
     }
+    if port.Banner != "" {
+        fmt.Printf("  Banner: %s\n", port.Banner)
+    }
 }
 
 // 处理操作系统检测结果
-if result.OS != nil {
-    fmt.Printf("OS: %s %s (%d%%)\n", result.OS.Name, result.OS.Version, result.OS.Confidence)
+if port.OS != nil {
+    fmt.Printf("OS: %s %s (Confidence: %.2f%%)\n", 
+        port.OS.Name, port.OS.Version, port.OS.Confidence*100)
 }</code></pre>
                     <button class="copy-btn" data-clipboard-text="// 开始扫描
 result, err := s.Scan()
 if err != nil {
-    log.Fatalf(&quot;Scan failed: %v&quot;, err)
+    log.Fatalf("Scan failed: %v", err)
 }
 
 // 处理扫描结果
-for _, port := range result.Ports {
-    fmt.Printf(&quot;Port %d/%s: %s\n&quot;, port.Port, port.Protocol, port.State)
-    if port.Service != &quot;&quot; {
-        fmt.Printf(&quot;  Service: %s\n&quot;, port.Service)
+for _, port := range result {
+    fmt.Printf("Port %d/%s: %s\n", port.Port, port.Type, port.State)
+    if port.ServiceName != "" {
+        fmt.Printf("  Service: %s\n", port.ServiceName)
     }
-    if port.Version != &quot;&quot; {
-        fmt.Printf(&quot;  Version: %s\n&quot;, port.Version)
+    if port.Version != "" {
+        fmt.Printf("  Version: %s\n", port.Version)
+    }
+    if port.Banner != "" {
+        fmt.Printf("  Banner: %s\n", port.Banner)
     }
 }
 
 // 处理操作系统检测结果
-if result.OS != nil {
-    fmt.Printf(&quot;OS: %s %s (%d%%)\n&quot;, result.OS.Name, result.OS.Version, result.OS.Confidence)
+if port.OS != nil {
+    fmt.Printf("OS: %s %s (Confidence: %.2f%%)\n", 
+        port.OS.Name, port.OS.Version, port.OS.Confidence*100)
 }">
                         <i class="far fa-copy"></i>
                     </button>
@@ -269,63 +667,117 @@ if result.OS != nil {
                 <h3>扫描器方法</h3>
                 <ul class="method-list">
                     <li>
-                        <code>NewScanner(opts *Options) (*Scanner, error)</code>
+                        <code>NewScanner(opts *ScanOptions) (*Scanner, error)</code>
                         <p>创建新的扫描器实例</p>
+                        <p>参数：</p>
+                        <ul>
+                            <li><code>opts</code> - 扫描配置选项结构体</li>
+                        </ul>
+                        <p>返回：</p>
+                        <ul>
+                            <li>扫描器实例</li>
+                            <li>错误信息（如有）</li>
+                        </ul>
                     </li>
                     <li>
-                        <code>Scan() (*ScanResult, error)</code>
+                        <code>Scan() ([]*ScanResult, error)</code>
                         <p>执行端口扫描并返回结果</p>
+                        <p>返回：</p>
+                        <ul>
+                            <li>扫描结果切片，每个端口的详细信息</li>
+                            <li>错误信息（如有）</li>
+                        </ul>
                     </li>
                     <li>
-                        <code>ScanAsync() (chan *PortResult, chan *ScanResult, chan error)</code>
+                        <code>ScanAsync() (chan *ScanResult, chan *ScanResult, chan error)</code>
                         <p>异步执行扫描并通过通道返回结果</p>
+                        <p>返回：</p>
+                        <ul>
+                            <li>端口结果通道 - 实时返回每个扫描的端口</li>
+                            <li>扫描结果通道 - 返回最终汇总结果</li>
+                            <li>错误通道 - 返回扫描过程中的错误</li>
+                        </ul>
                     </li>
                     <li>
                         <code>Stop()</code>
                         <p>停止正在进行的扫描</p>
+                    </li>
+                    <li>
+                        <code>ExecuteScan(opts *ScanOptions) ([]*ScanResult, error)</code>
+                        <p>便捷函数，一步创建扫描器并执行扫描</p>
+                        <p>参数：</p>
+                        <ul>
+                            <li><code>opts</code> - 扫描配置选项结构体</li>
+                        </ul>
+                        <p>返回：</p>
+                        <ul>
+                            <li>扫描结果切片</li>
+                            <li>错误信息（如有）</li>
+                        </ul>
                     </li>
                 </ul>
             </section>
 
             <section id="service-detection" class="docs-section">
                 <h2>服务检测</h2>
-                <p>服务检测模块用于识别开放端口上运行的服务和版本。</p>
+                <p>服务检测模块用于识别开放端口上运行的服务和版本。Port Rocket 实现了类似 nmap 的服务检测功能，通过发送特定探测数据包并分析响应来确定服务类型和版本。</p>
+
+                <h3>服务检测工作原理</h3>
+                <p>服务检测通过以下步骤实现：</p>
+                <ol>
+                    <li>对开放端口发送特定的探测数据包</li>
+                    <li>收集响应数据（如banner信息）</li>
+                    <li>根据响应内容匹配服务指纹数据库</li>
+                    <li>识别服务类型、名称和版本信息</li>
+                </ol>
 
                 <h3>使用服务检测</h3>
                 <div class="code-block">
-                    <pre><code>import "github.com/cc11001100/go-port-rocket/pkg/fingerprint"
+                    <pre><code class="language-go">import "github.com/cyberspacesec/go-port-rocket/pkg/fingerprint"
 
 // 创建服务检测器
 detector := fingerprint.NewServiceDetector(&fingerprint.ServiceOptions{
     Intensity: 7,
+    Timeout:   time.Second * 2,
 })
 
 // 对特定端口执行服务检测
-service, version, err := detector.Detect("192.168.1.1", 80, "tcp")
+serviceInfo, err := detector.Detect("192.168.1.1", 80, "tcp")
 if err != nil {
     log.Printf("Service detection failed: %v", err)
 } else {
-    fmt.Printf("Detected service: %s %s\n", service, version)
+    fmt.Printf("检测到的服务: %s\n", serviceInfo.Name)
+    fmt.Printf("版本: %s\n", serviceInfo.Version)
+    fmt.Printf("产品: %s\n", serviceInfo.Product)
+    if serviceInfo.Banner != "" {
+        fmt.Printf("Banner: %s\n", serviceInfo.Banner)
+    }
 }</code></pre>
-                    <button class="copy-btn" data-clipboard-text="import &quot;github.com/cc11001100/go-port-rocket/pkg/fingerprint&quot;
+                    <button class="copy-btn" data-clipboard-text="import &quot;github.com/cyberspacesec/go-port-rocket/pkg/fingerprint&quot;
 
 // 创建服务检测器
 detector := fingerprint.NewServiceDetector(&fingerprint.ServiceOptions{
     Intensity: 7,
+    Timeout:   time.Second * 2,
 })
 
 // 对特定端口执行服务检测
-service, version, err := detector.Detect(&quot;192.168.1.1&quot;, 80, &quot;tcp&quot;)
+serviceInfo, err := detector.Detect(&quot;192.168.1.1&quot;, 80, &quot;tcp&quot;)
 if err != nil {
     log.Printf(&quot;Service detection failed: %v&quot;, err)
 } else {
-    fmt.Printf(&quot;Detected service: %s %s\n&quot;, service, version)
+    fmt.Printf(&quot;检测到的服务: %s\n&quot;, serviceInfo.Name)
+    fmt.Printf(&quot;版本: %s\n&quot;, serviceInfo.Version)
+    fmt.Printf(&quot;产品: %s\n&quot;, serviceInfo.Product)
+    if serviceInfo.Banner != &quot;&quot; {
+        fmt.Printf(&quot;Banner: %s\n&quot;, serviceInfo.Banner)
+    }
 }">
                         <i class="far fa-copy"></i>
                     </button>
                 </div>
 
-                <h3>服务检测选项</h3>
+                <h3>服务检测选项 (ServiceOptions)</h3>
                 <div class="table-container">
                     <table class="options-table">
                         <thead>
@@ -340,63 +792,222 @@ if err != nil {
                             <tr>
                                 <td><code>Intensity</code></td>
                                 <td>int</td>
-                                <td>检测强度 (0-9)</td>
+                                <td>检测强度 (0-9)，值越大检测越详细但速度越慢</td>
                                 <td>7</td>
                             </tr>
                             <tr>
                                 <td><code>Timeout</code></td>
-                                <td>string</td>
+                                <td>time.Duration</td>
                                 <td>每次探测的超时时间</td>
-                                <td>"2s"</td>
+                                <td>2 * time.Second</td>
+                            </tr>
+                            <tr>
+                                <td><code>BannerOnly</code></td>
+                                <td>bool</td>
+                                <td>仅获取banner信息，不进行完整服务检测</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>EnableAllProbes</code></td>
+                                <td>bool</td>
+                                <td>对每个端口使用所有探测，而不仅是与端口相关的探测</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>MaxProbes</code></td>
+                                <td>int</td>
+                                <td>每个端口的最大探测次数</td>
+                                <td>10</td>
+                            </tr>
+                            <tr>
+                                <td><code>ProbeDB</code></td>
+                                <td>string</td>
+                                <td>服务探测数据库路径，不指定则使用内置数据库</td>
+                                <td>""</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+
+                <h3>服务信息结构体 (Service)</h3>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>字段</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>Name</code></td>
+                                <td>string</td>
+                                <td>服务名称 (如 "http", "ssh", "ftp")</td>
+                            </tr>
+                            <tr>
+                                <td><code>Version</code></td>
+                                <td>string</td>
+                                <td>服务版本号</td>
+                            </tr>
+                            <tr>
+                                <td><code>Product</code></td>
+                                <td>string</td>
+                                <td>产品名称 (如 "Apache", "OpenSSH")</td>
+                            </tr>
+                            <tr>
+                                <td><code>Protocol</code></td>
+                                <td>string</td>
+                                <td>使用的协议 (tcp/udp)</td>
+                            </tr>
+                            <tr>
+                                <td><code>DeviceType</code></td>
+                                <td>string</td>
+                                <td>设备类型 (如 "firewall", "router", "webcam")</td>
+                            </tr>
+                            <tr>
+                                <td><code>CPE</code></td>
+                                <td>[]string</td>
+                                <td>通用平台枚举标识符，用于漏洞匹配</td>
+                            </tr>
+                            <tr>
+                                <td><code>Banner</code></td>
+                                <td>string</td>
+                                <td>服务返回的原始banner信息</td>
+                            </tr>
+                            <tr>
+                                <td><code>Confidence</code></td>
+                                <td>float64</td>
+                                <td>检测结果的置信度 (0.0-1.0)</td>
+                            </tr>
+                            <tr>
+                                <td><code>Metadata</code></td>
+                                <td>map[string]string</td>
+                                <td>其他元数据，如额外信息</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>服务检测器方法</h3>
+                <ul class="method-list">
+                    <li>
+                        <code>NewServiceDetector(opts *ServiceOptions) *ServiceDetector</code>
+                        <p>创建新的服务检测器实例</p>
+                        <p>参数：</p>
+                        <ul>
+                            <li><code>opts</code> - 服务检测配置选项</li>
+                        </ul>
+                        <p>返回：</p>
+                        <ul>
+                            <li>服务检测器实例</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <code>Detect(host string, port int, protocol string) (*Service, error)</code>
+                        <p>检测指定主机端口上运行的服务</p>
+                        <p>参数：</p>
+                        <ul>
+                            <li><code>host</code> - 目标主机地址（IP或域名）</li>
+                            <li><code>port</code> - 端口号</li>
+                            <li><code>protocol</code> - 协议（"tcp"或"udp"）</li>
+                        </ul>
+                        <p>返回：</p>
+                        <ul>
+                            <li>服务信息对象</li>
+                            <li>错误信息（如有）</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <code>GetBanner(host string, port int, protocol string) (string, error)</code>
+                        <p>仅获取服务的banner信息</p>
+                        <p>参数：</p>
+                        <ul>
+                            <li><code>host</code> - 目标主机地址</li>
+                            <li><code>port</code> - 端口号</li>
+                            <li><code>protocol</code> - 协议</li>
+                        </ul>
+                        <p>返回：</p>
+                        <ul>
+                            <li>banner字符串</li>
+                            <li>错误信息（如有）</li>
+                        </ul>
+                    </li>
+                </ul>
             </section>
 
             <section id="os-detection" class="docs-section">
                 <h2>操作系统检测</h2>
-                <p>操作系统检测模块用于识别目标主机的操作系统类型和版本。</p>
+                <p>操作系统检测模块用于识别目标主机的操作系统类型和版本。该功能通过分析TCP/IP协议栈实现的行为特性（如TCP窗口大小、TTL值、选项等）来确定可能的操作系统。</p>
+
+                <h3>操作系统检测工作原理</h3>
+                <p>操作系统检测基于以下技术：</p>
+                <ol>
+                    <li>发送特殊构造的TCP数据包探测目标系统</li>
+                    <li>分析响应包中的TCP/IP栈参数和行为特征</li>
+                    <li>与数据库中的指纹进行匹配计算相似度</li>
+                    <li>返回最匹配的操作系统及置信度</li>
+                </ol>
 
                 <h3>使用操作系统检测</h3>
                 <div class="code-block">
-                    <pre><code>import "github.com/cc11001100/go-port-rocket/pkg/fingerprint"
+                    <pre><code class="language-go">import "github.com/cyberspacesec/go-port-rocket/pkg/fingerprint"
 
 // 创建操作系统检测器
 osDetector := fingerprint.NewOSDetector(&fingerprint.OSOptions{
-    GuessOS: true,
-    LimitOS: false,
+    GuessOS:    true,  // 即使信息不充分也尝试猜测
+    LimitOSScan: false, // 不限制操作系统扫描范围
+    Timeout:    time.Second * 3,
 })
+
+// 需要提供一些开放端口以获得更准确的结果
+openPorts := []int{22, 80, 443} 
 
 // 执行操作系统检测
 osInfo, err := osDetector.Detect("192.168.1.1", openPorts)
 if err != nil {
     log.Printf("OS detection failed: %v", err)
 } else {
-    fmt.Printf("Detected OS: %s %s (Confidence: %d%%)\n", 
-        osInfo.Name, osInfo.Version, osInfo.Confidence)
+    fmt.Printf("检测到的操作系统: %s\n", osInfo.Name)
+    if osInfo.Version != "" {
+        fmt.Printf("版本: %s\n", osInfo.Version)
+    }
+    if osInfo.Family != "" {
+        fmt.Printf("系统家族: %s\n", osInfo.Family)
+    }
+    fmt.Printf("置信度: %.2f%%\n", osInfo.Confidence * 100)
 }</code></pre>
-                    <button class="copy-btn" data-clipboard-text="import &quot;github.com/cc11001100/go-port-rocket/pkg/fingerprint&quot;
+                    <button class="copy-btn" data-clipboard-text="import &quot;github.com/cyberspacesec/go-port-rocket/pkg/fingerprint&quot;
 
 // 创建操作系统检测器
 osDetector := fingerprint.NewOSDetector(&fingerprint.OSOptions{
-    GuessOS: true,
-    LimitOS: false,
+    GuessOS:    true,  // 即使信息不充分也尝试猜测
+    LimitOSScan: false, // 不限制操作系统扫描范围
+    Timeout:    time.Second * 3,
 })
+
+// 需要提供一些开放端口以获得更准确的结果
+openPorts := []int{22, 80, 443} 
 
 // 执行操作系统检测
 osInfo, err := osDetector.Detect(&quot;192.168.1.1&quot;, openPorts)
 if err != nil {
     log.Printf(&quot;OS detection failed: %v&quot;, err)
 } else {
-    fmt.Printf(&quot;Detected OS: %s %s (Confidence: %d%%)\n&quot;, 
-        osInfo.Name, osInfo.Version, osInfo.Confidence)
+    fmt.Printf(&quot;检测到的操作系统: %s\n&quot;, osInfo.Name)
+    if osInfo.Version != &quot;&quot; {
+        fmt.Printf(&quot;版本: %s\n&quot;, osInfo.Version)
+    }
+    if osInfo.Family != &quot;&quot; {
+        fmt.Printf(&quot;系统家族: %s\n&quot;, osInfo.Family)
+    }
+    fmt.Printf(&quot;置信度: %.2f%%\n&quot;, osInfo.Confidence * 100)
 }">
                         <i class="far fa-copy"></i>
                     </button>
                 </div>
 
-                <h3>操作系统检测选项</h3>
+                <h3>操作系统检测选项 (OSOptions)</h3>
                 <div class="table-container">
                     <table class="options-table">
                         <thead>
@@ -411,39 +1022,154 @@ if err != nil {
                             <tr>
                                 <td><code>GuessOS</code></td>
                                 <td>bool</td>
-                                <td>启用操作系统推测</td>
+                                <td>启用操作系统推测，即使有限的信息也尝试猜测</td>
                                 <td>false</td>
                             </tr>
                             <tr>
-                                <td><code>LimitOS</code></td>
+                                <td><code>LimitOSScan</code></td>
                                 <td>bool</td>
-                                <td>限制操作系统扫描范围</td>
+                                <td>限制操作系统扫描范围，减少探测数据包</td>
                                 <td>false</td>
                             </tr>
                             <tr>
                                 <td><code>Timeout</code></td>
-                                <td>string</td>
+                                <td>time.Duration</td>
                                 <td>探测超时时间</td>
-                                <td>"3s"</td>
+                                <td>3 * time.Second</td>
+                            </tr>
+                            <tr>
+                                <td><code>MaxTries</code></td>
+                                <td>int</td>
+                                <td>最大尝试次数</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td><code>OSDB</code></td>
+                                <td>string</td>
+                                <td>操作系统指纹数据库路径，不指定则使用内置数据库</td>
+                                <td>""</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+
+                <h3>操作系统信息结构体 (OSInfo)</h3>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>字段</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>Name</code></td>
+                                <td>string</td>
+                                <td>操作系统名称 (如 "Windows", "Linux", "macOS")</td>
+                            </tr>
+                            <tr>
+                                <td><code>Family</code></td>
+                                <td>string</td>
+                                <td>操作系统家族 (如 "Windows NT", "Unix-like")</td>
+                            </tr>
+                            <tr>
+                                <td><code>Generation</code></td>
+                                <td>string</td>
+                                <td>操作系统代 (如 "10", "11")</td>
+                            </tr>
+                            <tr>
+                                <td><code>Version</code></td>
+                                <td>string</td>
+                                <td>详细版本 (如 "10.0", "22.04 LTS")</td>
+                            </tr>
+                            <tr>
+                                <td><code>Kernel</code></td>
+                                <td>string</td>
+                                <td>内核版本</td>
+                            </tr>
+                            <tr>
+                                <td><code>Architecture</code></td>
+                                <td>string</td>
+                                <td>系统架构 (如 "x86_64", "arm64")</td>
+                            </tr>
+                            <tr>
+                                <td><code>CPE</code></td>
+                                <td>[]string</td>
+                                <td>通用平台枚举标识符，用于漏洞匹配</td>
+                            </tr>
+                            <tr>
+                                <td><code>Confidence</code></td>
+                                <td>float64</td>
+                                <td>检测结果的置信度 (0.0-1.0)</td>
+                            </tr>
+                            <tr>
+                                <td><code>Metadata</code></td>
+                                <td>map[string]string</td>
+                                <td>其他元数据</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>操作系统检测器方法</h3>
+                <ul class="method-list">
+                    <li>
+                        <code>NewOSDetector(opts *OSOptions) *OSDetector</code>
+                        <p>创建新的操作系统检测器实例</p>
+                        <p>参数：</p>
+                        <ul>
+                            <li><code>opts</code> - 操作系统检测配置选项</li>
+                        </ul>
+                        <p>返回：</p>
+                        <ul>
+                            <li>操作系统检测器实例</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <code>Detect(host string, openPorts []int) (*OSInfo, error)</code>
+                        <p>检测目标主机的操作系统</p>
+                        <p>参数：</p>
+                        <ul>
+                            <li><code>host</code> - 目标主机地址</li>
+                            <li><code>openPorts</code> - 目标主机上的开放端口列表，提供更多端口可提高准确性</li>
+                        </ul>
+                        <p>返回：</p>
+                        <ul>
+                            <li>操作系统信息对象</li>
+                            <li>错误信息（如有）</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <code>DetectFromTTL(ttl int) (string, float64)</code>
+                        <p>根据TTL值推测操作系统</p>
+                        <p>参数：</p>
+                        <ul>
+                            <li><code>ttl</code> - 接收到的数据包TTL值</li>
+                        </ul>
+                        <p>返回：</p>
+                        <ul>
+                            <li>推测的操作系统名称</li>
+                            <li>置信度</li>
+                        </ul>
+                    </li>
+                </ul>
             </section>
 
             <section id="output" class="docs-section">
                 <h2>输出处理</h2>
-                <p>输出处理模块用于格式化和保存扫描结果。</p>
+                <p>输出处理模块用于格式化和保存扫描结果。Port Rocket 支持多种输出格式，能够将扫描结果以不同方式保存或展示，便于集成到其他系统或生成报告。</p>
 
                 <h3>使用输出处理</h3>
                 <div class="code-block">
-                    <pre><code>import "github.com/cc11001100/go-port-rocket/pkg/output"
+                    <pre><code class="language-go">import "github.com/cyberspacesec/go-port-rocket/pkg/output"
 
 // 创建输出处理器
 outputter, err := output.NewOutputter(&output.Options{
-    Format:    "json",
-    OutputFile: "result.json",
-    Pretty:    true,
+    Format:     "json",  // 输出格式：json, text, xml, html, csv
+    OutputFile: "result.json",  // 输出文件路径
+    Pretty:     true,  // 美化输出
 })
 if err != nil {
     log.Fatalf("Failed to create outputter: %v", err)
@@ -453,14 +1179,21 @@ if err != nil {
 err = outputter.Process(scanResult)
 if err != nil {
     log.Fatalf("Failed to process output: %v", err)
-}</code></pre>
-                    <button class="copy-btn" data-clipboard-text="import &quot;github.com/cc11001100/go-port-rocket/pkg/output&quot;
+}
+
+// 获取格式化后的输出字符串
+formattedOutput, err := outputter.Format(scanResult)
+if err != nil {
+    log.Fatalf("Failed to format output: %v", err)
+}
+fmt.Println(formattedOutput)</code></pre>
+                    <button class="copy-btn" data-clipboard-text="import &quot;github.com/cyberspacesec/go-port-rocket/pkg/output&quot;
 
 // 创建输出处理器
 outputter, err := output.NewOutputter(&output.Options{
-    Format:    &quot;json&quot;,
-    OutputFile: &quot;result.json&quot;,
-    Pretty:    true,
+    Format:     &quot;json&quot;,  // 输出格式：json, text, xml, html, csv
+    OutputFile: &quot;result.json&quot;,  // 输出文件路径
+    Pretty:     true,  // 美化输出
 })
 if err != nil {
     log.Fatalf(&quot;Failed to create outputter: %v&quot;, err)
@@ -470,7 +1203,14 @@ if err != nil {
 err = outputter.Process(scanResult)
 if err != nil {
     log.Fatalf(&quot;Failed to process output: %v&quot;, err)
-}">
+}
+
+// 获取格式化后的输出字符串
+formattedOutput, err := outputter.Format(scanResult)
+if err != nil {
+    log.Fatalf(&quot;Failed to format output: %v&quot;, err)
+}
+fmt.Println(formattedOutput)">
                         <i class="far fa-copy"></i>
                     </button>
                 </div>
@@ -490,31 +1230,231 @@ if err != nil {
                             <tr>
                                 <td><code>Format</code></td>
                                 <td>string</td>
-                                <td>输出格式 (text, json, xml, html)</td>
+                                <td>输出格式 (text, json, xml, html, csv)</td>
                                 <td>"text"</td>
                             </tr>
                             <tr>
                                 <td><code>OutputFile</code></td>
                                 <td>string</td>
-                                <td>输出文件路径</td>
+                                <td>输出文件路径，为空则仅返回格式化字符串</td>
                                 <td>""</td>
                             </tr>
                             <tr>
                                 <td><code>Pretty</code></td>
                                 <td>bool</td>
-                                <td>美化输出</td>
+                                <td>美化输出，适用于JSON、XML和HTML格式</td>
                                 <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>IncludeStats</code></td>
+                                <td>bool</td>
+                                <td>包含统计信息</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td><code>IncludeBanner</code></td>
+                                <td>bool</td>
+                                <td>包含服务banner信息</td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td><code>Colorize</code></td>
+                                <td>bool</td>
+                                <td>为文本输出添加颜色（CLI友好）</td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>Template</code></td>
+                                <td>string</td>
+                                <td>自定义输出模板路径</td>
+                                <td>""</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <h3>支持的输出格式</h3>
-                <ul>
-                    <li><code>text</code> - 纯文本格式，适合命令行显示</li>
-                    <li><code>json</code> - JSON 格式，适合程序处理</li>
-                    <li><code>xml</code> - XML 格式，适合与其他系统集成</li>
-                    <li><code>html</code> - HTML 格式，适合生成报告</li>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>格式</th>
+                                <th>描述</th>
+                                <th>适用场景</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>text</code></td>
+                                <td>纯文本格式</td>
+                                <td>命令行显示，人类可读</td>
+                            </tr>
+                            <tr>
+                                <td><code>json</code></td>
+                                <td>JSON 格式</td>
+                                <td>程序处理，API集成</td>
+                            </tr>
+                            <tr>
+                                <td><code>xml</code></td>
+                                <td>XML 格式</td>
+                                <td>与其他系统集成</td>
+                            </tr>
+                            <tr>
+                                <td><code>html</code></td>
+                                <td>HTML 格式</td>
+                                <td>生成网页报告</td>
+                            </tr>
+                            <tr>
+                                <td><code>csv</code></td>
+                                <td>CSV 格式</td>
+                                <td>导入电子表格软件</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>输出结果示例</h3>
+                <p>JSON 格式输出示例：</p>
+                <div class="code-block">
+                    <pre><code class="language-json">{
+  "target": "scanme.nmap.org",
+  "scan_time": "2023-04-20T15:30:45Z",
+  "scan_duration": "5.2s",
+  "ports": [
+    {
+      "port": 22,
+      "protocol": "tcp",
+      "state": "open",
+      "service": {
+        "name": "ssh",
+        "product": "OpenSSH",
+        "version": "8.2p1 Ubuntu 4ubuntu0.5",
+        "confidence": 0.95
+      }
+    },
+    {
+      "port": 80,
+      "protocol": "tcp",
+      "state": "open",
+      "service": {
+        "name": "http",
+        "product": "Apache httpd",
+        "version": "2.4.41",
+        "confidence": 0.98
+      }
+    }
+  ],
+  "os": {
+    "name": "Linux",
+    "family": "Ubuntu",
+    "version": "20.04 LTS",
+    "confidence": 0.92
+  },
+  "stats": {
+    "open_ports": 2,
+    "closed_ports": 45,
+    "filtered_ports": 3,
+    "total_ports": 50
+  }
+}</code></pre>
+                <button class="copy-btn" data-clipboard-text='{
+  "target": "scanme.nmap.org",
+  "scan_time": "2023-04-20T15:30:45Z",
+  "scan_duration": "5.2s",
+  "ports": [
+    {
+      "port": 22,
+      "protocol": "tcp",
+      "state": "open",
+      "service": {
+        "name": "ssh",
+        "product": "OpenSSH",
+        "version": "8.2p1 Ubuntu 4ubuntu0.5",
+        "confidence": 0.95
+      }
+    },
+    {
+      "port": 80,
+      "protocol": "tcp",
+      "state": "open",
+      "service": {
+        "name": "http",
+        "product": "Apache httpd",
+        "version": "2.4.41",
+        "confidence": 0.98
+      }
+    }
+  ],
+  "os": {
+    "name": "Linux",
+    "family": "Ubuntu",
+    "version": "20.04 LTS",
+    "confidence": 0.92
+  },
+  "stats": {
+    "open_ports": 2,
+    "closed_ports": 45,
+    "filtered_ports": 3,
+    "total_ports": 50
+  }
+}'>
+                    <i class="far fa-copy"></i>
+                </button>
+                </div>
+
+                <h3>输出处理器方法</h3>
+                <ul class="method-list">
+                    <li>
+                        <code>NewOutputter(opts *Options) (*Outputter, error)</code>
+                        <p>创建新的输出处理器实例</p>
+                        <p>参数：</p>
+                        <ul>
+                            <li><code>opts</code> - 输出处理选项结构体</li>
+                        </ul>
+                        <p>返回：</p>
+                        <ul>
+                            <li>输出处理器实例</li>
+                            <li>错误信息（如有）</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <code>Process(results []*scanner.ScanResult) error</code>
+                        <p>处理并保存扫描结果</p>
+                        <p>参数：</p>
+                        <ul>
+                            <li><code>results</code> - 扫描结果切片</li>
+                        </ul>
+                        <p>返回：</p>
+                        <ul>
+                            <li>错误信息（如有）</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <code>Format(results []*scanner.ScanResult) (string, error)</code>
+                        <p>将扫描结果格式化为指定格式的字符串</p>
+                        <p>参数：</p>
+                        <ul>
+                            <li><code>results</code> - 扫描结果切片</li>
+                        </ul>
+                        <p>返回：</p>
+                        <ul>
+                            <li>格式化后的字符串</li>
+                            <li>错误信息（如有）</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <code>SaveToFile(content string, filename string) error</code>
+                        <p>保存内容到文件</p>
+                        <p>参数：</p>
+                        <ul>
+                            <li><code>content</code> - 要保存的内容</li>
+                            <li><code>filename</code> - 文件路径</li>
+                        </ul>
+                        <p>返回：</p>
+                        <ul>
+                            <li>错误信息（如有）</li>
+                        </ul>
+                    </li>
                 </ul>
             </section>
 
@@ -523,23 +1463,24 @@ if err != nil {
                 
                 <h3>基本扫描示例</h3>
                 <div class="code-block">
-                    <pre><code>package main
+                    <pre><code class="language-go">package main
 
 import (
     "fmt"
     "log"
+    "time"
 
-    "github.com/cc11001100/go-port-rocket/pkg/scanner"
-    "github.com/cc11001100/go-port-rocket/pkg/output"
+    "github.com/cyberspacesec/go-port-rocket/pkg/scanner"
+    "github.com/cyberspacesec/go-port-rocket/pkg/output"
 )
 
 func main() {
     // 创建扫描器
-    s, err := scanner.NewScanner(&scanner.Options{
+    s, err := scanner.NewScanner(&scanner.ScanOptions{
         Target:   "example.com",
         Ports:    "80,443",
-        ScanType: "tcp",
-        Timeout:  "5s",
+        ScanType: scanner.ScanTypeTCP,
+        Timeout:  5 * time.Second,
         Workers:  100,
     })
     if err != nil {
@@ -571,18 +1512,19 @@ func main() {
 import (
     &quot;fmt&quot;
     &quot;log&quot;
+    &quot;time&quot;
 
-    &quot;github.com/cc11001100/go-port-rocket/pkg/scanner&quot;
-    &quot;github.com/cc11001100/go-port-rocket/pkg/output&quot;
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/scanner&quot;
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/output&quot;
 )
 
 func main() {
     // 创建扫描器
-    s, err := scanner.NewScanner(&scanner.Options{
+    s, err := scanner.NewScanner(&scanner.ScanOptions{
         Target:   &quot;example.com&quot;,
         Ports:    &quot;80,443&quot;,
-        ScanType: &quot;tcp&quot;,
-        Timeout:  &quot;5s&quot;,
+        ScanType: scanner.ScanTypeTCP,
+        Timeout:  5 * time.Second,
         Workers:  100,
     })
     if err != nil {
@@ -615,22 +1557,25 @@ func main() {
                 
                 <h3>带服务检测的扫描示例</h3>
                 <div class="code-block">
-                    <pre><code>package main
+                    <pre><code class="language-go">package main
 
 import (
     "fmt"
     "log"
+    "time"
 
-    "github.com/cc11001100/go-port-rocket/pkg/scanner"
-    "github.com/cc11001100/go-port-rocket/pkg/output"
+    "github.com/cyberspacesec/go-port-rocket/pkg/scanner"
+    "github.com/cyberspacesec/go-port-rocket/pkg/output"
 )
 
 func main() {
     // 创建扫描器
-    s, err := scanner.NewScanner(&scanner.Options{
+    s, err := scanner.NewScanner(&scanner.ScanOptions{
         Target:           "scanme.nmap.org",
         Ports:            "21-25,80,443",
-        ScanType:         "tcp",
+        ScanType:         scanner.ScanTypeTCP,
+        Timeout:          "5s",
+        Workers:          100,
         ServiceDetection: true,
         VersionIntensity: 7,
     })
@@ -660,24 +1605,27 @@ func main() {
         log.Fatalf("Failed to process output: %v", err)
     }
 
-    fmt.Println("Scan completed and results saved to result.json")
+    fmt.Println("扫描完成，结果已保存到 result.json")
 }</code></pre>
                     <button class="copy-btn" data-clipboard-text="package main
 
 import (
     &quot;fmt&quot;
     &quot;log&quot;
+    &quot;time&quot;
 
-    &quot;github.com/cc11001100/go-port-rocket/pkg/scanner&quot;
-    &quot;github.com/cc11001100/go-port-rocket/pkg/output&quot;
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/scanner&quot;
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/output&quot;
 )
 
 func main() {
     // 创建扫描器
-    s, err := scanner.NewScanner(&scanner.Options{
+    s, err := scanner.NewScanner(&scanner.ScanOptions{
         Target:           &quot;scanme.nmap.org&quot;,
         Ports:            &quot;21-25,80,443&quot;,
         ScanType:         &quot;tcp&quot;,
+        Timeout:          &quot;5s&quot;,
+        Workers:          100,
         ServiceDetection: true,
         VersionIntensity: 7,
     })
@@ -707,7 +1655,7 @@ func main() {
         log.Fatalf(&quot;Failed to process output: %v&quot;, err)
     }
 
-    fmt.Println(&quot;Scan completed and results saved to result.json&quot;)
+    fmt.Println(&quot;扫描完成，结果已保存到 result.json&quot;)
 }">
                         <i class="far fa-copy"></i>
                     </button>
@@ -715,24 +1663,24 @@ func main() {
                 
                 <h3>异步扫描示例</h3>
                 <div class="code-block">
-                    <pre><code>package main
+                    <pre><code class="language-go">package main
 
 import (
     "fmt"
     "log"
     "time"
 
-    "github.com/cc11001100/go-port-rocket/pkg/scanner"
+    "github.com/cyberspacesec/go-port-rocket/pkg/scanner"
 )
 
 func main() {
     // 创建扫描器
-    s, err := scanner.NewScanner(&scanner.Options{
+    s, err := scanner.NewScanner(&scanner.ScanOptions{
         Target:           "example.com",
         Ports:            "1-1000",
-        ScanType:         "tcp",
+        ScanType:         scanner.ScanTypeTCP,
         Workers:          200,
-        ServiceDetection: true,
+        EnableService:    true,
     })
     if err != nil {
         log.Fatalf("Failed to create scanner: %v", err)
@@ -741,28 +1689,40 @@ func main() {
     // 启动异步扫描
     portChan, resultChan, errChan := s.ScanAsync()
 
+    // 显示进度条
+    fmt.Println("正在扫描，请稍候...")
+    fmt.Println("[                    ]")
+    fmt.Print("\033[1A") // 光标上移一行
+    fmt.Print("\033[2C") // 光标右移两列
+
     // 处理端口结果
+    var openPorts int
     go func() {
         for port := range portChan {
-            fmt.Printf("Port %d/%s: %s", port.Port, port.Protocol, port.State)
-            if port.Service != "" {
-                fmt.Printf(" (%s %s)", port.Service, port.Version)
+            if port.State == scanner.PortStateOpen {
+                openPorts++
+                fmt.Printf("发现开放端口 %d/%s", port.Port, port.Type)
+                if port.ServiceName != "" {
+                    fmt.Printf(" (%s %s)", port.ServiceName, port.Version)
+                }
+                fmt.Println()
+                // 更新进度条
+                fmt.Print("=")
             }
-            fmt.Println()
         }
     }()
 
     // 处理错误
     go func() {
         for err := range errChan {
-            log.Printf("Error: %v", err)
+            log.Printf("错误: %v", err)
         }
     }()
 
     // 获取最终结果
     result := <-resultChan
-    fmt.Printf("\nScan completed in %s\n", result.ScanTime)
-    fmt.Printf("Found %d open ports\n", len(result.Ports))
+    fmt.Printf("\n\n扫描完成，耗时 %s\n", result.ScanTime)
+    fmt.Printf("共找到 %d 个开放端口\n\n", openPorts)
     
     // 等待所有处理完成
     time.Sleep(time.Second)
@@ -774,17 +1734,17 @@ import (
     &quot;log&quot;
     &quot;time&quot;
 
-    &quot;github.com/cc11001100/go-port-rocket/pkg/scanner&quot;
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/scanner&quot;
 )
 
 func main() {
     // 创建扫描器
-    s, err := scanner.NewScanner(&scanner.Options{
+    s, err := scanner.NewScanner(&scanner.ScanOptions{
         Target:           &quot;example.com&quot;,
         Ports:            &quot;1-1000&quot;,
-        ScanType:         &quot;tcp&quot;,
+        ScanType:         scanner.ScanTypeTCP,
         Workers:          200,
-        ServiceDetection: true,
+        EnableService:    true,
     })
     if err != nil {
         log.Fatalf(&quot;Failed to create scanner: %v&quot;, err)
@@ -793,31 +1753,273 @@ func main() {
     // 启动异步扫描
     portChan, resultChan, errChan := s.ScanAsync()
 
+    // 显示进度条
+    fmt.Println(&quot;正在扫描，请稍候...&quot;)
+    fmt.Println(&quot;[                    ]&quot;)
+    fmt.Print(&quot;\033[1A&quot;) // 光标上移一行
+    fmt.Print(&quot;\033[2C&quot;) // 光标右移两列
+
     // 处理端口结果
+    var openPorts int
     go func() {
         for port := range portChan {
-            fmt.Printf(&quot;Port %d/%s: %s&quot;, port.Port, port.Protocol, port.State)
-            if port.Service != &quot;&quot; {
-                fmt.Printf(&quot; (%s %s)&quot;, port.Service, port.Version)
+            if port.State == scanner.PortStateOpen {
+                openPorts++
+                fmt.Printf(&quot;发现开放端口 %d/%s&quot;, port.Port, port.Type)
+                if port.ServiceName != &quot;&quot; {
+                    fmt.Printf(&quot; (%s %s)&quot;, port.ServiceName, port.Version)
+                }
+                fmt.Println()
+                // 更新进度条
+                fmt.Print(&quot;=&quot;)
             }
-            fmt.Println()
         }
     }()
 
     // 处理错误
     go func() {
         for err := range errChan {
-            log.Printf(&quot;Error: %v&quot;, err)
+            log.Printf(&quot;错误: %v&quot;, err)
         }
     }()
 
     // 获取最终结果
     result := &lt;-resultChan
-    fmt.Printf(&quot;\nScan completed in %s\n&quot;, result.ScanTime)
-    fmt.Printf(&quot;Found %d open ports\n&quot;, len(result.Ports))
+    fmt.Printf(&quot;\n\n扫描完成，耗时 %s\n&quot;, result.ScanTime)
+    fmt.Printf(&quot;共找到 %d 个开放端口\n&quot;, openPorts)
     
     // 等待所有处理完成
     time.Sleep(time.Second)
+}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>SYN隐蔽扫描示例</h3>
+                <div class="code-block">
+                    <pre><code class="language-go">package main
+
+import (
+    "fmt"
+    "log"
+    "time"
+
+    "github.com/cyberspacesec/go-port-rocket/pkg/scanner"
+    "github.com/cyberspacesec/go-port-rocket/pkg/output"
+)
+
+func main() {
+    // 注意：SYN扫描需要root/管理员权限
+    s, err := scanner.NewScanner(&scanner.ScanOptions{
+        Target:   "192.168.1.1",
+        Ports:    "1-1024",
+        ScanType: scanner.ScanTypeSYN,  // 使用SYN半开放扫描
+        Timeout:  2 * time.Second,
+        Workers:  50,
+    })
+    if err != nil {
+        log.Fatalf("创建扫描器失败: %v", err)
+    }
+
+    fmt.Println("开始SYN隐蔽扫描...")
+    results, err := s.Scan()
+    if err != nil {
+        log.Fatalf("扫描失败: %v", err)
+    }
+
+    // 创建输出处理器
+    outputter, err := output.NewOutputter(&output.Options{
+        Format:     "text",
+        Colorize:   true,  // 在终端中使用彩色输出
+    })
+    if err != nil {
+        log.Fatalf("创建输出处理器失败: %v", err)
+    }
+
+    // 处理并输出结果
+    fmt.Println("\n扫描结果:")
+    formatted, err := outputter.Format(results)
+    if err != nil {
+        log.Fatalf("格式化结果失败: %v", err)
+    }
+    fmt.Println(formatted)
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="package main
+
+import (
+    &quot;fmt&quot;
+    &quot;log&quot;
+    &quot;time&quot;
+
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/scanner&quot;
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/output&quot;
+)
+
+func main() {
+    // 注意：SYN扫描需要root/管理员权限
+    s, err := scanner.NewScanner(&scanner.ScanOptions{
+        Target:   &quot;192.168.1.1&quot;,
+        Ports:    &quot;1-1024&quot;,
+        ScanType: scanner.ScanTypeSYN,  // 使用SYN半开放扫描
+        Timeout:  2 * time.Second,
+        Workers:  50,
+    })
+    if err != nil {
+        log.Fatalf(&quot;创建扫描器失败: %v&quot;, err)
+    }
+
+    fmt.Println(&quot;开始SYN隐蔽扫描...&quot;)
+    results, err := s.Scan()
+    if err != nil {
+        log.Fatalf(&quot;扫描失败: %v&quot;, err)
+    }
+
+    // 创建输出处理器
+    outputter, err := output.NewOutputter(&output.Options{
+        Format:     &quot;text&quot;,
+        Colorize:   true,  // 在终端中使用彩色输出
+    })
+    if err != nil {
+        log.Fatalf(&quot;创建输出处理器失败: %v&quot;, err)
+    }
+
+    // 处理并输出结果
+    fmt.Println(&quot;\n扫描结果:&quot;)
+    formatted, err := outputter.Format(results)
+    if err != nil {
+        log.Fatalf(&quot;格式化结果失败: %v&quot;, err)
+    }
+    fmt.Println(formatted)
+}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>UDP服务扫描示例</h3>
+                <div class="code-block">
+                    <pre><code class="language-go">package main
+
+import (
+    "fmt"
+    "log"
+    "time"
+
+    "github.com/cyberspacesec/go-port-rocket/pkg/scanner"
+    "github.com/cyberspacesec/go-port-rocket/pkg/output"
+)
+
+func main() {
+    // UDP扫描常用端口
+    commonUdpPorts := "53,67,68,69,123,137,138,161,162,1900,5353"
+    
+    // 创建UDP扫描器
+    s, err := scanner.NewScanner(&scanner.ScanOptions{
+        Target:        "example.com",
+        Ports:         commonUdpPorts,
+        ScanType:      scanner.ScanTypeUDP,
+        Timeout:       5 * time.Second,
+        Workers:       10,            // UDP扫描通常使用较少的并发
+        EnableService: true,          // 启用服务检测
+        ServiceProbe:  true,          // 启用UDP服务探测
+        Retries:       2,             // UDP扫描重试次数
+    })
+    if err != nil {
+        log.Fatalf("创建扫描器失败: %v", err)
+    }
+
+    fmt.Printf("开始UDP扫描 %s 的常用端口...\n", s.Options().Target)
+    startTime := time.Now()
+
+    results, err := s.Scan()
+    if err != nil {
+        log.Fatalf("扫描失败: %v", err)
+    }
+
+    // 扫描耗时
+    duration := time.Since(startTime)
+    
+    // 统计开放端口
+    var openPorts int
+    for _, port := range results {
+        if port.State == scanner.PortStateOpen {
+            openPorts++
+        }
+    }
+    
+    // 输出结果
+    fmt.Printf("\n扫描完成，耗时: %.2f秒\n", duration.Seconds())
+    fmt.Printf("发现 %d 个开放的UDP端口\n\n", openPorts)
+    
+    // 格式化输出
+    outputter, _ := output.NewOutputter(&output.Options{
+        Format: "text",
+        Pretty: true,
+    })
+    
+    formattedOutput, _ := outputter.Format(results)
+    fmt.Println(formattedOutput)
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="package main
+
+import (
+    &quot;fmt&quot;
+    &quot;log&quot;
+    &quot;time&quot;
+
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/scanner&quot;
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/output&quot;
+)
+
+func main() {
+    // UDP扫描常用端口
+    commonUdpPorts := &quot;53,67,68,69,123,137,138,161,162,1900,5353&quot;
+    
+    // 创建UDP扫描器
+    s, err := scanner.NewScanner(&scanner.ScanOptions{
+        Target:        &quot;example.com&quot;,
+        Ports:         commonUdpPorts,
+        ScanType:      scanner.ScanTypeUDP,
+        Timeout:       5 * time.Second,
+        Workers:       10,            // UDP扫描通常使用较少的并发
+        EnableService: true,          // 启用服务检测
+        ServiceProbe:  true,          // 启用UDP服务探测
+        Retries:       2,             // UDP扫描重试次数
+    })
+    if err != nil {
+        log.Fatalf(&quot;创建扫描器失败: %v&quot;, err)
+    }
+
+    fmt.Printf(&quot;开始UDP扫描 %s 的常用端口...\n&quot;, s.Options().Target)
+    startTime := time.Now()
+
+    results, err := s.Scan()
+    if err != nil {
+        log.Fatalf(&quot;扫描失败: %v&quot;, err)
+    }
+
+    // 扫描耗时
+    duration := time.Since(startTime)
+    
+    // 统计开放端口
+    var openPorts int
+    for _, port := range results {
+        if port.State == scanner.PortStateOpen {
+            openPorts++
+        }
+    }
+    
+    // 输出结果
+    fmt.Printf(&quot;\n扫描完成，耗时: %.2f秒\n&quot;, duration.Seconds())
+    fmt.Printf(&quot;发现 %d 个开放的UDP端口\n\n&quot;, openPorts)
+    
+    // 格式化输出
+    outputter, _ := output.NewOutputter(&output.Options{
+        Format: &quot;text&quot;,
+        Pretty: true,
+    })
+    
+    formattedOutput, _ := outputter.Format(results)
+    fmt.Println(formattedOutput)
 }">
                         <i class="far fa-copy"></i>
                     </button>
@@ -831,7 +2033,7 @@ func main() {
             <div class="footer-content">
                 <div class="footer-logo">
                     <i class="fas fa-rocket"></i>
-                    <span>Go Port Rocket</span>
+                    <span>Port Rocket</span>
                 </div>
                 <div class="footer-links">
                     <div class="footer-column">
@@ -839,26 +2041,133 @@ func main() {
                         <a href="cli.html">CLI 文档</a>
                         <a href="http-api.html">HTTP API</a>
                         <a href="golang-api.html" class="active">Golang API</a>
-                        <a href="mcp.html">MCP</a>
+                        <a href="mcp.html">MCP（AI集成）</a>
                     </div>
                     <div class="footer-column">
                         <h4>资源</h4>
-                        <a href="https://github.com/cc11001100/go-port-rocket" target="_blank">GitHub</a>
-                        <a href="https://github.com/cc11001100/go-port-rocket/issues" target="_blank">问题反馈</a>
-                        <a href="https://github.com/cc11001100/go-port-rocket/blob/main/LICENSE" target="_blank">许可证</a>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket" target="_blank">GitHub</a>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket/issues" target="_blank">问题反馈</a>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket/blob/main/LICENSE" target="_blank">许可证</a>
                     </div>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 Go Port Rocket. 采用 MIT 许可证。</p>
+                <p>&copy; 2023 Port Rocket. 采用 MIT 许可证。</p>
             </div>
         </div>
     </footer>
 
     <script src="../js/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+    
+    <!-- 添加Prism.js脚本 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <!-- 手动添加必要的语言组件 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    
     <script>
-        new ClipboardJS('.copy-btn');
+        // 初始化复制功能
+        document.addEventListener('DOMContentLoaded', function() {
+            var clipboard = new ClipboardJS('.copy-btn');
+            
+            // 复制成功效果
+            clipboard.on('success', function(e) {
+                var btn = e.trigger;
+                var originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="far fa-check-circle"></i> 已复制';
+                
+                setTimeout(function() {
+                    btn.innerHTML = originalText;
+                }, 2000);
+                
+                e.clearSelection();
+            });
+            
+            // 手动高亮bash代码
+            var bashElements = document.querySelectorAll('code.language-bash');
+            bashElements.forEach(function(element) {
+                // 获取代码内容
+                var content = element.textContent;
+                
+                // 分离命令和参数
+                var parts = content.split(' ');
+                var command = parts[0];
+                var params = parts.slice(1).join(' ');
+                
+                // 高亮处理
+                element.innerHTML = '<span class="token command">' + command + '</span> <span class="token parameter">' + params + '</span>';
+                
+                // 添加语言标签
+                var parent = element.parentElement.parentElement;
+                var label = document.createElement('div');
+                label.className = 'language-label';
+                label.textContent = 'BASH';
+                parent.style.position = 'relative';
+                parent.appendChild(label);
+                
+                // 添加高亮样式
+                element.parentElement.classList.add('highlight-bash');
+            });
+            
+            // 处理Golang代码块
+            var goElements = document.querySelectorAll('code.language-go');
+            goElements.forEach(function(element) {
+                // 添加语言标签
+                var parent = element.parentElement.parentElement;
+                if (!parent.querySelector('.language-label')) {
+                    var label = document.createElement('div');
+                    label.className = 'language-label';
+                    label.textContent = 'GO';
+                    parent.style.position = 'relative';
+                    parent.appendChild(label);
+                }
+                
+                // 应用预设的类以确保样式一致性
+                parent.classList.add('code-block');
+                element.parentElement.classList.add('language-go');
+                
+                // 这里不替换内容，留给Prism.js处理
+            });
+            
+            // 手动触发Prism.js重新高亮
+            setTimeout(function() {
+                if (typeof Prism !== 'undefined') {
+                    Prism.highlightAll();
+                    console.log('Prism.js语法高亮已重新应用');
+                } else {
+                    console.warn('Prism.js未加载，应用简易高亮');
+                    // 如果Prism.js加载失败，应用简易高亮
+                    applySimpleGoHighlighting();
+                }
+            }, 500); // 给Prism.js一点时间加载
+            
+            // 简易的Go语法高亮函数
+            function applySimpleGoHighlighting() {
+                var goElements = document.querySelectorAll('code.language-go');
+                goElements.forEach(function(element) {
+                    var content = element.innerHTML;
+                    
+                    // 替换关键字
+                    content = content.replace(/\b(package|import|func|return|var|const|if|else|for|range|switch|case|default|struct|interface|map|chan|go|defer|select|break|continue|fallthrough|goto|type)\b/g, '<span class="token keyword">$1</span>');
+                    
+                    // 替换字符串
+                    content = content.replace(/"([^"]*)"/g, '<span class="token string">"$1"</span>');
+                    
+                    // 替换注释
+                    content = content.replace(/\/\/(.*)/g, '<span class="token comment">// $1</span>');
+                    
+                    // 替换数字
+                    content = content.replace(/\b(\d+)\b/g, '<span class="token number">$1</span>');
+                    
+                    element.innerHTML = content;
+                });
+            }
+        });
     </script>
+<script src="../js/code-copy.js"></script>
 </body>
 </html> 

@@ -1,7 +1,7 @@
 /* 文档页面样式 */
 .docs-container {
     display: flex;
-    margin-top: 70px;
+    margin-top: 70px; /* Matches navbar height */
     min-height: calc(100vh - 70px - 300px); /* 减去导航栏和页脚高度 */
 }
 
@@ -11,7 +11,7 @@
     background-color: white;
     border-right: 1px solid #e2e8f0;
     position: sticky;
-    top: 70px;
+    top: 70px; /* Matches navbar height */
     height: calc(100vh - 70px);
     overflow-y: auto;
     padding: 2rem 0;
@@ -238,5 +238,174 @@ code {
     
     .docs-header h1 {
         font-size: 2rem;
+    }
+} 
+
+/* 快速安装样式 */
+.alert {
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-start;
+}
+
+.alert-info {
+    background-color: rgba(37, 99, 235, 0.1);
+    border-left: 4px solid var(--primary-color);
+}
+
+.alert i {
+    margin-right: 1rem;
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+.alert p {
+    margin: 0;
+}
+
+.alert a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.install-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.install-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--box-shadow);
+}
+
+.install-card h3 {
+    display: flex;
+    align-items: center;
+    margin-top: 0 !important;
+    font-size: 1.1rem;
+}
+
+.install-card h3 i {
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+}
+
+.install-card .code-block {
+    margin-bottom: 1rem;
+}
+
+/* 快速示例样式 */
+.quick-examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.quick-example {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--box-shadow);
+}
+
+.quick-example h3 {
+    margin-top: 0 !important;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+/* 命令速查样式 */
+.command-table-wrapper {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+.command-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.command-table th,
+.command-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.command-table th {
+    background-color: #f8fafc;
+    font-weight: 600;
+}
+
+.command-table tr:last-child td {
+    border-bottom: none;
+}
+
+.command-shortcuts {
+    margin-top: 2rem;
+}
+
+.shortcuts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.shortcut-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--box-shadow);
+}
+
+.shortcut-card h4 {
+    margin-top: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.shortcut-card ul {
+    margin: 0 !important;
+    padding-left: 1rem;
+}
+
+.shortcut-card li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* 笔记样式 */
+.docs-note {
+    background-color: #fff8c5;
+    border-left: 4px solid #f59f00;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.docs-note p {
+    margin: 0;
+}
+
+/* 响应式设计调整 */
+@media (max-width: 992px) {
+    .install-grid, 
+    .quick-examples,
+    .shortcuts-grid {
+        grid-template-columns: 1fr;
     }
 } 

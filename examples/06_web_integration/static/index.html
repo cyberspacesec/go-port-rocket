@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Port Rocket - 端口扫描器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Go Port Rocket</h1>
+            <p>高性能端口扫描器 Web 接口</p>
+        </header>
+
+        <div class="form-container">
+            <form id="scanForm">
+                <div class="form-group">
+                    <label for="target">目标地址:</label>
+                    <input type="text" id="target" name="target" placeholder="例如: localhost, scanme.nmap.org" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="ports">端口范围:</label>
+                    <input type="text" id="ports" name="ports" placeholder="例如: 1-1000, 22,80,443" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="scanType">扫描类型:</label>
+                    <select id="scanType" name="scanType">
+                        <option value="tcp">TCP 连接扫描</option>
+                        <option value="syn">SYN 扫描 (需要管理员权限)</option>
+                    </select>
+                </div>
+
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="enableOS" name="enableOS">
+                    <label for="enableOS">启用操作系统检测</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="concurrency">并发数:</label>
+                    <input type="number" id="concurrency" name="concurrency" value="50" min="1" max="1000">
+                </div>
+
+                <div class="form-group">
+                    <label for="timeout">超时 (秒):</label>
+                    <input type="number" id="timeout" name="timeout" value="5" min="1" max="60">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="scanButton">开始扫描</button>
+                    <button type="reset" id="resetButton">重置</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="results-container">
+            <div class="results-header">
+                <h2>扫描结果</h2>
+                <div class="status" id="scanStatus">准备就绪</div>
+            </div>
+            
+            <div class="progress-container" id="progressContainer" style="display: none;">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <div class="scan-summary" id="scanSummary"></div>
+            
+            <table id="resultsTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>端口</th>
+                        <th>状态</th>
+                        <th>服务</th>
+                        <th>版本</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <p>Powered by <a href="https://github.com/cyberspacesec/go-port-rocket" target="_blank">Go Port Rocket</a></p>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html> 

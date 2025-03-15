@@ -1,0 +1,66 @@
+{
+  "summary": {
+    "Target": "scanme.nmap.org",
+    "StartTime": "2025-03-15T17:02:57.209657+08:00",
+    "EndTime": "2025-03-15T17:03:02.214901+08:00",
+    "Duration": 5005200417,
+    "TotalPorts": 8,
+    "OpenPorts": 2,
+    "ClosedPorts": 5,
+    "FilteredPorts": 1
+  },
+  "open_ports": [
+    {
+      "port": 22,
+      "protocol": "tcp",
+      "state": "open",
+      "reason": "syn-ack"
+    },
+    {
+      "port": 80,
+      "protocol": "tcp",
+      "state": "open",
+      "reason": "syn-ack"
+    }
+  ],
+  "closed_ports": [
+    {
+      "port": 25,
+      "protocol": "tcp",
+      "state": "closed",
+      "reason": "reset"
+    },
+    {
+      "port": 443,
+      "protocol": "tcp",
+      "state": "closed",
+      "reason": "reset"
+    },
+    {
+      "port": 23,
+      "protocol": "tcp",
+      "state": "closed",
+      "reason": "reset"
+    },
+    {
+      "port": 3306,
+      "protocol": "tcp",
+      "state": "closed",
+      "reason": "reset"
+    },
+    {
+      "port": 21,
+      "protocol": "tcp",
+      "state": "closed",
+      "reason": "reset"
+    }
+  ],
+  "filtered_ports": [
+    {
+      "port": 24,
+      "protocol": "tcp",
+      "state": "filtered",
+      "reason": "no-response"
+    }
+  ]
+}

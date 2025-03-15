@@ -1,0 +1,5 @@
+扫描结果: batch_results/scanme.nmap.org
+
+PORT     STATE     SERVICE
+80       open      
+22       open      

@@ -64,4 +64,46 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    
+    // 回到顶部按钮
+    const createBackToTopButton = () => {
+        // 创建按钮元素
+        const backToTopButton = document.createElement('div');
+        backToTopButton.className = 'back-to-top';
+        backToTopButton.innerHTML = '<i class="fas fa-rocket"></i>';
+        document.body.appendChild(backToTopButton);
+        
+        // 点击事件：滚动到顶部
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            // 添加点击时的额外动画
+            backToTopButton.classList.add('clicked');
+            setTimeout(() => {
+                backToTopButton.classList.remove('clicked');
+            }, 300);
+        });
+        
+        // 处理滚动事件以显示/隐藏按钮
+        const toggleBackToTopButton = () => {
+            const scrollPosition = window.scrollY;
+            if (scrollPosition > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        };
+        
+        // 初始检查
+        toggleBackToTopButton();
+        
+        // 监听滚动事件
+        window.addEventListener('scroll', toggleBackToTopButton);
+    };
+    
+    // 初始化回到顶部按钮
+    createBackToTopButton();
 }); 

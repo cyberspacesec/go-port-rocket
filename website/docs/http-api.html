@@ -3,13 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTTP API 文档 - Go Port Rocket</title>
+    <title>HTTP API 文档 - Port Rocket</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/docs.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css">
+    <style>
+        /* 警告框样式修复 */
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .alert i {
+            margin-right: 10px;
+            font-size: 18px;
+            vertical-align: middle;
+        }
+        
+        .alert strong {
+            margin-right: 5px;
+            font-weight: 600;
+        }
+        
+        .alert p {
+            margin: 8px 0 0 28px;
+            line-height: 1.5;
+        }
+        
+        .alert p:first-of-type {
+            margin-top: 5px;
+        }
+        
+        .alert-warning {
+            background-color: #fffaf0;
+            border-left: 4px solid #f0ad4e;
+            color: #8a6d3b;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            color: #0c5460;
+        }
+        
+        @media (max-width: 768px) {
+            .alert p {
+                margin-left: 0;
+            }
+        }
+
+        /* 代码块相关样式 */
+        .code-block {
+            position: relative;
+            margin: 1.5em 0;
+            border-radius: 6px;
+            overflow: visible;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        pre[class*="language-"] {
+            margin: 0;
+            padding: 1.5em;
+            padding-left: 4em;
+            font-size: 14px;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+        
+        /* 行号样式 */
+        .line-numbers .line-numbers-rows {
+            border-right: 1px solid rgba(255,255,255,0.2);
+            padding-right: 0.8em;
+        }
+        
+        /* 高亮关键字和注释 */
+        .token.keyword {
+            color: #c792ea;
+            font-weight: 500;
+        }
+        
+        .token.comment {
+            color: #7b8ba3;
+        }
+        
+        /* 复制按钮样式 */
+        .copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.2);
+            color: #eee;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.7;
+            z-index: 10;
+        }
+        
+        .copy-btn:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+            opacity: 1;
+        }
+        
+        /* 语言标签 */
+        .language-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 2px 8px;
+            font-size: 12px;
+            border-bottom-right-radius: 6px;
+        }
+        
+        /* 命令关键字高亮 */
+        .token.command {
+            color: #5ab3ff;
+            font-weight: bold;
+        }
+        
+        /* 参数高亮 */
+        .token.parameter {
+            color: #98c379;
+        }
+        
+        /* 命令文本高亮 */
+        .highlight-bash {
+            background-color: #282c34;
+            color: #abb2bf;
+            border-radius: 6px;
+            padding: 16px;
+            font-family: monospace;
+            position: relative;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -18,16 +157,17 @@
                 <div class="logo">
                     <a href="../index.html">
                         <i class="fas fa-rocket"></i>
-                        <span>Go Port Rocket</span>
+                        <span>Port Rocket</span>
                     </a>
                 </div>
                 <div class="nav-links">
-                    <a href="../index.html#features">功能</a>
+                    <a href="../index.html">首页</a>
+                    <a href="installation.html">安装指南</a>
                     <a href="cli.html">CLI 文档</a>
                     <a href="http-api.html" class="active">HTTP API</a>
                     <a href="golang-api.html">Golang API</a>
-                    <a href="mcp.html">MCP</a>
-                    <a href="https://github.com/cc11001100/go-port-rocket" target="_blank" class="github-link">
+                    <a href="mcp.html">MCP（AI集成）</a>
+                    <a href="https://github.com/cyberspacesec/go-port-rocket" target="_blank" class="github-link">
                         <i class="fab fa-github"></i> GitHub
                     </a>
                 </div>
@@ -58,16 +198,41 @@
         <main class="docs-content">
             <div class="docs-header">
                 <h1>HTTP API 文档</h1>
-                <p>学习如何使用 Go Port Rocket 的 HTTP API 接口进行端口扫描和任务管理</p>
+                <p>学习如何使用 Port Rocket 的 HTTP API 接口进行端口扫描和任务管理</p>
             </div>
 
             <section id="getting-started" class="docs-section">
                 <h2>开始使用</h2>
-                <p>Go Port Rocket 提供 RESTful API，允许通过 HTTP 请求执行扫描任务和管理系统。API 服务可以通过以下命令启动：</p>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>提示：</strong> 
+                    <p>在使用 HTTP API 前，您需要先安装 Port Rocket。请参考 <a href="installation.html">安装指南</a> 完成安装。</p>
+                </div>
+                
+                <p>Port Rocket 提供 RESTful API，允许通过 HTTP 请求执行扫描任务和管理系统。API 服务可以通过以下命令启动：</p>
 
                 <div class="code-block">
-                    <pre><code>go-port-rocket api --port 8080</code></pre>
+                    <pre><code class="language-bash">go-port-rocket api --port 8080</code></pre>
                     <button class="copy-btn" data-clipboard-text="go-port-rocket api --port 8080">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>安全提示：</strong> 
+                    <p>默认情况下，系统会使用默认用户名 <code>CC11001100</code> 并自动生成随机密码，启动时会在控制台显示这些信息。</p>
+                    <p>强烈建议您使用 <code>--admin-user</code> 和 <code>--admin-password</code> 参数手动指定认证凭据，尤其是在生产环境中。</p>
+                </div>
+
+                <p>推荐的生产环境启动方式：</p>
+                <div class="code-block">
+                    <pre><code class="language-bash">go-port-rocket api \
+  --port 8080 \
+  --admin-user your_custom_username \
+  --admin-password your_secure_password \
+  --jwt-secret your_custom_jwt_secret</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket api --port 8080 --admin-user your_custom_username --admin-password your_secure_password --jwt-secret your_custom_jwt_secret">
                         <i class="far fa-copy"></i>
                     </button>
                 </div>
@@ -101,9 +266,19 @@
                                 <td>8080</td>
                             </tr>
                             <tr>
+                                <td><code>--admin-user</code></td>
+                                <td>管理员用户名</td>
+                                <td>CC11001100</td>
+                            </tr>
+                            <tr>
+                                <td><code>--admin-password</code></td>
+                                <td>管理员密码</td>
+                                <td>自动生成的随机密码</td>
+                            </tr>
+                            <tr>
                                 <td><code>--jwt-secret</code></td>
-                                <td>JWT密钥</td>
-                                <td>-</td>
+                                <td>JWT密钥（不指定时自动生成，不会显示）</td>
+                                <td>自动生成</td>
                             </tr>
                             <tr>
                                 <td><code>--redis-addr</code></td>
@@ -141,16 +316,18 @@
 
                 <h3>完整配置启动示例</h3>
                 <div class="code-block">
-                    <pre><code>go-port-rocket api \
+                    <pre><code class="language-bash">go-port-rocket api \
   --port 8080 \
   --enable-auth \
+  --admin-user admin \
+  --admin-password secure_password \
   --jwt-secret your-secret-key \
   --redis-addr localhost:6379 \
   --redis-pass your-password \
   --redis-db 0 \
   --max-workers 10 \
   --queue-size 100</code></pre>
-                    <button class="copy-btn" data-clipboard-text="go-port-rocket api --port 8080 --enable-auth --jwt-secret your-secret-key --redis-addr localhost:6379 --redis-pass your-password --redis-db 0 --max-workers 10 --queue-size 100">
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket api --port 8080 --enable-auth --admin-user admin --admin-password secure_password --jwt-secret your-secret-key --redis-addr localhost:6379 --redis-pass your-password --redis-db 0 --max-workers 10 --queue-size 100">
                         <i class="far fa-copy"></i>
                     </button>
                 </div>
@@ -160,9 +337,23 @@
                 <h2>认证</h2>
                 <p>API 服务默认启用认证。要访问受保护的端点，客户端需要先获取 JWT 令牌。</p>
 
+                <h3>默认认证凭据</h3>
+                <p>在启动 API 服务时，系统会使用以下认证凭据：</p>
+                <ul>
+                    <li>如果通过 <code>--admin-user</code> 和 <code>--admin-password</code> 指定了凭据，则使用指定的值</li>
+                    <li>如果未指定，则使用默认用户名 <code>CC11001100</code> 并自动生成随机密码</li>
+                    <li>生成的随机密码会在服务启动时显示在控制台上</li>
+                </ul>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>提示：</strong> 
+                    <p>在生产环境中，务必使用 <code>--admin-user</code> 和 <code>--admin-password</code> 参数手动设置安全的凭据。</p>
+                </div>
+
                 <h3>获取令牌</h3>
                 <div class="code-block">
-                    <pre><code>POST /api/v1/auth/login
+                    <pre><code class="language-http">POST /api/v1/auth/login
 Content-Type: application/json
 
 {
@@ -173,7 +364,7 @@ Content-Type: application/json
 
                 <p>成功响应示例：</p>
                 <div class="code-block">
-                    <pre><code>{
+                    <pre><code class="language-json">{
   "status": "success",
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -185,7 +376,7 @@ Content-Type: application/json
                 <h3>使用令牌</h3>
                 <p>获取令牌后，将其添加到后续请求的 Authorization 头中：</p>
                 <div class="code-block">
-                    <pre><code>GET /api/v1/scan/tasks
+                    <pre><code class="language-http">GET /api/v1/scan/tasks
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
                 </div>
             </section>
@@ -194,7 +385,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
                 <h2>扫描 API</h2>
                 <h3>创建扫描任务</h3>
                 <div class="code-block">
-                    <pre><code>POST /api/v1/scan
+                    <pre><code class="language-http">POST /api/v1/scan
 Authorization: Bearer &lt;token&gt;
 Content-Type: application/json
 
@@ -208,13 +399,15 @@ Content-Type: application/json
   "pretty_output": true,
   "enable_os": true,
   "enable_service": true,
-  "version_intensity": 7
+  "version_intensity": 7,
+  "guess_os": false,
+  "limit_os_scan": false
 }</code></pre>
                 </div>
 
                 <p>响应示例：</p>
                 <div class="code-block">
-                    <pre><code>{
+                    <pre><code class="language-json">{
   "status": "success",
   "data": {
     "task_id": "c91e0e9b-f869-4b15-a1cd-74e8c5afd8ca",
@@ -233,68 +426,141 @@ Content-Type: application/json
                                 <th>类型</th>
                                 <th>描述</th>
                                 <th>是否必填</th>
+                                <th>默认值</th>
+                                <th>示例</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td><code>target</code></td>
                                 <td>string</td>
-                                <td>扫描目标 (IP或域名)</td>
+                                <td>扫描目标 (IP、域名或CIDR)</td>
                                 <td>是</td>
+                                <td>-</td>
+                                <td><code>"192.168.1.1"</code> 或 <code>"example.com"</code> 或 <code>"10.0.0.0/24"</code></td>
                             </tr>
                             <tr>
                                 <td><code>ports</code></td>
                                 <td>string</td>
-                                <td>端口范围 (例如: 80,443 或 1-1024)</td>
+                                <td>端口范围，可以是单个端口、多个端口（逗号分隔）或端口范围</td>
                                 <td>是</td>
+                                <td>-</td>
+                                <td><code>"80"</code> 或 <code>"80,443,8080"</code> 或 <code>"1-1024"</code></td>
                             </tr>
                             <tr>
                                 <td><code>scan_type</code></td>
                                 <td>string</td>
-                                <td>扫描类型 (tcp 或 udp)</td>
-                                <td>否 (默认: tcp)</td>
+                                <td>扫描类型，支持 tcp、udp 或 syn</td>
+                                <td>否</td>
+                                <td>"tcp"</td>
+                                <td><code>"tcp"</code></td>
                             </tr>
                             <tr>
                                 <td><code>timeout</code></td>
                                 <td>string</td>
-                                <td>超时时间 (例如: "5s")</td>
-                                <td>否 (默认: "5s")</td>
+                                <td>单个端口扫描超时时间，支持时间单位 (s, ms)</td>
+                                <td>否</td>
+                                <td>"5s"</td>
+                                <td><code>"5s"</code> 或 <code>"500ms"</code></td>
                             </tr>
                             <tr>
                                 <td><code>workers</code></td>
                                 <td>int</td>
-                                <td>工作线程数</td>
-                                <td>否 (默认: 100)</td>
+                                <td>并发扫描的工作线程数</td>
+                                <td>否</td>
+                                <td>100</td>
+                                <td><code>100</code></td>
                             </tr>
                             <tr>
                                 <td><code>output_format</code></td>
                                 <td>string</td>
-                                <td>输出格式 (text, json, xml, html)</td>
-                                <td>否 (默认: json)</td>
+                                <td>输出格式，支持 json、text、xml 或 html</td>
+                                <td>否</td>
+                                <td>"json"</td>
+                                <td><code>"json"</code></td>
                             </tr>
                             <tr>
                                 <td><code>pretty_output</code></td>
                                 <td>bool</td>
-                                <td>美化输出</td>
-                                <td>否 (默认: false)</td>
+                                <td>是否美化输出格式（适用于 JSON 和 XML）</td>
+                                <td>否</td>
+                                <td>false</td>
+                                <td><code>true</code></td>
                             </tr>
                             <tr>
                                 <td><code>enable_os</code></td>
                                 <td>bool</td>
-                                <td>启用操作系统检测</td>
-                                <td>否 (默认: false)</td>
+                                <td>是否启用操作系统检测</td>
+                                <td>否</td>
+                                <td>false</td>
+                                <td><code>true</code></td>
                             </tr>
                             <tr>
                                 <td><code>enable_service</code></td>
                                 <td>bool</td>
-                                <td>启用服务检测</td>
-                                <td>否 (默认: false)</td>
+                                <td>是否启用服务和版本检测</td>
+                                <td>否</td>
+                                <td>false</td>
+                                <td><code>true</code></td>
                             </tr>
                             <tr>
                                 <td><code>version_intensity</code></td>
                                 <td>int</td>
-                                <td>版本检测强度 (0-9)</td>
-                                <td>否 (默认: 7)</td>
+                                <td>版本检测强度，范围 0-9，数值越大越详细但速度越慢</td>
+                                <td>否</td>
+                                <td>7</td>
+                                <td><code>7</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>guess_os</code></td>
+                                <td>bool</td>
+                                <td>是否根据开放端口推测操作系统</td>
+                                <td>否</td>
+                                <td>false</td>
+                                <td><code>true</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>limit_os_scan</code></td>
+                                <td>bool</td>
+                                <td>是否限制操作系统扫描的端口数量来提高速度</td>
+                                <td>否</td>
+                                <td>false</td>
+                                <td><code>true</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>响应字段说明</h3>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>字段</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>status</code></td>
+                                <td>string</td>
+                                <td>操作状态，成功为 "success"，失败为 "error"</td>
+                            </tr>
+                            <tr>
+                                <td><code>data.task_id</code></td>
+                                <td>string</td>
+                                <td>任务唯一标识符，用于后续查询任务状态和获取结果</td>
+                            </tr>
+                            <tr>
+                                <td><code>data.status</code></td>
+                                <td>string</td>
+                                <td>任务初始状态，通常为 "queued"</td>
+                            </tr>
+                            <tr>
+                                <td><code>data.created_at</code></td>
+                                <td>string</td>
+                                <td>任务创建时间，ISO 8601 格式</td>
                             </tr>
                         </tbody>
                     </table>
@@ -306,13 +572,55 @@ Content-Type: application/json
                 
                 <h3>获取任务列表</h3>
                 <div class="code-block">
-                    <pre><code>GET /api/v1/scan/tasks
+                    <pre><code class="language-http">GET /api/v1/scan/tasks
 Authorization: Bearer &lt;token&gt;</code></pre>
+                </div>
+
+                <p>查询参数：</p>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>参数</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>是否必填</th>
+                                <th>默认值</th>
+                                <th>示例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>page</code></td>
+                                <td>int</td>
+                                <td>页码，用于分页</td>
+                                <td>否</td>
+                                <td>1</td>
+                                <td><code>2</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>per_page</code></td>
+                                <td>int</td>
+                                <td>每页显示的任务数量</td>
+                                <td>否</td>
+                                <td>10</td>
+                                <td><code>20</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>status</code></td>
+                                <td>string</td>
+                                <td>按状态筛选任务</td>
+                                <td>否</td>
+                                <td>-</td>
+                                <td><code>completed</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <p>响应示例：</p>
                 <div class="code-block">
-                    <pre><code>{
+                    <pre><code class="language-json">{
   "status": "success",
   "data": {
     "tasks": [
@@ -340,13 +648,37 @@ Authorization: Bearer &lt;token&gt;</code></pre>
 
                 <h3>获取任务详情</h3>
                 <div class="code-block">
-                    <pre><code>GET /api/v1/scan/tasks/{task_id}
+                    <pre><code class="language-http">GET /api/v1/scan/tasks/{task_id}
 Authorization: Bearer &lt;token&gt;</code></pre>
+                </div>
+
+                <p>URL 参数：</p>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>参数</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>是否必填</th>
+                                <th>示例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>task_id</code></td>
+                                <td>string</td>
+                                <td>任务的唯一标识符</td>
+                                <td>是</td>
+                                <td><code>c91e0e9b-f869-4b15-a1cd-74e8c5afd8ca</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <p>响应示例：</p>
                 <div class="code-block">
-                    <pre><code>{
+                    <pre><code class="language-json">{
   "status": "success",
   "data": {
     "task_id": "c91e0e9b-f869-4b15-a1cd-74e8c5afd8ca",
@@ -364,13 +696,37 @@ Authorization: Bearer &lt;token&gt;</code></pre>
 
                 <h3>获取任务结果</h3>
                 <div class="code-block">
-                    <pre><code>GET /api/v1/scan/tasks/{task_id}/result
+                    <pre><code class="language-http">GET /api/v1/scan/tasks/{task_id}/result
 Authorization: Bearer &lt;token&gt;</code></pre>
+                </div>
+
+                <p>URL 参数：</p>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>参数</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>是否必填</th>
+                                <th>示例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>task_id</code></td>
+                                <td>string</td>
+                                <td>任务的唯一标识符</td>
+                                <td>是</td>
+                                <td><code>c91e0e9b-f869-4b15-a1cd-74e8c5afd8ca</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <p>响应示例：</p>
                 <div class="code-block">
-                    <pre><code>{
+                    <pre><code class="language-json">{
   "status": "success",
   "data": {
     "scan_result": {
@@ -404,13 +760,37 @@ Authorization: Bearer &lt;token&gt;</code></pre>
 
                 <h3>取消任务</h3>
                 <div class="code-block">
-                    <pre><code>DELETE /api/v1/scan/tasks/{task_id}
+                    <pre><code class="language-http">DELETE /api/v1/scan/tasks/{task_id}
 Authorization: Bearer &lt;token&gt;</code></pre>
+                </div>
+
+                <p>URL 参数：</p>
+                <div class="table-container">
+                    <table class="options-table">
+                        <thead>
+                            <tr>
+                                <th>参数</th>
+                                <th>类型</th>
+                                <th>描述</th>
+                                <th>是否必填</th>
+                                <th>示例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>task_id</code></td>
+                                <td>string</td>
+                                <td>任务的唯一标识符</td>
+                                <td>是</td>
+                                <td><code>d82f3a7c-5b1e-4c8a-9f5d-89e12c9b3c4a</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <p>响应示例：</p>
                 <div class="code-block">
-                    <pre><code>{
+                    <pre><code class="language-json">{
   "status": "success",
   "message": "Task cancelled successfully"
 }</code></pre>
@@ -422,13 +802,13 @@ Authorization: Bearer &lt;token&gt;</code></pre>
                 
                 <h3>系统状态</h3>
                 <div class="code-block">
-                    <pre><code>GET /api/v1/system/status
+                    <pre><code class="language-http">GET /api/v1/system/status
 Authorization: Bearer &lt;token&gt;</code></pre>
                 </div>
 
                 <p>响应示例：</p>
                 <div class="code-block">
-                    <pre><code>{
+                    <pre><code class="language-json">{
   "status": "success",
   "data": {
     "version": "1.0.0",
@@ -449,13 +829,13 @@ Authorization: Bearer &lt;token&gt;</code></pre>
 
                 <h3>系统指标</h3>
                 <div class="code-block">
-                    <pre><code>GET /api/v1/system/metrics
+                    <pre><code class="language-http">GET /api/v1/system/metrics
 Authorization: Bearer &lt;token&gt;</code></pre>
                 </div>
 
                 <p>响应示例：</p>
                 <div class="code-block">
-                    <pre><code>{
+                    <pre><code class="language-json">{
   "status": "success",
   "data": {
     "requests_total": 1580,
@@ -484,7 +864,7 @@ Authorization: Bearer &lt;token&gt;</code></pre>
                 
                 <h3>使用 curl 创建扫描任务</h3>
                 <div class="code-block">
-                    <pre><code>curl -X POST \
+                    <pre><code class="language-bash">curl -X POST \
   http://localhost:8080/api/v1/scan \
   -H 'Authorization: Bearer &lt;your-token&gt;' \
   -H 'Content-Type: application/json' \
@@ -509,10 +889,34 @@ Authorization: Bearer &lt;token&gt;</code></pre>
                         <i class="far fa-copy"></i>
                     </button>
                 </div>
+
+                <h3>使用 curl 获取任务结果</h3>
+                <div class="code-block">
+                    <pre><code class="language-bash">curl -X GET \
+  http://localhost:8080/api/v1/scan/tasks/c91e0e9b-f869-4b15-a1cd-74e8c5afd8ca/result \
+  -H 'Authorization: Bearer &lt;your-token&gt;'</code></pre>
+                    <button class="copy-btn" data-clipboard-text="curl -X GET \
+  http://localhost:8080/api/v1/scan/tasks/c91e0e9b-f869-4b15-a1cd-74e8c5afd8ca/result \
+  -H 'Authorization: Bearer <your-token>'">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>使用 curl 获取系统状态</h3>
+                <div class="code-block">
+                    <pre><code class="language-bash">curl -X GET \
+  http://localhost:8080/api/v1/system/status \
+  -H 'Authorization: Bearer &lt;your-token&gt;'</code></pre>
+                    <button class="copy-btn" data-clipboard-text="curl -X GET \
+  http://localhost:8080/api/v1/system/status \
+  -H 'Authorization: Bearer <your-token>'">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
                 
                 <h3>使用 Python 创建并检查任务</h3>
                 <div class="code-block">
-                    <pre><code>import requests
+                    <pre><code class="language-python">import requests
 import json
 import time
 
@@ -559,43 +963,569 @@ import json
 import time
 
 # 配置
-API_URL = &quot;http://localhost:8080/api/v1&quot;
-TOKEN = &quot;your-token&quot;
+API_URL = "http://localhost:8080/api/v1"
+TOKEN = "your-token"
 HEADERS = {
-    &quot;Authorization&quot;: f&quot;Bearer {TOKEN}&quot;,
-    &quot;Content-Type&quot;: &quot;application/json&quot;
+    "Authorization": f"Bearer {TOKEN}",
+    "Content-Type": "application/json"
 }
 
 # 创建扫描任务
 scan_data = {
-    &quot;target&quot;: &quot;example.com&quot;,
-    &quot;ports&quot;: &quot;80,443,8080&quot;,
-    &quot;scan_type&quot;: &quot;tcp&quot;,
-    &quot;enable_service&quot;: True,
-    &quot;enable_os&quot;: True
+    "target": "example.com",
+    "ports": "80,443,8080",
+    "scan_type": "tcp",
+    "enable_service": True,
+    "enable_os": True
 }
 
-response = requests.post(f&quot;{API_URL}/scan&quot;, headers=HEADERS, json=scan_data)
+response = requests.post(f"{API_URL}/scan", headers=HEADERS, json=scan_data)
 task = response.json()
-task_id = task[&quot;data&quot;][&quot;task_id&quot;]
-print(f&quot;Created task: {task_id}&quot;)
+task_id = task["data"]["task_id"]
+print(f"Created task: {task_id}")
 
 # 等待任务完成
 while True:
-    response = requests.get(f&quot;{API_URL}/scan/tasks/{task_id}&quot;, headers=HEADERS)
-    task_status = response.json()[&quot;data&quot;][&quot;status&quot;]
-    print(f&quot;Task status: {task_status}&quot;)
+    response = requests.get(f"{API_URL}/scan/tasks/{task_id}", headers=HEADERS)
+    task_status = response.json()["data"]["status"]
+    print(f"Task status: {task_status}")
     
-    if task_status in [&quot;completed&quot;, &quot;failed&quot;]:
+    if task_status in ["completed", "failed"]:
         break
     
     time.sleep(5)
 
 # 获取结果
-if task_status == &quot;completed&quot;:
-    response = requests.get(f&quot;{API_URL}/scan/tasks/{task_id}/result&quot;, headers=HEADERS)
+if task_status == "completed":
+    response = requests.get(f"{API_URL}/scan/tasks/{task_id}/result", headers=HEADERS)
     result = response.json()
     print(json.dumps(result, indent=2))">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>使用 JavaScript/Node.js 创建任务</h3>
+                <div class="code-block">
+                    <pre><code class="language-javascript">const axios = require('axios');
+
+// 配置
+const API_URL = 'http://localhost:8080/api/v1';
+const TOKEN = 'your-token';
+const HEADERS = {
+  'Authorization': `Bearer ${TOKEN}`,
+  'Content-Type': 'application/json'
+};
+
+// 创建扫描任务函数
+async function createScanTask() {
+  try {
+    const scanData = {
+      target: '192.168.1.1',
+      ports: '22,80,443',
+      scan_type: 'tcp',
+      timeout: '3s',
+      workers: 50,
+      enable_os: true,
+      enable_service: true
+    };
+    
+    const response = await axios.post(`${API_URL}/scan`, scanData, { headers: HEADERS });
+    const taskId = response.data.data.task_id;
+    console.log(`Task created with ID: ${taskId}`);
+    return taskId;
+  } catch (error) {
+    console.error('Error creating scan task:', error.response?.data || error.message);
+  }
+}
+
+// 获取任务状态函数
+async function getTaskStatus(taskId) {
+  try {
+    const response = await axios.get(`${API_URL}/scan/tasks/${taskId}`, { headers: HEADERS });
+    return response.data.data.status;
+  } catch (error) {
+    console.error('Error getting task status:', error.response?.data || error.message);
+    return null;
+  }
+}
+
+// 获取任务结果函数
+async function getTaskResult(taskId) {
+  try {
+    const response = await axios.get(`${API_URL}/scan/tasks/${taskId}/result`, { headers: HEADERS });
+    return response.data;
+  } catch (error) {
+    console.error('Error getting task result:', error.response?.data || error.message);
+    return null;
+  }
+}
+
+// 主函数
+async function main() {
+  // 创建任务
+  const taskId = await createScanTask();
+  if (!taskId) return;
+  
+  // 轮询任务状态
+  let status;
+  do {
+    await new Promise(resolve => setTimeout(resolve, 5000)); // 等待5秒
+    status = await getTaskStatus(taskId);
+    console.log(`Task status: ${status}`);
+  } while (status === 'queued' || status === 'running');
+  
+  // 获取结果
+  if (status === 'completed') {
+    const result = await getTaskResult(taskId);
+    console.log('Scan result:');
+    console.log(JSON.stringify(result, null, 2));
+  }
+}
+
+main();</code></pre>
+                    <button class="copy-btn" data-clipboard-text="const axios = require('axios');
+
+// 配置
+const API_URL = 'http://localhost:8080/api/v1';
+const TOKEN = 'your-token';
+const HEADERS = {
+  'Authorization': `Bearer ${TOKEN}`,
+  'Content-Type': 'application/json'
+};
+
+// 创建扫描任务函数
+async function createScanTask() {
+  try {
+    const scanData = {
+      target: '192.168.1.1',
+      ports: '22,80,443',
+      scan_type: 'tcp',
+      timeout: '3s',
+      workers: 50,
+      enable_os: true,
+      enable_service: true
+    };
+    
+    const response = await axios.post(`${API_URL}/scan`, scanData, { headers: HEADERS });
+    const taskId = response.data.data.task_id;
+    console.log(`Task created with ID: ${taskId}`);
+    return taskId;
+  } catch (error) {
+    console.error('Error creating scan task:', error.response?.data || error.message);
+  }
+}
+
+// 获取任务状态函数
+async function getTaskStatus(taskId) {
+  try {
+    const response = await axios.get(`${API_URL}/scan/tasks/${taskId}`, { headers: HEADERS });
+    return response.data.data.status;
+  } catch (error) {
+    console.error('Error getting task status:', error.response?.data || error.message);
+    return null;
+  }
+}
+
+// 获取任务结果函数
+async function getTaskResult(taskId) {
+  try {
+    const response = await axios.get(`${API_URL}/scan/tasks/${taskId}/result`, { headers: HEADERS });
+    return response.data;
+  } catch (error) {
+    console.error('Error getting task result:', error.response?.data || error.message);
+    return null;
+  }
+}
+
+// 主函数
+async function main() {
+  // 创建任务
+  const taskId = await createScanTask();
+  if (!taskId) return;
+  
+  // 轮询任务状态
+  let status;
+  do {
+    await new Promise(resolve => setTimeout(resolve, 5000)); // 等待5秒
+    status = await getTaskStatus(taskId);
+    console.log(`Task status: ${status}`);
+  } while (status === 'queued' || status === 'running');
+  
+  // 获取结果
+  if (status === 'completed') {
+    const result = await getTaskResult(taskId);
+    console.log('Scan result:');
+    console.log(JSON.stringify(result, null, 2));
+  }
+}
+
+main();">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>使用 Go 创建任务</h3>
+                <div class="code-block">
+                    <pre><code class="language-go">package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"time"
+)
+
+const (
+	APIURL = "http://localhost:8080/api/v1"
+	Token  = "your-token"
+)
+
+// 扫描请求结构体
+type ScanRequest struct {
+	Target           string `json:"target"`
+	Ports            string `json:"ports"`
+	ScanType         string `json:"scan_type"`
+	Timeout          string `json:"timeout"`
+	Workers          int    `json:"workers"`
+	EnableOS         bool   `json:"enable_os"`
+	EnableService    bool   `json:"enable_service"`
+	VersionIntensity int    `json:"version_intensity"`
+}
+
+// 任务响应结构体
+type TaskResponse struct {
+	Status string `json:"status"`
+	Data   struct {
+		TaskID    string `json:"task_id"`
+		Status    string `json:"status"`
+		CreatedAt string `json:"created_at"`
+	} `json:"data"`
+}
+
+// 任务状态响应结构体
+type TaskStatusResponse struct {
+	Status string `json:"status"`
+	Data   struct {
+		TaskID           string `json:"task_id"`
+		Status           string `json:"status"`
+		ResultAvailable  bool   `json:"result_available"`
+	} `json:"data"`
+}
+
+func main() {
+	// 创建扫描任务
+	taskID, err := createScanTask()
+	if err != nil {
+		fmt.Printf("创建任务失败: %v\n", err)
+		return
+	}
+	fmt.Printf("创建任务成功，ID: %s\n", taskID)
+
+	// 轮询任务状态
+	for {
+		status, done, err := getTaskStatus(taskID)
+		if err != nil {
+			fmt.Printf("获取任务状态失败: %v\n", err)
+			break
+		}
+
+		fmt.Printf("任务状态: %s\n", status)
+		if done {
+			// 获取结果
+			result, err := getTaskResult(taskID)
+			if err != nil {
+				fmt.Printf("获取任务结果失败: %v\n", err)
+			} else {
+				fmt.Printf("任务结果: %s\n", result)
+			}
+			break
+		}
+
+		time.Sleep(5 * time.Second)
+	}
+}
+
+// 创建扫描任务
+func createScanTask() (string, error) {
+	scanReq := ScanRequest{
+		Target:           "example.com",
+		Ports:            "80,443,8080",
+		ScanType:         "tcp",
+		Timeout:          "5s",
+		Workers:          100,
+		EnableOS:         true,
+		EnableService:    true,
+		VersionIntensity: 7,
+	}
+
+	reqBody, err := json.Marshal(scanReq)
+	if err != nil {
+		return "", err
+	}
+
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", APIURL+"/scan", bytes.NewBuffer(reqBody))
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Add("Authorization", "Bearer "+Token)
+	req.Header.Add("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	var taskResp TaskResponse
+	if err := json.Unmarshal(body, &taskResp); err != nil {
+		return "", err
+	}
+
+	return taskResp.Data.TaskID, nil
+}
+
+// 获取任务状态
+func getTaskStatus(taskID string) (string, bool, error) {
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/scan/tasks/%s", APIURL, taskID), nil)
+	if err != nil {
+		return "", false, err
+	}
+
+	req.Header.Add("Authorization", "Bearer "+Token)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", false, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", false, err
+	}
+
+	var statusResp TaskStatusResponse
+	if err := json.Unmarshal(body, &statusResp); err != nil {
+		return "", false, err
+	}
+
+	done := statusResp.Data.Status == "completed" || statusResp.Data.Status == "failed"
+	return statusResp.Data.Status, done, nil
+}
+
+// 获取任务结果
+func getTaskResult(taskID string) (string, error) {
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/scan/tasks/%s/result", APIURL, taskID), nil)
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Add("Authorization", "Bearer "+Token)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return string(body), nil
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="package main
+
+import (
+	&quot;bytes&quot;
+	&quot;encoding/json&quot;
+	&quot;fmt&quot;
+	&quot;io/ioutil&quot;
+	&quot;net/http&quot;
+	&quot;time&quot;
+)
+
+const (
+	APIURL = &quot;http://localhost:8080/api/v1&quot;
+	Token  = &quot;your-token&quot;
+)
+
+// 扫描请求结构体
+type ScanRequest struct {
+	Target           string `json:&quot;target&quot;`
+	Ports            string `json:&quot;ports&quot;`
+	ScanType         string `json:&quot;scan_type&quot;`
+	Timeout          string `json:&quot;timeout&quot;`
+	Workers          int    `json:&quot;workers&quot;`
+	EnableOS         bool   `json:&quot;enable_os&quot;`
+	EnableService    bool   `json:&quot;enable_service&quot;`
+	VersionIntensity int    `json:&quot;version_intensity&quot;`
+}
+
+// 任务响应结构体
+type TaskResponse struct {
+	Status string `json:&quot;status&quot;`
+	Data   struct {
+		TaskID    string `json:&quot;task_id&quot;`
+		Status    string `json:&quot;status&quot;`
+		CreatedAt string `json:&quot;created_at&quot;`
+	} `json:&quot;data&quot;`
+}
+
+// 任务状态响应结构体
+type TaskStatusResponse struct {
+	Status string `json:&quot;status&quot;`
+	Data   struct {
+		TaskID           string `json:&quot;task_id&quot;`
+		Status           string `json:&quot;status&quot;`
+		ResultAvailable  bool   `json:&quot;result_available&quot;`
+	} `json:&quot;data&quot;`
+}
+
+func main() {
+	// 创建扫描任务
+	taskID, err := createScanTask()
+	if err != nil {
+		fmt.Printf(&quot;创建任务失败: %v\n&quot;, err)
+		return
+	}
+	fmt.Printf(&quot;创建任务成功，ID: %s\n&quot;, taskID)
+
+	// 轮询任务状态
+	for {
+		status, done, err := getTaskStatus(taskID)
+		if err != nil {
+			fmt.Printf(&quot;获取任务状态失败: %v\n&quot;, err)
+			break
+		}
+
+		fmt.Printf(&quot;任务状态: %s\n&quot;, status)
+		if done {
+			// 获取结果
+			result, err := getTaskResult(taskID)
+			if err != nil {
+				fmt.Printf(&quot;获取任务结果失败: %v\n&quot;, err)
+			} else {
+				fmt.Printf(&quot;任务结果: %s\n&quot;, result)
+			}
+			break
+		}
+
+		time.Sleep(5 * time.Second)
+	}
+}
+
+// 创建扫描任务
+func createScanTask() (string, error) {
+	scanReq := ScanRequest{
+		Target:           &quot;example.com&quot;,
+		Ports:            &quot;80,443,8080&quot;,
+		ScanType:         &quot;tcp&quot;,
+		Timeout:          &quot;5s&quot;,
+		Workers:          100,
+		EnableOS:         true,
+		EnableService:    true,
+		VersionIntensity: 7,
+	}
+
+	reqBody, err := json.Marshal(scanReq)
+	if err != nil {
+		return &quot;&quot;, err
+	}
+
+	client := &amp;http.Client{}
+	req, err := http.NewRequest(&quot;POST&quot;, APIURL+&quot;/scan&quot;, bytes.NewBuffer(reqBody))
+	if err != nil {
+		return &quot;&quot;, err
+	}
+
+	req.Header.Add(&quot;Authorization&quot;, &quot;Bearer &quot;+Token)
+	req.Header.Add(&quot;Content-Type&quot;, &quot;application/json&quot;)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return &quot;&quot;, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return &quot;&quot;, err
+	}
+
+	var taskResp TaskResponse
+	if err := json.Unmarshal(body, &amp;taskResp); err != nil {
+		return &quot;&quot;, err
+	}
+
+	return taskResp.Data.TaskID, nil
+}
+
+// 获取任务状态
+func getTaskStatus(taskID string) (string, bool, error) {
+	client := &amp;http.Client{}
+	req, err := http.NewRequest(&quot;GET&quot;, fmt.Sprintf(&quot;%s/scan/tasks/%s&quot;, APIURL, taskID), nil)
+	if err != nil {
+		return &quot;&quot;, false, err
+	}
+
+	req.Header.Add(&quot;Authorization&quot;, &quot;Bearer &quot;+Token)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return &quot;&quot;, false, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return &quot;&quot;, false, err
+	}
+
+	var statusResp TaskStatusResponse
+	if err := json.Unmarshal(body, &amp;statusResp); err != nil {
+		return &quot;&quot;, false, err
+	}
+
+	done := statusResp.Data.Status == &quot;completed&quot; || statusResp.Data.Status == &quot;failed&quot;
+	return statusResp.Data.Status, done, nil
+}
+
+// 获取任务结果
+func getTaskResult(taskID string) (string, error) {
+	client := &amp;http.Client{}
+	req, err := http.NewRequest(&quot;GET&quot;, fmt.Sprintf(&quot;%s/scan/tasks/%s/result&quot;, APIURL, taskID), nil)
+	if err != nil {
+		return &quot;&quot;, err
+	}
+
+	req.Header.Add(&quot;Authorization&quot;, &quot;Bearer &quot;+Token)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return &quot;&quot;, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return &quot;&quot;, err
+	}
+
+	return string(body), nil
+}">
                         <i class="far fa-copy"></i>
                     </button>
                 </div>
@@ -608,7 +1538,7 @@ if task_status == &quot;completed&quot;:
             <div class="footer-content">
                 <div class="footer-logo">
                     <i class="fas fa-rocket"></i>
-                    <span>Go Port Rocket</span>
+                    <span>Port Rocket</span>
                 </div>
                 <div class="footer-links">
                     <div class="footer-column">
@@ -616,26 +1546,150 @@ if task_status == &quot;completed&quot;:
                         <a href="cli.html">CLI 文档</a>
                         <a href="http-api.html" class="active">HTTP API</a>
                         <a href="golang-api.html">Golang API</a>
-                        <a href="mcp.html">MCP</a>
+                        <a href="mcp.html">MCP（AI集成）</a>
                     </div>
                     <div class="footer-column">
                         <h4>资源</h4>
-                        <a href="https://github.com/cc11001100/go-port-rocket" target="_blank">GitHub</a>
-                        <a href="https://github.com/cc11001100/go-port-rocket/issues" target="_blank">问题反馈</a>
-                        <a href="https://github.com/cc11001100/go-port-rocket/blob/main/LICENSE" target="_blank">许可证</a>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket" target="_blank">GitHub</a>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket/issues" target="_blank">问题反馈</a>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket/blob/main/LICENSE" target="_blank">许可证</a>
                     </div>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 Go Port Rocket. 采用 MIT 许可证。</p>
+                <p>&copy; 2023 Port Rocket. 采用 MIT 许可证。</p>
             </div>
         </div>
     </footer>
 
     <script src="../js/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-http.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
     <script>
-        new ClipboardJS('.copy-btn');
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // 初始化复制功能
+            var clipboard = new ClipboardJS('.copy-btn');
+            
+            // 复制成功效果
+            clipboard.on('success', function(e) {
+                var btn = e.trigger;
+                var originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="far fa-check-circle"></i> 已复制';
+                
+                setTimeout(function() {
+                    btn.innerHTML = originalText;
+                }, 2000);
+                
+                e.clearSelection();
+            });
+            
+            // 手动高亮bash代码
+            var bashElements = document.querySelectorAll('code.language-bash');
+            bashElements.forEach(function(element) {
+                // 获取代码内容
+                var content = element.textContent;
+                
+                // 分离命令和参数
+                var parts = content.split(' ');
+                var command = parts[0];
+                var params = parts.slice(1).join(' ');
+                
+                // 高亮处理
+                element.innerHTML = '<span class="token command">' + command + '</span> <span class="token parameter">' + params + '</span>';
+                
+                // 添加语言标签
+                var parent = element.parentElement.parentElement;
+                if (!parent.querySelector('.language-label')) {
+                    var label = document.createElement('div');
+                    label.className = 'language-label';
+                    label.textContent = 'BASH';
+                    parent.style.position = 'relative';
+                    parent.appendChild(label);
+                }
+                
+                // 添加高亮样式
+                element.parentElement.classList.add('highlight-bash');
+            });
+            
+            // 为所有代码块添加语言标签
+            document.querySelectorAll('.code-block').forEach((block) => {
+                const pre = block.querySelector('pre');
+                const code = pre.querySelector('code');
+                
+                // 从class中提取语言
+                const codeClass = code.className;
+                const langMatch = codeClass.match(/language-(\w+)/);
+                
+                if (langMatch && langMatch[1]) {
+                    // 设置data-language属性用于显示语言标签
+                    if (!block.querySelector('.language-label')) {
+                        var label = document.createElement('div');
+                        label.className = 'language-label';
+                        label.textContent = langMatch[1].toUpperCase();
+                        block.style.position = 'relative';
+                        block.appendChild(label);
+                    }
+                    
+                    // 确保Prism类名格式正确
+                    code.className = `language-${langMatch[1]}`;
+                    pre.className = `language-${langMatch[1]}`;
+                }
+            });
+            
+            // 确保所有代码块应用了正确的CSS类
+            document.querySelectorAll('pre code').forEach(element => {
+                var parent = element.parentElement.parentElement;
+                parent.classList.add('code-block');
+            });
+            
+            // 手动触发Prism重新高亮
+            setTimeout(function() {
+                if (typeof Prism !== 'undefined') {
+                    Prism.highlightAll();
+                    console.log('Prism.js语法高亮已重新应用');
+                } else {
+                    console.warn('Prism.js未加载，应用简易高亮');
+                    applySimpleHighlighting();
+                }
+            }, 500);
+            
+            // 简易的语法高亮函数（备用）
+            function applySimpleHighlighting() {
+                // 处理Go代码
+                document.querySelectorAll('code.language-go').forEach(function(element) {
+                    var content = element.innerHTML;
+                    content = content.replace(/\b(package|import|func|return|var|const|if|else|for|range|switch|case|default|struct|interface|map|chan|go|defer|select)\b/g, '<span class="token keyword">$1</span>');
+                    content = content.replace(/"([^"]*)"/g, '<span class="token string">"$1"</span>');
+                    content = content.replace(/\/\/(.*)/g, '<span class="token comment">// $1</span>');
+                    element.innerHTML = content;
+                });
+                
+                // 处理JSON代码
+                document.querySelectorAll('code.language-json').forEach(function(element) {
+                    var content = element.innerHTML;
+                    content = content.replace(/"([^"]+)":/g, '<span class="token property">"$1":</span>');
+                    content = content.replace(/"([^"]*)"/g, '<span class="token string">"$1"</span>');
+                    content = content.replace(/\b(true|false|null)\b/g, '<span class="token keyword">$1</span>');
+                    element.innerHTML = content;
+                });
+                
+                // 处理HTTP代码
+                document.querySelectorAll('code.language-http').forEach(function(element) {
+                    var content = element.innerHTML;
+                    content = content.replace(/^(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)(.*)$/gm, '<span class="token request-line">$1$2</span>');
+                    content = content.replace(/^([A-Za-z\-]+):(.*?)$/gm, '<span class="token header"><span class="token header-name">$1:</span>$2</span>');
+                    element.innerHTML = content;
+                });
+            }
+        });
     </script>
+<script src="../js/code-copy.js"></script>
 </body>
 </html> 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Go-Port-Rocket 扫描报告</title>
+    <title>Port-Rocket 扫描报告</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
@@ -605,11 +605,43 @@
             background-color: #fffde7;
             transition: background-color 0.3s;
         }
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .back-to-top:hover {
+            background-color: #27ae60;
+        }
+        .back-to-top.clicked {
+            opacity: 1;
+            visibility: visible;
+            animation: bounce 1s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Go-Port-Rocket 端口扫描报告</h1>
+        <h1>Port-Rocket 端口扫描报告</h1>
     </header>
 
     <div class="info-section">
@@ -6742,7 +6774,7 @@
     </div>
 
     <footer>
-        <p>报告生成时间: 2025-03-15 15:48:11 | Go-Port-Rocket 端口扫描工具</p>
+        <p>报告生成时间: 2025-03-15 15:48:11 | Port-Rocket 端口扫描工具</p>
     </footer>
 
     <script>
@@ -6836,7 +6868,7 @@
                                     const value = context.raw || 0;
                                     const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
                                     const percentage = Math.round((value / total) * 100);
-                                    return label + ': ' + value + ' (' + percentage + '%!)(MISSING)';
+                                    return label + ': ' + value + ' (' + percentage + '%)';
                                 }
                             }
                         }
@@ -7073,7 +7105,7 @@
             if (!container || !hexData) return;
             
             // 确保hexData是偶数长度（每个字节两个十六进制字符）
-            if (hexData.length %! (MISSING)!== 0) {
+            if (hexData.length % 2 !== 0) {
                 hexData = '0' + hexData;
             }
             
@@ -7858,5 +7890,6 @@
             return fields;
         }
     </script>
+    <script src="js/main.js"></script>
 </body>
 </html>

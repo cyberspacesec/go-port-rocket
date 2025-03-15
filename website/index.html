@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Go Port Rocket - 高性能端口扫描与网络服务分析工具</title>
-    <meta name="description" content="Go Port Rocket是一款高性能的端口扫描工具，支持TCP/UDP扫描、服务识别、操作系统检测、协议解析等功能，为网络安全评估和故障排查提供强大支持。">
+    <title>Port Rocket - 高性能端口扫描与网络服务分析工具</title>
+    <meta name="description" content="Port Rocket是一款高性能的端口扫描工具，支持TCP/UDP扫描、服务识别、操作系统检测、协议解析等功能，为网络安全评估和故障排查提供强大支持。">
     <meta name="keywords" content="端口扫描,网络安全,服务识别,UDP扫描,协议解析,安全评估">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -19,19 +19,17 @@
                 <div class="logo">
                     <a href="index.html">
                         <i class="fas fa-rocket"></i>
-                        <span>Go Port Rocket</span>
+                        <span>Port Rocket</span>
                     </a>
                 </div>
                 <div class="nav-links">
-                    <a href="#features">功能</a>
-                    <a href="#demo">演示</a>
-                    <a href="#advanced-features">高级功能</a>
-                    <a href="#protocol-parsing">协议解析</a>
+                    <a href="index.html" class="active">首页</a>
+                    <a href="docs/installation.html">安装指南</a>
                     <a href="docs/cli.html">CLI 文档</a>
                     <a href="docs/http-api.html">HTTP API</a>
                     <a href="docs/golang-api.html">Golang API</a>
-                    <a href="docs/mcp.html">MCP</a>
-                    <a href="https://github.com/cc11001100/go-port-rocket" target="_blank" class="github-link">
+                    <a href="docs/mcp.html">MCP（AI集成）</a>
+                    <a href="https://github.com/cyberspacesec/go-port-rocket" target="_blank" class="github-link">
                         <i class="fab fa-github"></i> GitHub
                     </a>
                 </div>
@@ -44,54 +42,59 @@
         </nav>
     </header>
 
+    <!-- 开发状态提示 -->
+    <section class="dev-notice">
+        <div class="container">
+            <div class="dev-notice-content">
+                <div class="dev-notice-icon">
+                    <i class="fas fa-code-branch"></i>
+                </div>
+                <div class="dev-notice-text">
+                    <h2>🚧 开发进行中</h2>
+                    <p><strong>重要提示：</strong>Port Rocket 目前处于活跃开发阶段，尚未发布 v0.1 正式版本。部分功能可能不完整或存在问题，完整功能将在正式版本中提供。</p>
+                    <p>预计发布时间：2024年第二季度。如果您对此项目感兴趣，欢迎在 <a href="https://github.com/cyberspacesec/go-port-rocket" target="_blank">GitHub <i class="fab fa-github"></i></a> 上关注项目进展、贡献代码或提交问题反馈。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1>Go Port Rocket</h1>
+                <h1>Port Rocket</h1>
                 <p class="hero-subtitle">全功能网络扫描与协议分析工具，为安全评估、网络监控和故障排查而设计</p>
                 <div class="hero-buttons">
-                    <a href="docs/cli.html" class="btn btn-primary">开始使用</a>
-                    <a href="https://github.com/cc11001100/go-port-rocket" class="btn btn-secondary" target="_blank">
+                    <a href="docs/installation.html" class="btn btn-primary">立即安装</a>
+                    <a href="https://github.com/cyberspacesec/go-port-rocket" class="btn btn-secondary" target="_blank">
                         <i class="fab fa-github"></i> Star on GitHub
                     </a>
                 </div>
             </div>
-            <div class="terminal">
+            <div class="terminal" style="width: 169%; max-width: 1040px; margin: 0 auto;">
                 <div class="terminal-header">
-                    <span class="terminal-button red"></span>
-                    <span class="terminal-button yellow"></span>
-                    <span class="terminal-button green"></span>
+                    <div class="terminal-button red"></div>
+                    <div class="terminal-button yellow"></div>
+                    <div class="terminal-button green"></div>
                 </div>
-                <div class="terminal-body">
-                    <pre><code>$ go-port-rocket scan -t scanme.nmap.org -p 21-25,53,80,123,161,443 --scan-both --service-detection --banner-grab -O
-[INFO] Starting comprehensive scan against scanme.nmap.org...
-[INFO] Scanning TCP ports: 21-25,53,80,443
-[INFO] Scanning UDP ports: 53,123,161
-[INFO] Service detection enabled
-[INFO] Banner grabbing enabled
-[INFO] OS detection enabled
-
-TCP PORTS:
-PORT   STATE  SERVICE       VERSION
-21/tcp open   ftp           vsftpd 3.0.3
-22/tcp open   ssh           OpenSSH 7.4
-23/tcp closed telnet
-24/tcp closed unknown
-25/tcp closed smtp
-53/tcp open   dns           BIND 9.10.6
-80/tcp open   http          Apache httpd 2.4.46
-443/tcp open   https         Apache httpd 2.4.46 (SSL/TLS)
-
-UDP PORTS:
-PORT    STATE  SERVICE       VERSION
-53/udp  open   dns           BIND 9.10.6
-123/udp open   ntp           NTPv4
-161/udp filtered snmp
-
-OS: Linux 4.15.0-99-generic (98%)
-
-[INFO] Scan completed in 5.23s
-[INFO] Enhanced reports saved to 'scan-report.html'</code></pre>
+                <div class="terminal-body" style="padding: 0.5rem; line-height: 1.8; max-height: none;">
+                    <div class="terminal-content" style="padding: 0; line-height: 1.65; display: block;">
+                        <div style="padding-left: 0.3rem; margin-left: 0; display: block; white-space: nowrap;"><span class="prompt">user@go-port-rocket:~$</span> <span class="command">go-port-rocket</span> <span class="param">scan -t scanme.nmap.org -p 21-25,80,443 -s tcp</span></div>
+                        <div class="terminal-output" style="padding-left: 0.3rem; margin-left: 0; line-height: 1.8; margin-top: 0; display: block;">
+                            <div style="margin:0; padding:0; line-height:1.8;" class="info-header">GO-PORT-ROCKET v1.6.2</div>
+                            <div style="margin:0; padding:0; line-height:1.8;">Scanning <span class="highlight">scanme.nmap.org (45.33.32.156)</span> - <span class="highlight">7</span> ports</div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="progress">■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 100%</div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="scan-header">TCP PORTS:</div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="port-line"><span class="port-open">OPEN</span> <span class="port-num">22/tcp</span> <span class="service">ssh</span> <span class="version">OpenSSH 7.4p1</span></div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="port-line"><span class="port-open">OPEN</span> <span class="port-num">80/tcp</span> <span class="service">http</span> <span class="version">Apache 2.4.52</span></div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="port-line"><span class="port-open">OPEN</span> <span class="port-num">443/tcp</span> <span class="service">https</span> <span class="version">Apache (TLS)</span></div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="port-line"><span class="port-closed">CLOSED</span> <span class="port-num">21,23-25/tcp</span></div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="scan-header">UDP PORTS:</div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="port-line"><span class="port-filtered">FILTERED</span> <span class="port-num">53,123,161/udp</span></div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="os-header">OS DETECTION:</div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="os-line">OS: <span class="highlight">Linux 4.9 - 5.8</span> (94%)</div>
+                            <div style="margin:0; padding:0; line-height:1.8;" class="summary">Scan: <span class="highlight">3.78s</span> | Report: <a href="demo-report.html" class="filepath" style="text-decoration:none; cursor:pointer;" target="_blank">scan-report.html</a></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -101,7 +104,7 @@ OS: Linux 4.15.0-99-generic (98%)
     <section class="demo" id="demo">
         <div class="container">
             <h2 class="section-title">在线演示报告</h2>
-            <p class="section-description">查看Go Port Rocket生成的各种扫描报告示例，体验强大的功能和直观的可视化效果</p>
+            <p class="section-description">查看Port Rocket生成的各种扫描报告示例，体验强大的功能和直观的可视化效果</p>
             
             <div class="demo-grid">
                 <div class="demo-card">
@@ -137,7 +140,7 @@ OS: Linux 4.15.0-99-generic (98%)
     <section class="features" id="features">
         <div class="container">
             <h2 class="section-title">核心功能</h2>
-            <p class="section-description">Go Port Rocket提供全面而强大的扫描功能，满足各种网络安全评估和网络管理需求</p>
+            <p class="section-description">Port Rocket提供全面而强大的扫描功能，满足各种网络安全评估和网络管理需求</p>
             <div class="feature-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
@@ -244,7 +247,7 @@ OS: Linux 4.15.0-99-generic (98%)
             <div class="protocol-features">
                 <div class="protocol-description">
                     <h3>支持的网络协议</h3>
-                    <p>Go Port Rocket提供先进的协议数据解析功能，目前支持以下协议的深度分析：</p>
+                    <p>Port Rocket提供先进的协议数据解析功能，目前支持以下协议的深度分析：</p>
                     <ul class="protocol-list">
                         <li><strong>网络时间协议 (NTP)</strong> - 解析版本、层级、轮询间隔和各种时间戳</li>
                         <li><strong>域名系统 (DNS)</strong> - 分析查询标识、标志位、记录类型和域名信息</li>
@@ -297,49 +300,102 @@ OS: Linux 4.15.0-99-generic (98%)
     <section class="installation">
         <div class="container">
             <h2 class="section-title">快速安装</h2>
-            <p class="section-description">多种安装方式，快速部署Go Port Rocket到您的环境</p>
+            <p class="section-description">多种安装方式，快速部署Port Rocket到您的环境</p>
             <div class="installation-options">
                 <div class="install-option">
-                    <h3>使用Go安装</h3>
+                    <h3><i class="fab fa-apple"></i> macOS 安装</h3>
+                    <p>使用 Homebrew 包管理器一键安装</p>
+                    <div class="code-block">
+                        <pre><code># 添加 tap（首次使用）
+brew tap cyberspacesec/go-port-rocket
+
+# 安装工具
+brew install go-port-rocket</code></pre>
+                        <button class="copy-btn" data-clipboard-text="brew tap cyberspacesec/go-port-rocket
+brew install go-port-rocket">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="install-option">
+                    <h3><i class="fab fa-windows"></i> Windows 安装</h3>
+                    <p>使用 Scoop 或 Chocolatey 包管理器</p>
+                    <div class="code-block">
+                        <pre><code># 使用 Scoop 安装
+scoop bucket add cyberspacesec https://github.com/cyberspacesec/go-port-rocket
+scoop install go-port-rocket
+
+# 使用 Chocolatey 安装
+choco install go-port-rocket</code></pre>
+                        <button class="copy-btn" data-clipboard-text="scoop bucket add cyberspacesec https://github.com/cyberspacesec/go-port-rocket
+scoop install go-port-rocket">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="install-option">
+                    <h3><i class="fab fa-linux"></i> Linux 安装</h3>
+                    <p>多种Linux发行版安装选项</p>
+                    <div class="code-block">
+                        <pre><code># Debian/Ubuntu
+wget https://github.com/cyberspacesec/go-port-rocket/releases/download/v1.0.0/go-port-rocket_1.0.0_linux_amd64.deb
+sudo apt install ./go-port-rocket_1.0.0_linux_amd64.deb
+
+# RedHat/Fedora/CentOS
+sudo dnf install https://github.com/cyberspacesec/go-port-rocket/releases/download/v1.0.0/go-port-rocket_1.0.0_linux_amd64.rpm
+
+# Arch Linux
+yay -S go-port-rocket-bin</code></pre>
+                        <button class="copy-btn" data-clipboard-text="wget https://github.com/cyberspacesec/go-port-rocket/releases/download/v1.0.0/go-port-rocket_1.0.0_linux_amd64.deb
+sudo apt install ./go-port-rocket_1.0.0_linux_amd64.deb">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="install-option">
+                    <h3><i class="fab fa-docker"></i> Docker 安装</h3>
+                    <p>使用Docker容器一键部署</p>
+                    <div class="code-block">
+                        <pre><code># 拉取镜像
+docker pull cyberspacesec/go-port-rocket:latest
+
+# 运行（网络扫描需要特殊权限）
+docker run --rm --network host --cap-add=NET_RAW --cap-add=NET_ADMIN cyberspacesec/go-port-rocket</code></pre>
+                        <button class="copy-btn" data-clipboard-text="docker pull cyberspacesec/go-port-rocket:latest
+docker run --rm --network host --cap-add=NET_RAW --cap-add=NET_ADMIN cyberspacesec/go-port-rocket">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="install-option">
+                    <h3><i class="fab fa-golang"></i> 使用Go安装</h3>
                     <p>通过Go官方包管理器安装最新版本</p>
                     <div class="code-block">
-                        <pre><code>go install github.com/cc11001100/go-port-rocket@latest</code></pre>
-                        <button class="copy-btn" data-clipboard-text="go install github.com/cc11001100/go-port-rocket@latest">
+                        <pre><code>go install github.com/cyberspacesec/go-port-rocket@latest</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go install github.com/cyberspacesec/go-port-rocket@latest">
                             <i class="far fa-copy"></i>
                         </button>
                     </div>
                 </div>
+                
                 <div class="install-option">
-                    <h3>从源码编译</h3>
-                    <p>获取源代码并本地编译，可以进行自定义配置</p>
-                    <div class="code-block">
-                        <pre><code>git clone https://github.com/cc11001100/go-port-rocket.git
-cd go-port-rocket
-go build -o go-port-rocket</code></pre>
-                        <button class="copy-btn" data-clipboard-text="git clone https://github.com/cc11001100/go-port-rocket.git
-cd go-port-rocket
-go build -o go-port-rocket">
-                            <i class="far fa-copy"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="install-option">
-                    <h3>二进制下载</h3>
+                    <h3><i class="fas fa-download"></i> 二进制下载</h3>
                     <p>从GitHub发布页下载预编译的二进制文件</p>
-                    <div class="code-block">
-                        <pre><code># 下载适合您系统的版本
-# Linux (64位)
-wget https://github.com/cc11001100/go-port-rocket/releases/latest/download/go-port-rocket-linux-amd64.tar.gz
-
-# macOS
-wget https://github.com/cc11001100/go-port-rocket/releases/latest/download/go-port-rocket-darwin-amd64.tar.gz
-
-# Windows
-# 请访问GitHub下载页面获取Windows版本</code></pre>
-                        <a href="https://github.com/cc11001100/go-port-rocket/releases" class="btn btn-secondary" target="_blank">
-                            <i class="fas fa-download"></i> 下载页面
+                    <div class="github-download">
+                        <a href="https://github.com/cyberspacesec/go-port-rocket/releases" class="btn btn-primary" target="_blank">
+                            <i class="fas fa-download"></i> 下载最新版本
                         </a>
                     </div>
+                </div>
+                
+                <div class="install-more">
+                    <a href="docs/installation.html" class="btn btn-secondary">
+                        <i class="fas fa-book"></i> 查看完整安装文档
+                    </a>
                 </div>
             </div>
         </div>
@@ -352,36 +408,69 @@ wget https://github.com/cc11001100/go-port-rocket/releases/latest/download/go-po
             
             <div class="examples-grid">
                 <div class="example-card">
-                    <h3>基本TCP扫描</h3>
+                    <h3>基本TCP端口扫描</h3>
                     <div class="code-block">
-                        <pre><code>go-port-rocket scan -t 192.168.1.1 -p 1-1000 -s tcp</code></pre>
-                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 1-1000 -s tcp">
+                        <pre><code>go-port-rocket scan -t 192.168.1.1 -p 80,443,8080 -s tcp</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 80,443,8080 -s tcp">
                             <i class="far fa-copy"></i>
                         </button>
                     </div>
-                    <p>扫描目标IP的前1000个TCP端口</p>
+                    <p>扫描目标IP上的特定TCP端口（常见Web服务）</p>
                 </div>
                 
                 <div class="example-card">
-                    <h3>UDP服务检测</h3>
+                    <h3>网段扫描</h3>
                     <div class="code-block">
-                        <pre><code>go-port-rocket scan -t example.com -p 53,123,161 -s udp --service-detection</code></pre>
-                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t example.com -p 53,123,161 -s udp --service-detection">
+                        <pre><code>go-port-rocket scan -t 192.168.1.0/24 -p 22 -s tcp --timeout 100ms</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.0/24 -p 22 -s tcp --timeout 100ms">
                             <i class="far fa-copy"></i>
                         </button>
                     </div>
-                    <p>扫描常见UDP服务并进行服务识别</p>
+                    <p>扫描整个子网的SSH服务（端口22），使用更快的超时设置</p>
                 </div>
                 
                 <div class="example-card">
-                    <h3>完整安全扫描</h3>
+                    <h3>服务识别</h3>
                     <div class="code-block">
-                        <pre><code>go-port-rocket scan -t scanme.nmap.org -p 1-1024 --scan-both -O --service-detection --banner-grab -o full-scan.html</code></pre>
-                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t scanme.nmap.org -p 1-1024 --scan-both -O --service-detection --banner-grab -o full-scan.html">
+                        <pre><code>go-port-rocket scan -t scanme.nmap.org -p 1-1000 -s tcp --service-detection</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t scanme.nmap.org -p 1-1000 -s tcp --service-detection">
                             <i class="far fa-copy"></i>
                         </button>
                     </div>
-                    <p>执行全面扫描，包括TCP/UDP、操作系统检测和服务识别，输出为HTML报告</p>
+                    <p>扫描目标的前1000个TCP端口并进行服务及版本识别</p>
+                </div>
+                
+                <div class="example-card">
+                    <h3>操作系统检测</h3>
+                    <div class="code-block">
+                        <pre><code>go-port-rocket scan -t 192.168.1.1 -p 22,80,443 -O</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 22,80,443 -O">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <p>对目标进行操作系统检测（-O参数）</p>
+                </div>
+                
+                <div class="example-card">
+                    <h3>UDP服务扫描</h3>
+                    <div class="code-block">
+                        <pre><code>go-port-rocket scan -t 192.168.1.1 -p 53,123,161 -s udp --service-detection</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 53,123,161 -s udp --service-detection">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <p>检测常见UDP服务（DNS、NTP、SNMP）并进行服务识别</p>
+                </div>
+                
+                <div class="example-card">
+                    <h3>完整扫描与报告</h3>
+                    <div class="code-block">
+                        <pre><code>go-port-rocket scan -t example.com -p 1-1000 --scan-both -O --service-detection --banner-grab -o report.html</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t example.com -p 1-1000 --scan-both -O --service-detection --banner-grab -o report.html">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <p>进行全面扫描（TCP+UDP、操作系统检测、服务识别、Banner抓取）并输出HTML报告</p>
                 </div>
                 
                 <div class="example-card">
@@ -392,8 +481,28 @@ wget https://github.com/cc11001100/go-port-rocket/releases/latest/download/go-po
                             <i class="far fa-copy"></i>
                         </button>
                     </div>
-                    <p>启动HTTP API服务，监听在8080端口，设置认证密钥</p>
+                    <p>启动HTTP API服务，可通过RESTful接口远程调用扫描功能</p>
                 </div>
+                
+                <div class="example-card">
+                    <h3>并发控制</h3>
+                    <div class="code-block">
+                        <pre><code>go-port-rocket scan -t 192.168.1.1 -p 1-10000 --rate-limit 1000</code></pre>
+                        <button class="copy-btn" data-clipboard-text="go-port-rocket scan -t 192.168.1.1 -p 1-10000 --rate-limit 1000">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                    <p>大范围扫描时通过--rate-limit参数控制并发速率，避免过度占用网络带宽</p>
+                </div>
+            </div>
+            
+            <div class="examples-more">
+                <a href="docs/cli.html" class="btn btn-primary">
+                    <i class="fas fa-terminal"></i> 查看更多命令行示例
+                </a>
+                <a href="docs/installation.html" class="btn btn-secondary">
+                    <i class="fas fa-book"></i> 查看安装指南
+                </a>
             </div>
         </div>
     </section>
@@ -401,7 +510,7 @@ wget https://github.com/cc11001100/go-port-rocket/releases/latest/download/go-po
     <section class="documentation">
         <div class="container">
             <h2 class="section-title">详细文档</h2>
-            <p class="section-description">全面了解Go Port Rocket的各项功能和使用方法</p>
+            <p class="section-description">全面了解Port Rocket的各项功能和使用方法</p>
             <div class="doc-grid">
                 <a href="docs/cli.html" class="doc-card">
                     <div class="doc-icon">
@@ -422,7 +531,7 @@ wget https://github.com/cc11001100/go-port-rocket/releases/latest/download/go-po
                         <i class="fab fa-golang"></i>
                     </div>
                     <h3>Golang API 文档</h3>
-                    <p>学习如何将Go Port Rocket作为库集成到你的Go项目中，包含代码示例和最佳实践</p>
+                    <p>学习如何将Port Rocket作为库集成到你的Go项目中，包含代码示例和最佳实践</p>
                 </a>
                 <a href="docs/mcp.html" class="doc-card">
                     <div class="doc-icon">
@@ -459,7 +568,7 @@ wget https://github.com/cc11001100/go-port-rocket/releases/latest/download/go-po
                     <thead>
                         <tr>
                             <th>特性</th>
-                            <th>Go Port Rocket</th>
+                            <th>Port Rocket</th>
                             <th>Nmap</th>
                             <th>Masscan</th>
                             <th>RustScan</th>
@@ -548,7 +657,7 @@ wget https://github.com/cc11001100/go-port-rocket/releases/latest/download/go-po
             <div class="footer-content">
                 <div class="footer-logo">
                     <i class="fas fa-rocket"></i>
-                    <span>Go Port Rocket</span>
+                    <span>Port Rocket</span>
                 </div>
                 <div class="footer-links">
                     <div class="footer-column">
@@ -556,16 +665,16 @@ wget https://github.com/cc11001100/go-port-rocket/releases/latest/download/go-po
                         <a href="docs/cli.html">CLI 文档</a>
                         <a href="docs/http-api.html">HTTP API</a>
                         <a href="docs/golang-api.html">Golang API</a>
-                        <a href="docs/mcp.html">MCP</a>
+                        <a href="docs/mcp.html">MCP（AI集成）</a>
                         <a href="docs/UDP-SCANNING.md">UDP扫描指南</a>
                         <a href="docs/PROTOCOL-PARSING.md">协议解析指南</a>
                     </div>
                     <div class="footer-column">
                         <h4>资源</h4>
-                        <a href="https://github.com/cc11001100/go-port-rocket" target="_blank">GitHub</a>
-                        <a href="https://github.com/cc11001100/go-port-rocket/issues" target="_blank">问题反馈</a>
-                        <a href="https://github.com/cc11001100/go-port-rocket/blob/main/LICENSE" target="_blank">许可证</a>
-                        <a href="https://github.com/cc11001100/go-port-rocket/releases" target="_blank">下载</a>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket" target="_blank">GitHub</a>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket/issues" target="_blank">问题反馈</a>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket/blob/main/LICENSE" target="_blank">许可证</a>
+                        <a href="https://github.com/cyberspacesec/go-port-rocket/releases" target="_blank">下载</a>
                     </div>
                     <div class="footer-column">
                         <h4>使用案例</h4>
@@ -577,7 +686,7 @@ wget https://github.com/cc11001100/go-port-rocket/releases/latest/download/go-po
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023-2024 Go Port Rocket. 采用 MIT 许可证开源。</p>
+                <p>&copy; 2023-2024 Port Rocket. 采用 MIT 许可证开源。</p>
             </div>
         </div>
     </footer>
@@ -601,5 +710,6 @@ wget https://github.com/cc11001100/go-port-rocket/releases/latest/download/go-po
             });
         });
     </script>
+<script src="js/code-copy.js"></script>
 </body>
 </html> 

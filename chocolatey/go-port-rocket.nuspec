@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>go-port-rocket</id>
+    <version>$version$</version>
+    <title>Go Port Rocket</title>
+    <authors>cyberspacesec</authors>
+    <projectUrl>https://github.com/cyberspacesec/go-port-rocket</projectUrl>
+    <licenseUrl>https://github.com/cyberspacesec/go-port-rocket/blob/main/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>port-scanner network-scanner security-tool pentesting</tags>
+    <summary>高性能端口扫描器 | Fast Port Scanner</summary>
+    <description>
+      Go Port Rocket是一个功能强大的端口扫描工具，支持TCP/UDP扫描、
+      服务识别、操作系统检测等功能。它提供命令行界面和HTTP API两种使用方式。
+    </description>
+    <releaseNotes>https://github.com/cyberspacesec/go-port-rocket/releases/tag/v$version$</releaseNotes>
+    <dependencies>
+      <dependency id="npcap" version="1.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package> 

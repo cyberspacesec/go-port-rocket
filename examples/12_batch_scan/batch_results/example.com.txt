@@ -1,0 +1,5 @@
+扫描结果: batch_results/example.com
+
+PORT     STATE     SERVICE
+22       filtered  
+80       filtered  

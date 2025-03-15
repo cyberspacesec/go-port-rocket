@@ -1,0 +1,255 @@
+project_name: go-port-rocket
+
+# 明确指定从Git标签获取版本
+version_scheme: git
+git:
+  # 确保标签前缀为v开头
+  tag_prefix: v
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - env:
+      - CGO_ENABLED=1
+    goos:
+      - linux
+      - darwin
+      - windows
+      - freebsd
+      - openbsd
+      - netbsd
+      - dragonfly
+    goarch:
+      - amd64
+      - arm64
+      - arm
+      - 386
+      - ppc64le
+      - s390x
+      - mips64le
+    goarm:
+      - 6
+      - 7
+    ignore:
+      - goos: darwin
+        goarch: 386
+      - goos: darwin
+        goarch: arm
+      - goos: windows
+        goarch: arm
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w -X github.com/cyberspacesec/go-port-rocket/cmd.Version={{.Version}}
+
+archives:
+  - format: tar.gz
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- .Os }}_
+      {{- .Arch }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - LICENSE
+      - README.md
+      - CHANGELOG.md
+      - LINUX_INSTALL.md
+      - examples/**/*
+
+# DEB/RPM/APK等包配置
+nfpms:
+  - id: go-port-rocket
+    package_name: go-port-rocket
+    file_name_template: "{{ .PackageName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    vendor: cyberspacesec
+    homepage: https://github.com/cyberspacesec/go-port-rocket
+    maintainer: cyberspacesec <your-email@example.com>
+    description: "高性能端口扫描器 | Fast Port Scanner"
+    license: MIT
+    # 更多包格式支持
+    formats:
+      - deb
+      - rpm
+      - apk       # Alpine Linux
+      - archlinux # Arch Linux
+      - termux.deb # Termux
+    dependencies:
+      - libpcap
+    recommends:
+      - libpcap-dev
+    suggests:
+      - golang
+    section: net
+    priority: optional
+    contents:
+      - src: LICENSE
+        dst: /usr/share/doc/go-port-rocket/copyright
+      - src: README.md
+        dst: /usr/share/doc/go-port-rocket/README.md
+        type: doc
+      - src: LINUX_INSTALL.md
+        dst: /usr/share/doc/go-port-rocket/LINUX_INSTALL.md
+        type: doc
+
+# Docker镜像支持
+dockers:
+  - image_templates:
+      - "cyberspacesec/go-port-rocket:{{ .Version }}-amd64"
+      - "cyberspacesec/go-port-rocket:latest-amd64"
+    dockerfile: Dockerfile.goreleaser
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+  - image_templates:
+      - "cyberspacesec/go-port-rocket:{{ .Version }}-arm64"
+      - "cyberspacesec/go-port-rocket:latest-arm64"
+    dockerfile: Dockerfile.goreleaser
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+
+# Docker镜像清单
+docker_manifests:
+  - name_template: "cyberspacesec/go-port-rocket:{{ .Version }}"
+    image_templates:
+      - "cyberspacesec/go-port-rocket:{{ .Version }}-amd64"
+      - "cyberspacesec/go-port-rocket:{{ .Version }}-arm64"
+  - name_template: "cyberspacesec/go-port-rocket:latest"
+    image_templates:
+      - "cyberspacesec/go-port-rocket:latest-amd64"
+      - "cyberspacesec/go-port-rocket:latest-arm64"
+
+# Windows专用配置
+windows:
+  # Windows安装程序
+  wix:
+    # 版权和许可
+    license: LICENSE
+    # 程序名称
+    upgrade_guid: 1cf5db8d-8440-4c8c-8dc0-d671e5b2b6cc
+
+# Snapcraft配置（用于Ubuntu商店）
+snapcrafts:
+  - name: go-port-rocket
+    summary: 高性能端口扫描器
+    description: |
+      Go Port Rocket是一个功能强大的端口扫描工具，支持TCP/UDP扫描、
+      服务识别、操作系统检测等功能。它提供命令行界面和HTTP API两种使用方式。
+    grade: stable
+    confinement: strict
+    publish: true
+    license: MIT
+    base: core20
+    assumes:
+      - snapd2.45
+    apps:
+      go-port-rocket:
+        command: bin/go-port-rocket
+        plugs:
+          - home
+          - network
+          - network-bind
+          - network-observe
+
+brews:
+  - name: go-port-rocket
+    tap:
+      owner: cyberspacesec
+      name: homebrew-go-port-rocket
+    folder: Formula
+    description: "高性能端口扫描器 | Fast Port Scanner"
+    homepage: "https://github.com/cyberspacesec/go-port-rocket"
+    license: "MIT"
+    test: |
+      system "#{bin}/go-port-rocket --version"
+    install: |
+      bin.install "go-port-rocket"
+    dependencies:
+      - name: "libpcap"
+
+# Scoop配置（Windows的包管理器）
+scoops:
+  - bucket:
+      owner: cyberspacesec
+      name: scoop-go-port-rocket
+    homepage: "https://github.com/cyberspacesec/go-port-rocket"
+    description: "高性能端口扫描器 | Fast Port Scanner"
+    license: MIT
+    persist:
+      - "data"
+    shortcuts:
+      - ["bin/go-port-rocket.exe", "Go Port Rocket"]
+
+# Chocolatey配置（Windows流行的包管理器）
+chocolateys:
+  - name: go-port-rocket
+    title: "Go Port Rocket"
+    authors: "cyberspacesec"
+    project_url: "https://github.com/cyberspacesec/go-port-rocket"
+    url_template: "https://github.com/cyberspacesec/go-port-rocket/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    icon_url: "https://raw.githubusercontent.com/cyberspacesec/go-port-rocket/main/assets/icon.png"
+    copyright: "2023 cyberspacesec"
+    license_url: "https://github.com/cyberspacesec/go-port-rocket/blob/main/LICENSE"
+    require_license_acceptance: false
+    project_source_url: "https://github.com/cyberspacesec/go-port-rocket"
+    docs_url: "https://github.com/cyberspacesec/go-port-rocket"
+    bug_tracker_url: "https://github.com/cyberspacesec/go-port-rocket/issues"
+    tags: "network-scanner port-scanner security-tool pentesting"
+    summary: "高性能端口扫描器 | Fast Port Scanner"
+    description: |
+      Go Port Rocket是一个功能强大的端口扫描工具，支持TCP/UDP扫描、
+      服务识别、操作系统检测等功能。它提供命令行界面和HTTP API两种使用方式。
+    release_notes: "https://github.com/cyberspacesec/go-port-rocket/releases/tag/{{ .Tag }}"
+    api_key: '{{ .Env.CHOCOLATEY_API_KEY }}'
+    source_repo: "https://push.chocolatey.org/"
+    skip_publish: false
+    goamd64: v1
+
+# AUR包（Arch Linux用户仓库）
+aurs:
+  - name: go-port-rocket-bin
+    homepage: "https://github.com/cyberspacesec/go-port-rocket"
+    description: "高性能端口扫描器 | Fast Port Scanner"
+    maintainers:
+      - "cyberspacesec <your-email@example.com>"
+    license: "MIT"
+    private_key: '{{ .Env.AUR_KEY }}'
+    git_url: "ssh://aur@aur.archlinux.org/go-port-rocket-bin.git"
+    depends:
+      - libpcap
+    optdepends:
+      - libpcap-dev
+    provides:
+      - go-port-rocket
+    conflicts:
+      - go-port-rocket
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^README"
+      - Merge pull request
+      - Merge branch 

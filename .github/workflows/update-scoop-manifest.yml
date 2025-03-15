@@ -1,0 +1,50 @@
+name: Update Scoop Manifest
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-scoop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get release info
+        id: release
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Get checksums
+        id: checksums
+        run: |
+          SHA256_64=$(curl -s https://github.com/cyberspacesec/go-port-rocket/releases/download/v${{ steps.release.outputs.version }}/go-port-rocket_${{ steps.release.outputs.version }}_windows_amd64.zip.sha256 | cut -d ' ' -f 1)
+          SHA256_32=$(curl -s https://github.com/cyberspacesec/go-port-rocket/releases/download/v${{ steps.release.outputs.version }}/go-port-rocket_${{ steps.release.outputs.version }}_windows_386.zip.sha256 | cut -d ' ' -f 1)
+          echo "sha256_64=$SHA256_64" >> $GITHUB_OUTPUT
+          echo "sha256_32=$SHA256_32" >> $GITHUB_OUTPUT
+
+      - name: Update manifest
+        run: |
+          # 更新bucket中的manifest
+          sed -i 's/"version": "\$version"/"version": "${{ steps.release.outputs.version }}"/g' bucket/go-port-rocket.json
+          sed -i 's/"hash": "\$sha256_64"/"hash": "${{ steps.checksums.outputs.sha256_64 }}"/g' bucket/go-port-rocket.json
+          sed -i 's/"hash": "\$sha256_32"/"hash": "${{ steps.checksums.outputs.sha256_32 }}"/g' bucket/go-port-rocket.json
+          
+          # 更新scoop/bucket中的manifest
+          mkdir -p scoop/bucket
+          cp bucket/go-port-rocket.json scoop/bucket/
+          sed -i 's/"version": "\$version"/"version": "${{ steps.release.outputs.version }}"/g' scoop/bucket/go-port-rocket.json
+          sed -i 's/"hash": "\$sha256_64"/"hash": "${{ steps.checksums.outputs.sha256_64 }}"/g' scoop/bucket/go-port-rocket.json
+          sed -i 's/"hash": "\$sha256_32"/"hash": "${{ steps.checksums.outputs.sha256_32 }}"/g' scoop/bucket/go-port-rocket.json
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add bucket/go-port-rocket.json scoop/bucket/go-port-rocket.json
+          git commit -m "chore: Update Scoop manifest for v${{ steps.release.outputs.version }}" || echo "No changes to commit"
+          git push 

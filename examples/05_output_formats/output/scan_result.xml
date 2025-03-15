@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scan_result>
+  <PortScanOutput>
+    <summary>
+      <Target>scanme.nmap.org</Target>
+      <StartTime>2025-03-15T17:02:57.209657+08:00</StartTime>
+      <EndTime>2025-03-15T17:03:02.214901+08:00</EndTime>
+      <Duration>5005200417</Duration>
+      <TotalPorts>8</TotalPorts>
+      <OpenPorts>2</OpenPorts>
+      <ClosedPorts>5</ClosedPorts>
+      <FilteredPorts>1</FilteredPorts>
+    </summary>
+    <open_ports>
+      <port number="22" protocol="tcp">
+        <state>open</state>
+        <reason>syn-ack</reason>
+      </port>
+      <port number="80" protocol="tcp">
+        <state>open</state>
+        <reason>syn-ack</reason>
+      </port>
+    </open_ports>
+    <closed_ports>
+      <port number="25" protocol="tcp">
+        <state>closed</state>
+        <reason>reset</reason>
+      </port>
+      <port number="443" protocol="tcp">
+        <state>closed</state>
+        <reason>reset</reason>
+      </port>
+      <port number="23" protocol="tcp">
+        <state>closed</state>
+        <reason>reset</reason>
+      </port>
+      <port number="3306" protocol="tcp">
+        <state>closed</state>
+        <reason>reset</reason>
+      </port>
+      <port number="21" protocol="tcp">
+        <state>closed</state>
+        <reason>reset</reason>
+      </port>
+    </closed_ports>
+    <filtered_ports>
+      <port number="24" protocol="tcp">
+        <state>filtered</state>
+        <reason>no-response</reason>
+      </port>
+    </filtered_ports>
+    <host_discovery></host_discovery>
+    <service_versions></service_versions>
+    <os_detection></os_detection>
+  </PortScanOutput></scan_result>

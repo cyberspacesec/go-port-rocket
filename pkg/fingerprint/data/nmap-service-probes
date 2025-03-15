@@ -1,0 +1,108 @@
+# Nmap Service Probes File
+# Format:
+# Probe <probename> <probestring>
+# ports/protocols
+# <service detection rules>
+
+# HTTP Probe
+Probe TCP GetRequest q|GET / HTTP/1.0\r\n\r\n|
+ports 80,81,443,591,8000,8080,8443,9090
+match http m|^HTTP/1\.[01] \d\d\d |s p/HTTP/
+match http m|^HTTP/1\.[01] [0-9]{3} (?:[^\r\n]+)?\r\nServer: Apache/([^\r\n]+)| s p/Apache httpd/ v/$1/
+match http m|^HTTP/1\.[01] [0-9]{3} (?:[^\r\n]+)?\r\nServer: nginx/([^\r\n]+)| s p/nginx/ v/$1/
+match http m|^HTTP/1\.[01] [0-9]{3} (?:[^\r\n]+)?\r\nServer: Microsoft-IIS/([^\r\n]+)| s p/Microsoft IIS httpd/ v/$1/
+match http m|^HTTP/1\.[01] [0-9]{3} (?:[^\r\n]+)?\r\nServer: ([^\r\n]+)| s p/$1/
+
+# SSH Probe
+Probe TCP SSHVersionString q|SSH-2.0-Go-Port-Rocket_Scanner\r\n|
+ports 22
+match ssh m|^SSH-([.\d]+)-OpenSSH[ _]([^\\r\\n]+) | s p/OpenSSH/ v/$2/ i/protocol $1/
+match ssh m|^SSH-([.\d]+)-([^\\r\\n]+) | s p/$2/ i/protocol $1/
+
+# FTP Probe
+Probe TCP FTPRequest q|220|
+ports 21
+match ftp m|^220[- ]([^\r\n]*)| s p/FTP/ i/$1/
+match ftp m|^220[- ].*\r\nUserName:| s p/FTP/ i/Requires Authentication/
+
+# SMTP Probe
+Probe TCP SMTPRequest q|EHLO go-port-rocket.local\r\n|
+ports 25,465,587
+match smtp m|^220[- ]([^\r\n]+)| s p/SMTP/ i/$1/
+match smtp m|^220[- ].*ESMTP ([^\r\n]+)| s p/ESMTP/ i/$1/
+
+# DNS Probe
+Probe UDP DNSStatusRequest q|\x00\x00\x10\x00\x00\x00\x00\x00\x00\x00\x00\x00|
+ports 53
+match dns m|^\x00\x00\x84| s p/DNS/
+
+# IMAP Probe
+Probe TCP IMAPRequest q|A1 CAPABILITY\r\n|
+ports 143,993
+match imap m|^\* OK ([^\r\n]+)| s p/IMAP/ i/$1/
+match imap m|^\* CAPABILITY| s p/IMAP/
+
+# POP3 Probe
+Probe TCP POP3Request q|CAPA\r\n|
+ports 110,995
+match pop3 m|^\+OK ([^\r\n]+)| s p/POP3/ i/$1/
+
+# MySQL Probe
+Probe TCP MySQLRequest q|\x00\x00\x00\x00\x00\x01\x00\x00\x00\x01|
+ports 3306
+match mysql m|^.\x00\x00\x00\n([.\d]+)| s p/MySQL/ v/$1/
+
+# Redis Probe
+Probe TCP RedisRequest q|PING\r\n|
+ports 6379
+match redis m|^\+PONG| s p/Redis/
+
+# MongoDB Probe
+Probe TCP MongoDBRequest q|\x41\x00\x00\x00\x21\x00\x00\x00\x00\x00\x00\x00\xd4\x07\x00\x00\x00\x00\x00\x00\x61\x64\x6d\x69\x6e\x2e\x24\x63\x6d\x64\x00\x00\x00\x00\x00\x01\x00\x00\x00\x14\x00\x00\x00\x10\x69\x73\x6d\x61\x73\x74\x65\x72\x00\x01\x00\x00\x00\x00|
+ports 27017
+match mongodb m|.*versionStr| s p/MongoDB/
+
+# Telnet Probe
+Probe TCP TelnetRequest q|\xff\xfb\x01\xff\xfb\x03\xff\xfd\x18\xff\xfd\x1f|
+ports 23
+match telnet m|^(\xff\xfd|\xff\xfb|[A-Za-z0-9]+)| s p/Telnet/
+
+# SNMP Probe
+Probe UDP SNMPRequest q|\x30\x2c\x02\x01\x00\x04\x07\x70\x75\x62\x6c\x69\x63\xa0\x1e\x02\x01\x01\x02\x01\x00\x02\x01\x00\x30\x13\x30\x11\x06\x0d\x2b\x06\x01\x02\x01\x01\x02\x00\x12\x02\x01\x00\x00\x00\x00|
+ports 161
+match snmp m|^\x30[\x25-\x29]| s p/SNMP/
+
+# PostgreSQL Probe
+Probe TCP PostgreSQLRequest q|\x00\x00\x00\x08\x04\xd2\x16\x2f|
+ports 5432
+match postgresql m|^(.)(.)(.)(.)| s p/PostgreSQL/
+
+# SQLServer Probe
+Probe TCP SQLServerRequest q|\x12\x01\x00\x34\x00\x00\x00\x00\x00\x00\x15\x00\x06\x01\x00\x1b\x00\x01\x02\x00\x1c\x00\x0c\x03\x00\x28\x00\x04\xff\x08\x00\x01\x55\x00\x00\x00\x4d\x53\x53\x51\x4c\x53\x65\x72\x76\x65\x72\x00\x00|
+ports 1433
+match mssql m|^(\x04\x01\x00\x25|\x05\x01\x00\x26)| s p/Microsoft SQL Server/
+
+# RDP Probe
+Probe TCP RDPRequest q|\x03\x00\x00\x13\x0e\xe0\x00\x00\x00\x00\x00\x01\x00\x08\x00\x03\x00\x00\x00|
+ports 3389
+match rdp m|^\x03\x00\x00| s p/Microsoft Remote Desktop Protocol/
+
+# SMB Probe
+Probe TCP SMBRequest q|\x00\x00\x00\x85\xff\x53\x4d\x42\x72\x00\x00\x00\x00\x18\x53\xc8\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xff\xfe\x00\x00\x00\x00\x00\x62\x00\x02\x50\x43\x20\x4e\x45\x54\x57\x4f\x52\x4b\x20\x50\x52\x4f\x47\x52\x41\x4d\x20\x31\x2e\x30\x00\x02\x4c\x41\x4e\x4d\x41\x4e\x31\x2e\x30\x00\x02\x57\x69\x6e\x64\x6f\x77\x73\x20\x66\x6f\x72\x20\x57\x6f\x72\x6b\x67\x72\x6f\x75\x70\x73\x20\x33\x2e\x31\x61\x00\x02\x4c\x4d\x31\x2e\x32\x58\x30\x30\x32\x00\x02\x4c\x41\x4e\x4d\x41\x4e\x32\x2e\x31\x00\x02\x4e\x54\x20\x4c\x4d\x20\x30\x2e\x31\x32\x00|
+ports 139,445
+match smb m|^\x00\x00\x00| s p/SMB/
+
+# WebSocket Probe
+Probe TCP WebSocketRequest q|GET / HTTP/1.1\r\nHost: localhost\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\nSec-WebSocket-Version: 13\r\n\r\n|
+ports 80,443,8080,8443
+match websocket m|^HTTP/1\.1 101 (?:[^\r\n]+\r\n)*Upgrade: websocket\r\n| s p/WebSocket/
+
+# RabbitMQ Probe
+Probe TCP RabbitMQRequest q|AMQP\x00\x00\x09\x01|
+ports 5672
+match rabbitmq m|^AMQP\x00\x00\x09\x01| s p/RabbitMQ/
+
+# Elasticsearch Probe
+Probe TCP ElasticsearchRequest q|GET / HTTP/1.0\r\n\r\n|
+ports 9200,9300
+match elasticsearch m|"cluster_name".*"elasticsearch"| s p/Elasticsearch/ 

@@ -1,0 +1,172 @@
+# SERVICE NAMES AND PORT NUMBERS
+# Format:
+# <service name>  <port number>/<protocol>  <description>
+
+# 常见HTTP/Web相关服务
+http            80/tcp   World Wide Web HTTP
+http            80/udp   World Wide Web HTTP
+https           443/tcp  Secure HTTP
+https           443/udp  Secure HTTP
+http-alt        8080/tcp HTTP Alternate
+http-alt        8080/udp HTTP Alternate
+http-alt        8000/tcp HTTP Alternate (common development port)
+proxy-http      8118/tcp HTTP Proxy
+webmin          10000/tcp Webmin Administration
+cpanel          2082/tcp cPanel web control panel
+cpanel-ssl      2083/tcp cPanel web control panel (SSL)
+plesk           8443/tcp Plesk Control Panel
+directadmin     2222/tcp DirectAdmin Control Panel
+tomcat          8080/tcp Apache Tomcat
+tomcat-ajp      8009/tcp Apache Tomcat AJP connector
+jenkins         8080/tcp Jenkins CI server
+jenkins-alt     9090/tcp Jenkins CI server alt
+
+# 数据库服务
+mysql           3306/tcp MySQL Database Server
+mysql           3306/udp MySQL Database Server
+ms-sql          1433/tcp Microsoft SQL Server
+ms-sql          1433/udp Microsoft SQL Server
+postgres        5432/tcp PostgreSQL Database Server
+postgres        5432/udp PostgreSQL Database Server
+oracle          1521/tcp Oracle Database
+mongodb         27017/tcp MongoDB Database
+redis           6379/tcp Redis Database
+redis           6379/udp Redis Database
+memcached       11211/tcp Memcached
+memcached       11211/udp Memcached
+cassandra       9042/tcp Cassandra Database
+elasticsearch   9200/tcp Elasticsearch
+elasticsearch   9300/tcp Elasticsearch (node communication)
+influxdb        8086/tcp InfluxDB Database
+neo4j           7474/tcp Neo4j Database
+
+# 邮件服务
+smtp            25/tcp   Simple Mail Transfer Protocol
+smtp            25/udp   Simple Mail Transfer Protocol
+pop3            110/tcp  Post Office Protocol v3
+pop3            110/udp  Post Office Protocol v3
+pop3s           995/tcp  Post Office Protocol v3 over SSL
+imap            143/tcp  Internet Message Access Protocol
+imap            143/udp  Internet Message Access Protocol
+imaps           993/tcp  Internet Message Access Protocol over SSL
+submission      587/tcp  Mail message submission
+exchange        135/tcp  Microsoft Exchange
+
+# 文件传输服务
+ftp             21/tcp   File Transfer Protocol
+ftp-data        20/tcp   FTP Data Transfer
+ftps            990/tcp  FTP over SSL
+sftp            115/tcp  SSH File Transfer Protocol
+tftp            69/udp   Trivial File Transfer Protocol
+rsync           873/tcp  Rsync file transfer
+rsync           873/udp  Rsync file transfer
+nfs             2049/tcp Network File System
+smb             445/tcp  SMB over TCP/IP
+smb             445/udp  SMB over TCP/IP
+afp             548/tcp  Apple Filing Protocol
+afp             548/udp  Apple Filing Protocol
+iscsi           3260/tcp iSCSI target
+webdav          80/tcp   WebDAV (HTTP-based file transfer)
+
+# 远程访问服务
+ssh             22/tcp   Secure Shell
+ssh             22/udp   Secure Shell
+telnet          23/tcp   Telnet
+telnet          23/udp   Telnet
+rdp             3389/tcp Microsoft Remote Desktop Protocol
+rdp             3389/udp Microsoft Remote Desktop Protocol
+vnc             5900/tcp Virtual Network Computing
+vnc-http        5800/tcp VNC Web Interface
+teamviewer      5938/tcp TeamViewer remote access
+anydesk         7070/tcp AnyDesk remote desktop
+citrix          1494/tcp Citrix Application
+x11             6000/tcp X Window System
+
+# DNS服务
+domain          53/tcp   Domain Name Server
+domain          53/udp   Domain Name Server
+mdns            5353/udp Multicast DNS
+llmnr           5355/udp Link-Local Multicast Name Resolution
+
+# 消息队列和中间件
+activemq        61616/tcp Apache ActiveMQ
+rabbitmq        5672/tcp RabbitMQ
+rabbitmq-mgmt   15672/tcp RabbitMQ Management
+kafka           9092/tcp Apache Kafka
+zookeeper       2181/tcp Apache ZooKeeper
+mqtt            1883/tcp MQTT (Message Queuing Telemetry Transport)
+mqtt-ssl        8883/tcp MQTT over SSL
+
+# 网络服务
+dhcp            67/udp   DHCP Server
+dhcp            68/udp   DHCP Client
+ntp             123/tcp  Network Time Protocol
+ntp             123/udp  Network Time Protocol
+snmp            161/tcp  Simple Network Management Protocol
+snmp            161/udp  Simple Network Management Protocol
+snmptrap        162/tcp  Simple Network Management Protocol Trap
+snmptrap        162/udp  Simple Network Management Protocol Trap
+syslog          514/udp  System Log
+ldap            389/tcp  Lightweight Directory Access Protocol
+ldaps           636/tcp  LDAP over SSL
+radius          1812/udp RADIUS Authentication Protocol
+radius-acct     1813/udp RADIUS Accounting Protocol
+kerberos        88/tcp   Kerberos Authentication
+kerberos        88/udp   Kerberos Authentication
+
+# VPN服务
+l2tp            1701/udp Layer 2 Tunneling Protocol
+pptp            1723/tcp Point-to-Point Tunneling Protocol
+openvpn         1194/tcp OpenVPN
+openvpn         1194/udp OpenVPN
+ipsec-nat-t     4500/udp IPsec NAT Traversal
+ipsec           500/udp  Internet Security Association and Key Management Protocol
+wireguard       51820/udp WireGuard VPN
+isakmp          500/udp  Internet Security Association and Key Management Protocol
+
+# 应用和游戏服务
+minecraft       25565/tcp Minecraft Game Server
+steamcmd        27015/tcp Steam Game Server
+steamcmd        27015/udp Steam Game Server
+discord         6463/tcp Discord Voice and Chat
+teamspeak       9987/udp TeamSpeak Voice Server
+mumble          64738/tcp Mumble Voice Chat
+mumble          64738/udp Mumble Voice Chat
+
+# IoT和监控服务
+mqtt            1883/tcp MQTT (IoT messaging)
+coap            5683/udp Constrained Application Protocol (IoT)
+rtsp            554/tcp  Real Time Streaming Protocol
+rtsp            554/udp  Real Time Streaming Protocol
+sip             5060/tcp Session Initiation Protocol (VoIP)
+sip             5060/udp Session Initiation Protocol (VoIP)
+sip-tls         5061/tcp SIP over TLS
+zabbix-agent    10050/tcp Zabbix Network Monitoring Agent
+zabbix-server   10051/tcp Zabbix Network Monitoring Server
+nagios          5666/tcp Nagios Remote Plugin Executor
+prometheus      9090/tcp Prometheus Monitoring System
+
+# 常见危险/后门服务
+backdoor-trojan 31337/tcp Back Orifice Trojan
+netbus          12345/tcp NetBus Trojan
+netbus-alt      12346/tcp NetBus Trojan alternate
+sub7            1243/tcp SubSeven Trojan
+sub7-alt        6711/tcp SubSeven Trojan alternate
+remote-anything 1234/tcp Remote Anything (potential backdoor)
+remote-anything 1234/udp Remote Anything (potential backdoor)
+shellshock      4444/tcp Common reverse shell port
+
+# 云服务和容器
+docker          2375/tcp Docker API (unencrypted)
+docker-s        2376/tcp Docker API (encrypted)
+kubernetes-api  6443/tcp Kubernetes API Server
+etcd            2379/tcp etcd client communication
+etcd-cluster    2380/tcp etcd server-to-server
+mesos-master    5050/tcp Apache Mesos Master
+consul          8500/tcp Consul
+vault           8200/tcp HashiCorp Vault
+nomad           4646/tcp HashiCorp Nomad
+
+# 版本控制系统
+git             9418/tcp Git Version Control
+svn             3690/tcp Subversion Version Control 
