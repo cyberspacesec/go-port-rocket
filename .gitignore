@@ -23,6 +23,14 @@ result.*
 !website/
 !website/**/*
 
+# 排除examples目录（示例文件和配置）
+!examples/
+!examples/**/*
+
+# 排除docs目录（文档文件）
+!docs/
+!docs/**/*
+
 # IDE 相关
 .idea/
 .vscode/
@@ -36,7 +44,7 @@ Thumbs.db
 
 # Go 相关
 /vendor/
-/go.sum
+# /go.sum - 应该包含在版本控制中
 
 # 临时文件
 *.tmp

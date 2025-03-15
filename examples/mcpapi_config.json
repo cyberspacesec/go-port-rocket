@@ -1,0 +1,11 @@
+{
+  "host": "0.0.0.0",
+  "port": 8080,
+  "jwt_secret": "your-jwt-secret-key-change-me",
+  "redis_addr": "localhost:6379",
+  "redis_password": "",
+  "redis_db": 0,
+  "max_workers": 10,
+  "queue_size": 100,
+  "enable_auth": true
+} 
