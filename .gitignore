@@ -19,15 +19,9 @@
 *.html
 result.*
 
-# 排除website目录中的文件（这些不会被忽略）
-!website/**/*.html
-!website/**/*.css
-!website/**/*.js
-!website/**/*.png
-!website/**/*.jpg
-!website/**/*.jpeg
-!website/**/*.gif
-!website/**/*.svg
+# 排除website目录（不忽略网站文件）
+!website/
+!website/**/*
 
 # IDE 相关
 .idea/
