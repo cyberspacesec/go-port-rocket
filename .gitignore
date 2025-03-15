@@ -1,0 +1,58 @@
+# 二进制文件
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/go-port-rocket
+
+# 测试二进制文件
+*.test
+*.out
+
+# 输出文件
+*.log
+*.txt
+*.json
+*.xml
+*.csv
+!website/**/*.html
+!website/**/*.css
+!website/**/*.js
+!website/**/*.png
+!website/**/*.jpg
+!website/**/*.jpeg
+!website/**/*.gif
+!website/**/*.svg
+*.html
+result.*
+
+# IDE 相关
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 操作系统相关
+.DS_Store
+Thumbs.db
+
+# Go 相关
+/vendor/
+/go.sum
+
+# 临时文件
+*.tmp
+*.temp
+
+# 备份文件和目录
+*_bak/
+*_bak.*
+*.bak
+*_backup/
+*_backup.*
+*.backup
+*_old/
+*_old.*
+*.old 
