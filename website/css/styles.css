@@ -597,4 +597,324 @@ footer {
 
 .demo-card .btn {
     align-self: center;
+}
+
+/* 新增：高级功能区域样式 */
+.advanced-features {
+    padding: 80px 0;
+    background-color: #f9fafb;
+}
+
+.advanced-features .section-description {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    font-size: 1.1rem;
+    color: #4a5568;
+}
+
+/* 协议解析区域样式 */
+.protocol-parsing {
+    padding: 80px 0;
+    background-color: #eef2ff;
+}
+
+.protocol-parsing .section-description {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    font-size: 1.1rem;
+    color: #4a5568;
+}
+
+.protocol-features {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.protocol-description {
+    flex: 1;
+    min-width: 300px;
+}
+
+.protocol-description h3 {
+    margin-bottom: 20px;
+    color: #2d3748;
+    font-size: 1.5rem;
+}
+
+.protocol-description p {
+    margin-bottom: 20px;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.protocol-list {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+.protocol-list li {
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.protocol-image {
+    flex: 1;
+    min-width: 300px;
+    text-align: center;
+}
+
+.protocol-screenshot {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.protocol-caption {
+    margin-top: 15px;
+    font-style: italic;
+    color: #718096;
+}
+
+.protocol-applications h3 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2d3748;
+    font-size: 1.5rem;
+}
+
+.application-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.application-card {
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
+    padding: 25px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.application-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.application-icon {
+    width: 60px;
+    height: 60px;
+    background-color: #ebf4ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.application-icon i {
+    font-size: 24px;
+    color: #4299e1;
+}
+
+.application-card h4 {
+    margin-bottom: 12px;
+    color: #2d3748;
+    font-size: 1.25rem;
+}
+
+.application-card p {
+    color: #4a5568;
+    line-height: 1.5;
+}
+
+/* 使用示例区域样式 */
+.usage-examples {
+    padding: 80px 0;
+    background-color: #f9fafb;
+}
+
+.usage-examples .section-description {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    font-size: 1.1rem;
+    color: #4a5568;
+}
+
+.examples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.example-card {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.example-card h3 {
+    margin-bottom: 15px;
+    color: #2d3748;
+    font-size: 1.25rem;
+}
+
+.example-card p {
+    margin-top: 15px;
+    color: #4a5568;
+}
+
+.example-card .code-block {
+    margin-bottom: 0;
+}
+
+/* 比较表格区域样式 */
+.comparison {
+    padding: 80px 0;
+}
+
+.comparison .section-description {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    font-size: 1.1rem;
+    color: #4a5568;
+}
+
+.comparison-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.comparison-table th, 
+.comparison-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+}
+
+.comparison-table th {
+    background-color: #f8fafc;
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.comparison-table tbody tr:nth-child(even) {
+    background-color: #f8fafc;
+}
+
+.comparison-table tbody tr:hover {
+    background-color: #edf2f7;
+}
+
+.text-success {
+    color: #48bb78;
+}
+
+.text-danger {
+    color: #f56565;
+}
+
+.comparison-note {
+    text-align: center;
+    font-style: italic;
+    color: #718096;
+}
+
+/* 对安装部分的增强样式 */
+.installation .section-description {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    font-size: 1.1rem;
+    color: #4a5568;
+}
+
+.install-option p {
+    margin-bottom: 15px;
+    color: #4a5568;
+}
+
+/* 文档区域增强样式 */
+.documentation .section-description {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    font-size: 1.1rem;
+    color: #4a5568;
+}
+
+/* 通用部分描述样式 */
+.section-description {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    font-size: 1.1rem;
+    color: #4a5568;
+}
+
+/* 响应式调整 */
+@media (max-width: 992px) {
+    .protocol-features {
+        flex-direction: column;
+    }
+    
+    .application-cards {
+        justify-content: space-around;
+    }
+    
+    .comparison-table th,
+    .comparison-table td {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .protocol-parsing,
+    .advanced-features,
+    .usage-examples,
+    .comparison {
+        padding: 60px 0;
+    }
+    
+    .application-card {
+        min-width: 100%;
+    }
+    
+    .examples-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .comparison-table th,
+    .comparison-table td {
+        padding: 6px 8px;
+        font-size: 0.8rem;
+    }
+}
+
+/* 增加页脚列的样式 */
+@media (min-width: 768px) {
+    .footer-links {
+        grid-template-columns: repeat(3, 1fr);
+    }
 } 
