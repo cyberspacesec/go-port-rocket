@@ -227,6 +227,8 @@ func runAPIServer(cmd *cobra.Command, args []string) {
 
 	fmt.Printf("3. 查看任务状态:\n   curl -s http://%s:%d/api/v1/scan/tasks/{task_id}\n\n", apiHost, apiPort)
 	fmt.Printf("4. 查看系统状态:\n   curl -s http://%s:%d/api/v1/system/status\n\n", apiHost, apiPort)
+	fmt.Println("📚 完整API文档请访问: https://cyberspacesec.github.io/go-port-rocket/docs/http-api.html")
+	fmt.Println()
 	fmt.Println("按 Ctrl+C 停止服务")
 	fmt.Println("------------------------------------------------------")
 

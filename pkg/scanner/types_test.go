@@ -116,7 +116,7 @@ func TestNewScanOptions(t *testing.T) {
 	assert.Equal(t, 3, opts.Retries)
 	assert.False(t, opts.Verbose)
 	assert.True(t, opts.ServiceProbe)
-	assert.True(t, opts.OSProbe)
+	assert.False(t, opts.EnableOS) // 修正字段名，并且默认应该是false
 	assert.True(t, opts.BannerProbe)
 }
 

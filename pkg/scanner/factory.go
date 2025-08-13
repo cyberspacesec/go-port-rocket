@@ -100,16 +100,42 @@ func (f *ScannerFactory) CreateScannerWithOptions(opts *ScanOptions) (*Scanner, 
 func QuickScan(target string, ports []int, scanType ScanType, timeout time.Duration, workers int) ([]ScanResult, error) {
 	factory := NewScannerFactory()
 
-	// 创建扫描选项
+	// 创建扫描选项 - 使用默认配置，不强制启用OS检测
 	opts := &ScanOptions{
 		Target:   target,
 		Ports:    joinPortsToString(ports),
 		ScanType: scanType,
 		Timeout:  timeout,
 		Workers:  workers,
-		EnableOS: true, // 启用OS检测
-		GuessOS:  true, // 启用OS猜测
+		EnableOS: false, // 默认禁用OS检测，避免超时问题
+		GuessOS:  false, // 默认禁用OS猜测
 	}
+
+	// 创建Scanner实例
+	scanner, err := factory.CreateScannerWithOptions(opts)
+	if err != nil {
+		return nil, fmt.Errorf("创建Scanner失败: %v", err)
+	}
+
+	// 执行扫描
+	ctx := context.Background()
+	scanResults, err := scanner.Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	// 转换结果类型
+	results := make([]ScanResult, len(scanResults))
+	for i, result := range scanResults {
+		results[i] = *result
+	}
+
+	return results, nil
+}
+
+// QuickScanWithOptions 使用完整选项的快速扫描函数
+func QuickScanWithOptions(opts *ScanOptions) ([]ScanResult, error) {
+	factory := NewScannerFactory()
 
 	// 创建Scanner实例
 	scanner, err := factory.CreateScannerWithOptions(opts)

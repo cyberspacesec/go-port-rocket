@@ -51,6 +51,30 @@ type ScanOptions struct {
 	OutputFile       string                   // 输出文件
 }
 
+// NewScanOptions 创建新的扫描选项，使用合理的默认值
+func NewScanOptions(target string, ports []int, scanType ScanType) *ScanOptions {
+	// 将端口数组转换为字符串
+	portsStr := joinPortsToString(ports)
+
+	return &ScanOptions{
+		Target:           target,
+		Ports:            portsStr,
+		ScanType:         scanType,
+		Timeout:          time.Second * 5, // 默认5秒超时
+		Workers:          100,             // 默认100个工作线程
+		RateLimit:        1000,            // 默认速率限制
+		Retries:          3,               // 默认重试3次
+		Verbose:          false,           // 默认不详细输出
+		ServiceProbe:     true,            // 默认启用服务探测
+		BannerProbe:      true,            // 默认启用Banner探测
+		EnableOS:         false,           // 默认禁用OS检测（避免超时）
+		EnableService:    false,           // 默认禁用服务检测（避免超时）
+		VersionIntensity: 0,               // 默认禁用版本检测
+		GuessOS:          false,           // 默认禁用OS猜测
+		LimitOSScan:      false,           // 默认不限制OS扫描
+	}
+}
+
 // ScanResult 扫描结果
 type ScanResult struct {
 	Port        int                    `json:"port"`                   // 端口号

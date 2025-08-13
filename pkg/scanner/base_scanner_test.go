@@ -50,7 +50,7 @@ func TestBaseScanner_ValidateOptions(t *testing.T) {
 			name: "empty target",
 			opts: &ScanOptions{
 				Target:  "",
-				Ports:   []int{80},
+				Ports:   "80",
 				Timeout: time.Second,
 			},
 			wantErr: true,
@@ -59,7 +59,7 @@ func TestBaseScanner_ValidateOptions(t *testing.T) {
 			name: "empty ports",
 			opts: &ScanOptions{
 				Target:  "127.0.0.1",
-				Ports:   []int{},
+				Ports:   "",
 				Timeout: time.Second,
 			},
 			wantErr: true,
@@ -68,7 +68,7 @@ func TestBaseScanner_ValidateOptions(t *testing.T) {
 			name: "zero timeout",
 			opts: &ScanOptions{
 				Target:  "127.0.0.1",
-				Ports:   []int{80},
+				Ports:   "80",
 				Timeout: 0,
 			},
 			wantErr: false, // Should set default timeout
@@ -77,7 +77,7 @@ func TestBaseScanner_ValidateOptions(t *testing.T) {
 			name: "zero workers",
 			opts: &ScanOptions{
 				Target:  "127.0.0.1",
-				Ports:   []int{80},
+				Ports:   "80",
 				Timeout: time.Second,
 				Workers: 0,
 			},
@@ -87,7 +87,7 @@ func TestBaseScanner_ValidateOptions(t *testing.T) {
 			name: "valid options",
 			opts: &ScanOptions{
 				Target:  "127.0.0.1",
-				Ports:   []int{80},
+				Ports:   "80",
 				Timeout: time.Second,
 				Workers: 10,
 			},
@@ -127,7 +127,7 @@ func TestBaseScanner_Scan(t *testing.T) {
 			name: "successful scan",
 			opts: &ScanOptions{
 				Target:  "127.0.0.1",
-				Ports:   []int{80},
+				Ports:   "80",
 				Timeout: time.Second,
 				Workers: 1,
 			},

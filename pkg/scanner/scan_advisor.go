@@ -209,10 +209,17 @@ func (sa *ScanAdvisor) GetOptimizedConfig() *ScanOptions {
 		optimized.Timeout = time.Second * 3
 	}
 
-	// 大规模扫描时禁用一些功能以提高速度
+	// 大规模扫描时建议禁用一些功能以提高速度，但不强制覆盖用户设置
+	// 只有当用户没有明确设置时才应用优化
 	if sa.portCount > 5000 {
-		optimized.EnableOS = false
-		optimized.VersionIntensity = 3
+		// 注意：这里不再强制覆盖用户的EnableOS设置
+		// 如果用户明确启用了OS检测，我们尊重用户的选择
+		// optimized.EnableOS = false  // 移除强制覆盖
+
+		// 只在用户没有设置版本检测强度时才优化
+		if sa.opts.VersionIntensity == 0 {
+			optimized.VersionIntensity = 3
+		}
 	}
 
 	return &optimized
