@@ -1,0 +1,3 @@
+[submodule "go-port-rocket-goat"]
+	path = go-port-rocket-goat
+	url = git@github.com:cyberspacesec/go-port-rocket-goat.git
