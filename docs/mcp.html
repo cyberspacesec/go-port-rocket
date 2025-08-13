@@ -241,6 +241,72 @@
                 </div>
             </section>
 
+            <section id="configuration" class="docs-section">
+                <h2>配置和安装</h2>
+
+                <h3>AI模型配置</h3>
+                <p>MCP支持多种AI模型，包括OpenAI和本地模型：</p>
+
+                <h4>配置OpenAI模型</h4>
+                <div class="code-block">
+                    <pre><code class="language-bash"># 设置API密钥
+export OPENAI_API_KEY="your-api-key-here"
+
+# 配置模型
+go-port-rocket mcp --config-model --type openai --model gpt-4 --api-key "your-key"</code></pre>
+                    <button class="copy-btn" data-clipboard-text="export OPENAI_API_KEY=&quot;your-api-key-here&quot;
+go-port-rocket mcp --config-model --type openai --model gpt-4 --api-key &quot;your-key&quot;">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h4>使用本地模型</h4>
+                <div class="code-block">
+                    <pre><code class="language-bash"># 配置本地模型（无需API密钥）
+go-port-rocket mcp --config-model --type local</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket mcp --config-model --type local">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>会话管理</h3>
+                <p>MCP支持会话管理，可以保持上下文和历史记录：</p>
+
+                <h4>创建新会话</h4>
+                <div class="code-block">
+                    <pre><code class="language-bash"># 启动新会话
+go-port-rocket mcp --start-session --model gpt-4
+
+# 输出示例：
+# 会话已创建: 550e8400-e29b-41d4-a716-446655440000</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket mcp --start-session --model gpt-4">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h4>使用指定会话</h4>
+                <div class="code-block">
+                    <pre><code class="language-bash"># 在指定会话中执行查询
+go-port-rocket mcp --session-id "550e8400-e29b-41d4-a716-446655440000" --query "扫描本地网络"</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket mcp --session-id &quot;550e8400-e29b-41d4-a716-446655440000&quot; --query &quot;扫描本地网络&quot;">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h4>导出和导入会话</h4>
+                <div class="code-block">
+                    <pre><code class="language-bash"># 导出会话
+go-port-rocket mcp --export-session --session-id "session-id" --output session.json
+
+# 导入会话
+go-port-rocket mcp --import session.json</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket mcp --export-session --session-id &quot;session-id&quot; --output session.json
+go-port-rocket mcp --import session.json">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </section>
+
             <section id="implementation" class="docs-section">
                 <h2>实现细节</h2>
                 

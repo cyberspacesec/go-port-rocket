@@ -2025,6 +2025,166 @@ func main() {
                     </button>
                 </div>
             </section>
+
+            <section id="best-practices" class="docs-section">
+                <h2>最佳实践</h2>
+
+                <h3>错误处理</h3>
+                <p>在使用Port Rocket API时，正确的错误处理非常重要：</p>
+                <div class="code-block">
+                    <pre><code class="language-go">package main
+
+import (
+    "fmt"
+    "log"
+    "time"
+
+    "github.com/cyberspacesec/go-port-rocket/pkg/scanner"
+    "github.com/cyberspacesec/go-port-rocket/pkg/utils"
+)
+
+func main() {
+    target := "example.com"
+
+    // 1. 验证目标地址
+    if err := utils.ValidateTarget(target); err != nil {
+        log.Fatalf("无效的目标地址: %v", err)
+    }
+
+    // 2. 验证端口范围
+    ports := "1-65535"
+    if err := utils.ValidatePortRange(ports); err != nil {
+        log.Fatalf("无效的端口范围: %v", err)
+    }
+
+    // 3. 验证超时时间
+    timeout := 5 * time.Second
+    if err := utils.ValidateTimeout(timeout); err != nil {
+        log.Fatalf("无效的超时时间: %v", err)
+    }
+
+    // 4. 创建扫描器时处理错误
+    scanner, err := scanner.NewScanner(&scanner.ScanOptions{
+        Target:   target,
+        Ports:    ports,
+        ScanType: scanner.ScanTypeTCP,
+        Timeout:  timeout,
+        Workers:  100,
+    })
+    if err != nil {
+        log.Fatalf("创建扫描器失败: %v", err)
+    }
+
+    // 5. 执行扫描时处理错误
+    results, err := scanner.Scan()
+    if err != nil {
+        log.Fatalf("扫描失败: %v", err)
+    }
+
+    fmt.Printf("扫描完成，发现 %d 个端口\n", len(results))
+}</code></pre>
+                    <button class="copy-btn" data-clipboard-text="package main
+
+import (
+    &quot;fmt&quot;
+    &quot;log&quot;
+    &quot;time&quot;
+
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/scanner&quot;
+    &quot;github.com/cyberspacesec/go-port-rocket/pkg/utils&quot;
+)
+
+func main() {
+    target := &quot;example.com&quot;
+
+    // 1. 验证目标地址
+    if err := utils.ValidateTarget(target); err != nil {
+        log.Fatalf(&quot;无效的目标地址: %v&quot;, err)
+    }
+
+    // 2. 验证端口范围
+    ports := &quot;1-65535&quot;
+    if err := utils.ValidatePortRange(ports); err != nil {
+        log.Fatalf(&quot;无效的端口范围: %v&quot;, err)
+    }
+
+    // 3. 验证超时时间
+    timeout := 5 * time.Second
+    if err := utils.ValidateTimeout(timeout); err != nil {
+        log.Fatalf(&quot;无效的超时时间: %v&quot;, err)
+    }
+
+    // 4. 创建扫描器时处理错误
+    scanner, err := scanner.NewScanner(&scanner.ScanOptions{
+        Target:   target,
+        Ports:    ports,
+        ScanType: scanner.ScanTypeTCP,
+        Timeout:  timeout,
+        Workers:  100,
+    })
+    if err != nil {
+        log.Fatalf(&quot;创建扫描器失败: %v&quot;, err)
+    }
+
+    // 5. 执行扫描时处理错误
+    results, err := scanner.Scan()
+    if err != nil {
+        log.Fatalf(&quot;扫描失败: %v&quot;, err)
+    }
+
+    fmt.Printf(&quot;扫描完成，发现 %d 个端口\n&quot;, len(results))
+}">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>性能优化</h3>
+                <p>以下是一些性能优化建议：</p>
+                <ul>
+                    <li><strong>合理设置并发数</strong>：根据目标网络和本地资源调整Workers数量</li>
+                    <li><strong>选择合适的扫描类型</strong>：SYN扫描比TCP扫描更快但需要特权</li>
+                    <li><strong>设置合理的超时时间</strong>：过短会漏检，过长会影响速度</li>
+                    <li><strong>使用端口范围</strong>：避免扫描不必要的端口</li>
+                </ul>
+
+                <h3>安全考虑</h3>
+                <ul>
+                    <li><strong>获得授权</strong>：确保有权限扫描目标网络</li>
+                    <li><strong>控制扫描强度</strong>：避免对目标造成过大负载</li>
+                    <li><strong>保护扫描结果</strong>：妥善处理敏感的扫描数据</li>
+                    <li><strong>遵守法律法规</strong>：确保扫描活动符合当地法律</li>
+                </ul>
+
+                <h3>集成建议</h3>
+                <div class="code-block">
+                    <pre><code class="language-go">// 推荐的项目结构
+project/
+├── main.go                 // 主程序入口
+├── config/
+│   └── config.go          // 配置管理
+├── scanner/
+│   ├── scanner.go         // 扫描器封装
+│   └── result.go          // 结果处理
+├── output/
+│   └── formatter.go       // 输出格式化
+└── utils/
+    └── helpers.go         // 工具函数</code></pre>
+                    <button class="copy-btn" data-clipboard-text="// 推荐的项目结构
+project/
+├── main.go                 // 主程序入口
+├── config/
+│   └── config.go          // 配置管理
+├── scanner/
+│   ├── scanner.go         // 扫描器封装
+│   └── result.go          // 结果处理
+├── output/
+│   └── formatter.go       // 输出格式化
+└── utils/
+    └── helpers.go         // 工具函数">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+            </section>
         </main>
     </div>
 

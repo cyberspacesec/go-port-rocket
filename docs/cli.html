@@ -530,8 +530,35 @@ docker run --rm --network host --cap-add=NET_RAW --cap-add=NET_ADMIN cyberspaces
                         <div class="shortcut-card">
                             <h4>API选项</h4>
                             <ul>
-                                <li><code>--host</code> - API服务监听地址</li>
-                                <li><code>--port</code> - API服务监听端口</li>
+                                <li><code>--host</code> - API服务监听地址 (默认: 0.0.0.0)</li>
+                                <li><code>--port</code> - API服务监听端口 (默认: 8080)</li>
+                                <li><code>--enable-auth</code> - 启用认证 (默认: true)</li>
+                                <li><code>--jwt-secret</code> - JWT密钥</li>
+                                <li><code>--redis-addr</code> - Redis服务器地址</li>
+                                <li><code>--max-workers</code> - 最大工作线程数 (默认: 10)</li>
+                                <li><code>--allow-inmemory</code> - 允许内存存储降级</li>
+                            </ul>
+                        </div>
+                        <div class="shortcut-card">
+                            <h4>发现选项</h4>
+                            <ul>
+                                <li><code>-n, --network</code> - 要扫描的网段</li>
+                                <li><code>--icmp</code> - 使用ICMP Ping (默认: true)</li>
+                                <li><code>--tcp</code> - 使用TCP Ping (默认: true)</li>
+                                <li><code>--arp</code> - 使用ARP扫描</li>
+                                <li><code>--ports</code> - TCP Ping端口 (默认: 80,443,22,445)</li>
+                                <li><code>-c, --concurrent</code> - 并发数 (默认: 100)</li>
+                            </ul>
+                        </div>
+                        <div class="shortcut-card">
+                            <h4>MCP选项</h4>
+                            <ul>
+                                <li><code>--query</code> - 自然语言查询</li>
+                                <li><code>--model</code> - AI模型名称 (默认: gpt-4)</li>
+                                <li><code>--type</code> - AI模型类型 (openai, local)</li>
+                                <li><code>--session-id</code> - 指定MCP会话ID</li>
+                                <li><code>--start-session</code> - 启动新会话</li>
+                                <li><code>--show-history</code> - 显示会话历史</li>
                             </ul>
                         </div>
                     </div>
@@ -830,6 +857,31 @@ docker run --rm --network host --cap-add=NET_RAW --cap-add=NET_ADMIN cyberspaces
                 <div class="code-block">
                     <pre><code class="language-bash">go-port-rocket discover -n 192.168.1.0/24 --icmp --tcp --ports 22,80,443</code></pre>
                     <button class="copy-btn" data-clipboard-text="go-port-rocket discover -n 192.168.1.0/24 --icmp --tcp --ports 22,80,443">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>使用 MCP (AI集成)</h3>
+                <p>使用自然语言进行端口扫描和安全分析：</p>
+                <div class="code-block">
+                    <pre><code class="language-bash">go-port-rocket mcp --query "扫描 scanme.nmap.org 的常用端口"</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket mcp --query &quot;扫描 scanme.nmap.org 的常用端口&quot;">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>启动 MCP 会话</h3>
+                <div class="code-block">
+                    <pre><code class="language-bash">go-port-rocket mcp --start-session --model gpt-4</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket mcp --start-session --model gpt-4">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <h3>查看 MCP 会话历史</h3>
+                <div class="code-block">
+                    <pre><code class="language-bash">go-port-rocket mcp --show-history --session-id "session-123"</code></pre>
+                    <button class="copy-btn" data-clipboard-text="go-port-rocket mcp --show-history --session-id &quot;session-123&quot;">
                         <i class="far fa-copy"></i>
                     </button>
                 </div>
