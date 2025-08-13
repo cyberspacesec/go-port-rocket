@@ -408,12 +408,8 @@ Content-Type: application/json
                 <p>响应示例：</p>
                 <div class="code-block">
                     <pre><code class="language-json">{
-  "status": "success",
-  "data": {
-    "task_id": "c91e0e9b-f869-4b15-a1cd-74e8c5afd8ca",
-    "status": "queued",
-    "created_at": "2023-06-15T10:15:30Z"
-  }
+  "task_id": "c91e0e9b-f869-4b15-a1cd-74e8c5afd8ca",
+  "status": "pending"
 }</code></pre>
                 </div>
 
@@ -809,21 +805,11 @@ Authorization: Bearer &lt;token&gt;</code></pre>
                 <p>响应示例：</p>
                 <div class="code-block">
                     <pre><code class="language-json">{
-  "status": "success",
-  "data": {
-    "version": "1.0.0",
-    "uptime": "12h 30m 15s",
-    "task_queue": {
-      "pending": 2,
-      "running": 1,
-      "completed": 150,
-      "failed": 5
-    },
-    "system_load": {
-      "cpu": 25.4,
-      "memory": 512.6
-    }
-  }
+  "queue_size": 2,
+  "worker_count": 8,
+  "running_tasks": 1,
+  "max_workers": 10,
+  "queue_capacity": 100
 }</code></pre>
                 </div>
 
