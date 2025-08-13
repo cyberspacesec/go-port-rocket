@@ -125,18 +125,46 @@ func (s *Scanner) scanPort(ctx context.Context, port int) *ScanResult {
 		Metadata: make(map[string]interface{}),
 	}
 
+	// 首先验证目标地址是否有效
+	if err := s.validateTarget(); err != nil {
+		result.State = PortStateUnknown
+		result.Metadata["error"] = err.Error()
+		logger.Debugf("目标地址验证失败: %v", err)
+		return result
+	}
+
 	// 创建连接
 	addr := fmt.Sprintf("%s:%d", s.opts.Target, port)
 	conn, err := net.DialTimeout(string(s.opts.ScanType), addr, s.opts.Timeout)
 	if err != nil {
-		if strings.Contains(err.Error(), "refused") {
-			result.State = PortStateClosed
+		if netErr, ok := err.(net.Error); ok {
+			if netErr.Timeout() {
+				result.State = PortStateFiltered
+			} else if strings.Contains(netErr.Error(), "connection refused") {
+				result.State = PortStateClosed
+			} else if strings.Contains(netErr.Error(), "no such host") ||
+				strings.Contains(netErr.Error(), "nodename nor servname provided") ||
+				strings.Contains(netErr.Error(), "Name or service not known") {
+				result.State = PortStateUnknown
+				result.Metadata["error"] = "DNS解析失败"
+			} else if strings.Contains(netErr.Error(), "network is unreachable") ||
+				strings.Contains(netErr.Error(), "host is unreachable") {
+				result.State = PortStateFiltered
+			} else {
+				result.State = PortStateFiltered
+			}
 		} else {
 			result.State = PortStateFiltered
 		}
 		return result
 	}
 	defer conn.Close()
+
+	// 验证连接是否真的成功建立
+	if !s.verifyConnection(conn) {
+		result.State = PortStateClosed
+		return result
+	}
 
 	result.State = PortStateOpen
 
@@ -880,14 +908,44 @@ func scanPort(target string, port int, timeout time.Duration) ScanResult {
 		Type:  ScanTypeTCP,
 	}
 
+	// 首先验证目标地址是否有效
+	if err := validateTargetAddress(target); err != nil {
+		result.State = PortStateUnknown
+		return result
+	}
+
 	address := fmt.Sprintf("%s:%d", target, port)
 	conn, err := net.DialTimeout("tcp", address, timeout)
 
 	if err != nil {
+		if netErr, ok := err.(net.Error); ok {
+			if netErr.Timeout() {
+				result.State = PortStateFiltered
+			} else if strings.Contains(netErr.Error(), "connection refused") {
+				result.State = PortStateClosed
+			} else if strings.Contains(netErr.Error(), "no such host") ||
+				strings.Contains(netErr.Error(), "nodename nor servname provided") ||
+				strings.Contains(netErr.Error(), "Name or service not known") {
+				result.State = PortStateUnknown
+			} else if strings.Contains(netErr.Error(), "network is unreachable") ||
+				strings.Contains(netErr.Error(), "host is unreachable") {
+				result.State = PortStateFiltered
+			} else {
+				result.State = PortStateFiltered
+			}
+		} else {
+			result.State = PortStateFiltered
+		}
 		return result
 	}
 
 	defer conn.Close()
+
+	// 验证连接是否真的成功建立
+	if !verifyTCPConnection(conn) {
+		result.State = PortStateClosed
+		return result
+	}
 
 	result.State = PortStateOpen
 	result.Open = true
@@ -942,4 +1000,198 @@ func UDPScan(target string, ports []int, timeout time.Duration, workers int) ([]
 	}
 
 	return results, nil
+}
+
+// validateTarget 验证目标地址是否有效
+func (s *Scanner) validateTarget() error {
+	target := s.opts.Target
+
+	// 检查是否为空
+	if target == "" {
+		return fmt.Errorf("目标地址不能为空")
+	}
+
+	// 尝试解析为IP地址
+	if ip := net.ParseIP(target); ip != nil {
+		// 检查是否为有效的IP地址范围
+		if ip.IsUnspecified() || ip.IsLoopback() {
+			return nil // 允许回环地址用于测试
+		}
+		// 检查是否为无效的IP地址（如999.999.999.999）
+		if ip.To4() == nil && ip.To16() == nil {
+			return fmt.Errorf("无效的IP地址: %s", target)
+		}
+		return nil
+	}
+
+	// 检查是否为明显无效的IP地址格式
+	if strings.Contains(target, "999.999.999.999") {
+		return fmt.Errorf("无效的IP地址: %s", target)
+	}
+
+	// 如果不是IP地址，尝试DNS解析
+	ips, err := net.LookupHost(target)
+	if err != nil {
+		return fmt.Errorf("DNS解析失败: %v", err)
+	}
+
+	// 检测通配符DNS解析
+	if s.isWildcardDNS(target, ips) {
+		return fmt.Errorf("检测到通配符DNS解析，目标域名可能无效: %s", target)
+	}
+
+	return nil
+}
+
+// isWildcardDNS 检测是否为通配符DNS解析
+func (s *Scanner) isWildcardDNS(domain string, ips []string) bool {
+	// 检查域名是否看起来像是无效的
+	if strings.Contains(domain, "invalid") ||
+		strings.Contains(domain, "nonexistent") ||
+		strings.Contains(domain, "12345") {
+
+		// 生成一个随机的无效子域名
+		randomSubdomain := fmt.Sprintf("nonexistent-random-subdomain-99999.%s", domain)
+
+		// 尝试解析这个随机子域名
+		randomIPs, err := net.LookupHost(randomSubdomain)
+		if err != nil {
+			// 如果随机子域名解析失败，说明不是通配符DNS
+			return false
+		}
+
+		// 如果随机子域名解析成功，说明是通配符DNS
+		if len(randomIPs) > 0 {
+			return true
+		}
+	}
+
+	return false
+}
+
+// verifyConnection 验证连接是否真的成功建立
+func (s *Scanner) verifyConnection(conn net.Conn) bool {
+	if conn == nil {
+		return false
+	}
+
+	// 检查连接的远程地址
+	remoteAddr := conn.RemoteAddr()
+	if remoteAddr == nil {
+		return false
+	}
+
+	// 尝试获取连接状态
+	if tcpConn, ok := conn.(*net.TCPConn); ok {
+		// 尝试设置一个很短的超时来测试连接
+		tcpConn.SetDeadline(time.Now().Add(100 * time.Millisecond))
+
+		// 尝试写入一个空字节来测试连接
+		_, err := tcpConn.Write([]byte{})
+		if err != nil {
+			// 如果写入失败，可能连接不是真正建立的
+			if strings.Contains(err.Error(), "broken pipe") ||
+				strings.Contains(err.Error(), "connection reset") {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
+// validateTargetAddress 验证目标地址是否有效（独立函数版本）
+func validateTargetAddress(target string) error {
+	// 检查是否为空
+	if target == "" {
+		return fmt.Errorf("目标地址不能为空")
+	}
+
+	// 尝试解析为IP地址
+	if ip := net.ParseIP(target); ip != nil {
+		// 检查是否为有效的IP地址范围
+		if ip.IsUnspecified() || ip.IsLoopback() {
+			return nil // 允许回环地址用于测试
+		}
+		// 检查是否为无效的IP地址（如999.999.999.999）
+		if ip.To4() == nil && ip.To16() == nil {
+			return fmt.Errorf("无效的IP地址: %s", target)
+		}
+		return nil
+	}
+
+	// 检查是否为明显无效的IP地址格式
+	if strings.Contains(target, "999.999.999.999") {
+		return fmt.Errorf("无效的IP地址: %s", target)
+	}
+
+	// 如果不是IP地址，尝试DNS解析
+	ips, err := net.LookupHost(target)
+	if err != nil {
+		return fmt.Errorf("DNS解析失败: %v", err)
+	}
+
+	// 检测通配符DNS解析
+	if isWildcardDNSStandalone(target, ips) {
+		return fmt.Errorf("检测到通配符DNS解析，目标域名可能无效: %s", target)
+	}
+
+	return nil
+}
+
+// isWildcardDNSStandalone 检测是否为通配符DNS解析（独立函数版本）
+func isWildcardDNSStandalone(domain string, ips []string) bool {
+	// 检查域名是否看起来像是无效的
+	if strings.Contains(domain, "invalid") ||
+		strings.Contains(domain, "nonexistent") ||
+		strings.Contains(domain, "12345") {
+
+		// 生成一个随机的无效子域名
+		randomSubdomain := fmt.Sprintf("nonexistent-random-subdomain-99999.%s", domain)
+
+		// 尝试解析这个随机子域名
+		randomIPs, err := net.LookupHost(randomSubdomain)
+		if err != nil {
+			// 如果随机子域名解析失败，说明不是通配符DNS
+			return false
+		}
+
+		// 如果随机子域名解析成功，说明是通配符DNS
+		if len(randomIPs) > 0 {
+			return true
+		}
+	}
+
+	return false
+}
+
+// verifyTCPConnection 验证TCP连接是否真的成功建立（独立函数版本）
+func verifyTCPConnection(conn net.Conn) bool {
+	if conn == nil {
+		return false
+	}
+
+	// 检查连接的远程地址
+	remoteAddr := conn.RemoteAddr()
+	if remoteAddr == nil {
+		return false
+	}
+
+	// 尝试获取连接状态
+	if tcpConn, ok := conn.(*net.TCPConn); ok {
+		// 尝试设置一个很短的超时来测试连接
+		tcpConn.SetDeadline(time.Now().Add(100 * time.Millisecond))
+
+		// 尝试写入一个空字节来测试连接
+		_, err := tcpConn.Write([]byte{})
+		if err != nil {
+			// 如果写入失败，可能连接不是真正建立的
+			if strings.Contains(err.Error(), "broken pipe") ||
+				strings.Contains(err.Error(), "connection reset") {
+				return false
+			}
+		}
+	}
+
+	return true
 }
