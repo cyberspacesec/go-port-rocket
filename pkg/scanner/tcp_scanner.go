@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/cyberspacesec/go-port-rocket/pkg/logger"
+	"github.com/cyberspacesec/go-port-rocket/pkg/utils"
 )
 
 // TCPScanner TCP扫描器
@@ -29,30 +30,20 @@ func (s *TCPScanner) scanPort(ctx context.Context, port int) (ScanResult, error)
 		return ScanResult{Port: port, State: PortStateUnknown}, err
 	}
 
-	addr := fmt.Sprintf("%s:%d", s.opts.Target, port)
-	conn, err := net.DialTimeout("tcp", addr, s.opts.Timeout)
-	if err != nil {
-		if netErr, ok := err.(net.Error); ok {
-			if netErr.Timeout() {
-				return ScanResult{Port: port, State: PortStateFiltered}, nil
-			}
-			// 检查是否是连接被拒绝错误
-			if strings.Contains(netErr.Error(), "connection refused") {
-				return ScanResult{Port: port, State: PortStateClosed}, nil
-			}
-			// 检查DNS解析失败
-			if strings.Contains(netErr.Error(), "no such host") ||
-				strings.Contains(netErr.Error(), "nodename nor servname provided") ||
-				strings.Contains(netErr.Error(), "Name or service not known") {
-				return ScanResult{Port: port, State: PortStateUnknown}, fmt.Errorf("DNS解析失败: %v", err)
-			}
-			// 检查网络不可达
-			if strings.Contains(netErr.Error(), "network is unreachable") ||
-				strings.Contains(netErr.Error(), "host is unreachable") {
-				return ScanResult{Port: port, State: PortStateFiltered}, nil
-			}
+	conn, netErr := utils.ConnectWithTimeout(s.opts.Target, port, s.opts.Timeout)
+	if netErr != nil {
+		switch netErr.Type {
+		case "timeout":
+			return ScanResult{Port: port, State: PortStateFiltered}, nil
+		case "refused":
+			return ScanResult{Port: port, State: PortStateClosed}, nil
+		case "dns_failed":
+			return ScanResult{Port: port, State: PortStateUnknown}, fmt.Errorf("DNS解析失败: %v", netErr.Err)
+		case "unreachable":
+			return ScanResult{Port: port, State: PortStateFiltered}, nil
+		default:
+			return ScanResult{Port: port, State: PortStateUnknown}, netErr
 		}
-		return ScanResult{Port: port, State: PortStateUnknown}, err
 	}
 	defer conn.Close()
 

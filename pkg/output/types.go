@@ -2,6 +2,8 @@ package output
 
 import (
 	"time"
+
+	"github.com/cyberspacesec/go-port-rocket/pkg/scanner"
 )
 
 // ScanResult 扫描结果
@@ -43,6 +45,51 @@ type Statistics struct {
 	ClosedPorts   int           // 关闭端口数
 	FilteredPorts int           // 被过滤端口数
 	ScanDuration  time.Duration // 扫描持续时间
+}
+
+// ScanReport 统一的扫描报告数据结构
+type ScanReport struct {
+	Target     string                `json:"target" xml:"target"`
+	ScanType   string                `json:"scan_type" xml:"scan_type"`
+	StartTime  time.Time             `json:"start_time" xml:"start_time"`
+	EndTime    time.Time             `json:"end_time" xml:"end_time"`
+	Duration   float64               `json:"duration" xml:"duration"`
+	Results    []*scanner.ScanResult `json:"results" xml:"results"`
+	Statistics *Statistics           `json:"statistics" xml:"statistics"`
+}
+
+// NewScanReport 创建新的扫描报告
+func NewScanReport(opts *Options, results []*scanner.ScanResult) *ScanReport {
+	return &ScanReport{
+		Target:     opts.Target,
+		ScanType:   opts.ScanType,
+		StartTime:  opts.StartTime,
+		EndTime:    opts.EndTime,
+		Duration:   opts.Duration.Seconds(),
+		Results:    results,
+		Statistics: calculateStatistics(results, opts.Duration),
+	}
+}
+
+// calculateStatistics 计算扫描统计信息
+func calculateStatistics(results []*scanner.ScanResult, duration time.Duration) *Statistics {
+	stats := &Statistics{
+		TotalPorts:   len(results),
+		ScanDuration: duration,
+	}
+
+	for _, result := range results {
+		switch result.State {
+		case "open":
+			stats.OpenPorts++
+		case "closed":
+			stats.ClosedPorts++
+		case "filtered":
+			stats.FilteredPorts++
+		}
+	}
+
+	return stats
 }
 
 // OutputFormat 输出格式

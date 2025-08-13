@@ -2,7 +2,10 @@ package scanner
 
 import (
 	"context"
+	"fmt"
+	"runtime"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/cyberspacesec/go-port-rocket/pkg/logger"
@@ -116,7 +119,7 @@ func (s *baseScanner) Scan(ctx context.Context, opts *ScanOptions) ([]ScanResult
 				continue
 			}
 			s.stats.Errors++
-			logger.Error("扫描端口 %d 时发生错误: %v", err.Port, err.Error)
+			fmt.Printf("⚠️  扫描端口 %d 时发生错误: %v\n", err.Port, err.Error)
 		}
 	}
 }
@@ -165,18 +168,51 @@ func (s *baseScanner) ValidateOptions(opts *ScanOptions) error {
 	if opts.Ports == "" {
 		return ErrInvalidPorts
 	}
+
+	// 解析端口数量用于智能参数调整
+	ports, err := parsePorts(opts.Ports)
+	if err != nil {
+		return err
+	}
+	portCount := len(ports)
+
+	// 设置默认超时时间（仅当用户未设置时）
 	if opts.Timeout <= 0 {
-		opts.Timeout = time.Second * 5
+		if portCount > 10000 {
+			opts.Timeout = time.Second * 2 // 大规模扫描使用较短超时
+		} else if portCount > 1000 {
+			opts.Timeout = time.Second * 3
+		} else {
+			opts.Timeout = time.Second * 5
+		}
 	}
+
+	// 智能调整工作线程数
 	if opts.Workers <= 0 {
-		opts.Workers = 100
+		opts.Workers = calculateOptimalWorkers(portCount)
+	} else {
+		// 只验证资源限制，不强制修改用户设置
+		maxWorkers := calculateMaxWorkers(portCount)
+		if opts.Workers > maxWorkers {
+			fmt.Printf("⚠️  警告: 工作线程数 %d 可能超出系统资源限制 (建议: %d)\n", opts.Workers, maxWorkers)
+			fmt.Printf("   如遇到问题，请考虑降低并发数或增加系统资源限制\n")
+		}
 	}
+
+	// 智能调整速率限制
 	if opts.RateLimit <= 0 {
-		opts.RateLimit = 1000
+		opts.RateLimit = calculateOptimalRateLimit(portCount, opts.Workers)
 	}
+
 	if opts.Retries < 0 {
 		opts.Retries = 3
 	}
+
+	// 验证资源限制
+	if err := validateSystemResources(opts.Workers, portCount); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -190,4 +226,90 @@ func (s *baseScanner) GetStats() *ScanStats {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	return s.stats
+}
+
+// calculateOptimalWorkers 根据端口数量计算最优工作线程数
+func calculateOptimalWorkers(portCount int) int {
+	cpuCount := runtime.NumCPU()
+
+	if portCount <= 100 {
+		return min(10, cpuCount*2)
+	} else if portCount <= 1000 {
+		return min(20, cpuCount*4)
+	} else if portCount <= 10000 {
+		return min(50, cpuCount*8)
+	} else {
+		// 大规模扫描，限制并发以避免资源耗尽
+		return min(100, cpuCount*10)
+	}
+}
+
+// calculateMaxWorkers 计算最大允许的工作线程数
+func calculateMaxWorkers(portCount int) int {
+	// 获取系统文件描述符限制
+	var rlimit syscall.Rlimit
+	if err := syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rlimit); err != nil {
+		logger.Warnf("无法获取文件描述符限制: %v", err)
+		return calculateOptimalWorkers(portCount) // 回退到最优值
+	}
+
+	// 保留一些文件描述符给系统使用
+	availableFDs := int(rlimit.Cur) - 100
+
+	// 每个工作线程可能同时打开的连接数（考虑重试）
+	maxConcurrentConnections := availableFDs / 2
+
+	// 根据端口数量和可用资源计算最大工作线程数
+	maxByPorts := portCount / 10 // 每10个端口一个线程
+	maxByResources := maxConcurrentConnections
+	maxByCPU := runtime.NumCPU() * 20 // CPU核心数的20倍
+
+	return min(min(maxByPorts, maxByResources), maxByCPU)
+}
+
+// calculateOptimalRateLimit 计算最优速率限制
+func calculateOptimalRateLimit(portCount, workers int) int {
+	if portCount <= 100 {
+		return 1000
+	} else if portCount <= 1000 {
+		return 500
+	} else if portCount <= 10000 {
+		return 200
+	} else {
+		// 大规模扫描，降低速率以避免被目标服务器限制
+		return 100
+	}
+}
+
+// validateSystemResources 验证系统资源是否足够
+func validateSystemResources(workers, portCount int) error {
+	// 检查文件描述符限制
+	var rlimit syscall.Rlimit
+	if err := syscall.Getrlimit(syscall.RLIMIT_NOFILE, &rlimit); err != nil {
+		logger.Warnf("无法获取文件描述符限制: %v", err)
+		return nil // 不阻止扫描，只是警告
+	}
+
+	// 估算需要的文件描述符数量
+	estimatedFDs := workers * 2 // 每个工作线程可能需要2个FD
+	if estimatedFDs > int(rlimit.Cur)-100 {
+		return fmt.Errorf("工作线程数过多，可能导致文件描述符耗尽 (需要: %d, 可用: %d)",
+			estimatedFDs, int(rlimit.Cur)-100)
+	}
+
+	// 检查内存使用估算
+	estimatedMemoryMB := (workers * portCount * 1024) / (1024 * 1024) // 粗略估算
+	if estimatedMemoryMB > 1024 {                                     // 超过1GB
+		logger.Warnf("扫描可能消耗大量内存 (估算: %d MB)，建议降低并发数或分批扫描", estimatedMemoryMB)
+	}
+
+	return nil
+}
+
+// min 返回两个整数中的较小值
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }

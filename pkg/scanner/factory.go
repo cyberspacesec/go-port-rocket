@@ -1,7 +1,9 @@
 package scanner
 
 import (
+	"context"
 	"fmt"
+	"time"
 )
 
 // ScannerFactory 扫描器工厂
@@ -76,4 +78,57 @@ func (f *ScannerFactory) IsScanTypeImplemented(scanType ScanType) bool {
 		}
 	}
 	return false
+}
+
+// CreateScannerWithOptions 使用选项创建扫描器
+func (f *ScannerFactory) CreateScannerWithOptions(opts *ScanOptions) (*Scanner, error) {
+	// 验证选项
+	if opts == nil {
+		return nil, fmt.Errorf("扫描选项不能为空")
+	}
+
+	// 检查扫描类型是否已实现
+	if !f.IsScanTypeImplemented(opts.ScanType) {
+		return nil, fmt.Errorf("扫描类型 %s 暂未实现", opts.ScanType)
+	}
+
+	// 创建Scanner实例
+	return NewScanner(opts)
+}
+
+// QuickScan 快速扫描函数，减少重复代码
+func QuickScan(target string, ports []int, scanType ScanType, timeout time.Duration, workers int) ([]ScanResult, error) {
+	factory := NewScannerFactory()
+
+	// 创建扫描选项
+	opts := &ScanOptions{
+		Target:   target,
+		Ports:    joinPortsToString(ports),
+		ScanType: scanType,
+		Timeout:  timeout,
+		Workers:  workers,
+		EnableOS: true, // 启用OS检测
+		GuessOS:  true, // 启用OS猜测
+	}
+
+	// 创建Scanner实例
+	scanner, err := factory.CreateScannerWithOptions(opts)
+	if err != nil {
+		return nil, fmt.Errorf("创建Scanner失败: %v", err)
+	}
+
+	// 执行扫描
+	ctx := context.Background()
+	scanResults, err := scanner.Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	// 转换结果类型
+	results := make([]ScanResult, len(scanResults))
+	for i, result := range scanResults {
+		results[i] = *result
+	}
+
+	return results, nil
 }

@@ -216,34 +216,19 @@ func (o *TextOutput) Write(results []*scanner.ScanResult) error {
 
 // Write 写入JSON输出
 func (o *JSONOutput) Write(results []*scanner.ScanResult) error {
-	output := struct {
-		Target     string                `json:"target"`
-		ScanType   string                `json:"scan_type"`
-		StartTime  time.Time             `json:"start_time"`
-		EndTime    time.Time             `json:"end_time"`
-		Duration   float64               `json:"duration"`
-		Results    []*scanner.ScanResult `json:"results"`
-		Statistics *Statistics           `json:"statistics"`
-	}{
-		Target:     o.opts.Target,
-		ScanType:   o.opts.ScanType,
-		StartTime:  o.opts.StartTime,
-		EndTime:    o.opts.EndTime,
-		Duration:   o.opts.Duration.Seconds(),
-		Results:    results,
-		Statistics: calculateStatistics(results, o.opts.Duration),
-	}
+	report := NewScanReport(o.opts, results)
 
 	encoder := json.NewEncoder(o.opts.Writer)
 	if o.opts.Pretty {
 		encoder.SetIndent("", "  ")
 	}
-	return encoder.Encode(output)
+	return encoder.Encode(report)
 }
 
 // Write 写入XML输出
 func (o *XMLOutput) Write(results []*scanner.ScanResult) error {
-	output := struct {
+	// 创建带XML标签的报告结构
+	type XMLScanReport struct {
 		XMLName    xml.Name              `xml:"ScanResult"`
 		Target     string                `xml:"target"`
 		ScanType   string                `xml:"scan_type"`
@@ -252,14 +237,17 @@ func (o *XMLOutput) Write(results []*scanner.ScanResult) error {
 		Duration   float64               `xml:"duration"`
 		Results    []*scanner.ScanResult `xml:"ports>port"`
 		Statistics *Statistics           `xml:"statistics"`
-	}{
-		Target:     o.opts.Target,
-		ScanType:   o.opts.ScanType,
-		StartTime:  o.opts.StartTime,
-		EndTime:    o.opts.EndTime,
-		Duration:   o.opts.Duration.Seconds(),
-		Results:    results,
-		Statistics: calculateStatistics(results, o.opts.Duration),
+	}
+
+	report := NewScanReport(o.opts, results)
+	xmlReport := XMLScanReport{
+		Target:     report.Target,
+		ScanType:   report.ScanType,
+		StartTime:  report.StartTime,
+		EndTime:    report.EndTime,
+		Duration:   report.Duration,
+		Results:    report.Results,
+		Statistics: report.Statistics,
 	}
 
 	encoder := xml.NewEncoder(o.opts.Writer)
@@ -267,7 +255,7 @@ func (o *XMLOutput) Write(results []*scanner.ScanResult) error {
 		encoder.Indent("", "  ")
 	}
 	fmt.Fprintf(o.opts.Writer, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-	return encoder.Encode(output)
+	return encoder.Encode(xmlReport)
 }
 
 // Write 写入HTML输出
@@ -1028,49 +1016,12 @@ func (o *HTMLOutput) Write(results []*scanner.ScanResult) error {
 		},
 	}
 
-	data := struct {
-		Target     string
-		ScanType   string
-		StartTime  time.Time
-		EndTime    time.Time
-		Duration   float64
-		Results    []*scanner.ScanResult
-		Statistics *Statistics
-	}{
-		Target:     o.opts.Target,
-		ScanType:   o.opts.ScanType,
-		StartTime:  o.opts.StartTime,
-		EndTime:    o.opts.EndTime,
-		Duration:   o.opts.Duration.Seconds(),
-		Results:    results,
-		Statistics: calculateStatistics(results, o.opts.Duration),
-	}
+	report := NewScanReport(o.opts, results)
 
 	tmpl, err := template.New("report").Funcs(funcMap).Parse(htmlTemplate)
 	if err != nil {
 		return fmt.Errorf("解析HTML模板失败: %v", err)
 	}
 
-	return tmpl.Execute(o.opts.Writer, data)
-}
-
-// calculateStatistics 计算扫描统计信息
-func calculateStatistics(results []*scanner.ScanResult, duration time.Duration) *Statistics {
-	stats := &Statistics{
-		TotalPorts:   len(results),
-		ScanDuration: duration,
-	}
-
-	for _, result := range results {
-		switch result.State {
-		case "open":
-			stats.OpenPorts++
-		case "closed":
-			stats.ClosedPorts++
-		case "filtered":
-			stats.FilteredPorts++
-		}
-	}
-
-	return stats
+	return tmpl.Execute(o.opts.Writer, report)
 }

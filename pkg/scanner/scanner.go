@@ -559,6 +559,14 @@ func ExecuteScan(opts *ScanOptions) ([]ScanResult, error) {
 		return nil, fmt.Errorf("解析端口范围失败: %v", err)
 	}
 
+	// 创建扫描建议器并提供建议
+	advisor, err := NewScanAdvisor(opts)
+	if err != nil {
+		logger.Warnf("无法创建扫描建议器: %v", err)
+	} else {
+		advisor.PrintSuggestions()
+	}
+
 	// 根据扫描类型执行不同的扫描
 	switch opts.ScanType {
 	case ScanTypeTCP:
@@ -812,36 +820,7 @@ func PrintResults(results []ScanResult) {
 
 // TCPScan 使用普通TCP连接进行扫描
 func TCPScan(target string, ports []int, timeout time.Duration, workers int) ([]ScanResult, error) {
-	// 创建Scanner实例
-	scanner, err := NewScanner(&ScanOptions{
-		Target:   target,
-		Ports:    joinPortsToString(ports),
-		ScanType: ScanTypeTCP,
-		Timeout:  timeout,
-		Workers:  workers,
-		EnableOS: true, // 启用OS检测
-		GuessOS:  true, // 启用OS猜测
-	})
-
-	if err != nil {
-		return nil, fmt.Errorf("创建Scanner失败: %v", err)
-	}
-
-	// 使用Scanner实例进行扫描
-	ctx := context.Background()
-	scanResults, err := scanner.Scan(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	// 转换结果类型
-	results := make([]ScanResult, len(scanResults))
-	for i, result := range scanResults {
-		// 直接转换指针类型为值类型
-		results[i] = *result
-	}
-
-	return results, nil
+	return QuickScan(target, ports, ScanTypeTCP, timeout, workers)
 }
 
 // joinPortsToString 将端口数组转换为端口范围字符串
