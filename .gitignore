@@ -1,62 +1,112 @@
-# 二进制文件
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-/go-port-rocket
 
-# 测试二进制文件
-*.test
-*.out
-
-# 输出文件
-*.log
-*.txt
-*.json
-*.xml
-*.csv
-*.html
-result.*
-
-# 排除website目录（不忽略网站文件）
-!website/
-!website/**/*
-
-# 排除examples目录（示例文件和配置）
-!examples/
-!examples/**/*
-
-# 排除docs目录（文档文件）
 !docs/
 !docs/**/*
-
-# IDE 相关
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-
-# 操作系统相关
-.DS_Store
-Thumbs.db
-
-# Go 相关
-/vendor/
+!examples/
+!examples/**/*
+!website/
+!website/**/*
 # /go.sum - 应该包含在版本控制中
-
+# Air live reload
+# Build output
+# Certificate files (for certificate-hacker)
+# Configuration files with sensitive data
+# Coverage reports
+# Database files
+# Debug files
+# Dependency directories (remove the comment below to include it)
+# Environment files
+# Go workspace file
+# Go 相关
+# IDE files
+# IDE 相关
+# Log files
+# MCP related
+# Nuclei templates (custom)
+# OS generated files
+# Output of the go coverage tool, specifically when used with LiteIDE
+# Profiling data
+# Submodule specific
+# Task runner
+# Temporary files
+# Test binary, built with `go test -c`
+# 排除docs目录（文档文件）
+# 排除examples目录（示例文件和配置）
+# 排除website目录（不忽略网站文件）
 # 临时文件
-*.tmp
-*.temp
-
+# 输出文件
+# 二进制文件
+# 操作系统相关
 # 备份文件和目录
-*_bak/
-*_bak.*
-*.bak
-*_backup/
-*_backup.*
+# 测试二进制文件
 *.backup
-*_old/
+*.bak
+*.crt
+*.csv
+*.db
+*.dll
+*.dylib
+*.exe
+*.exe~
+*.html
+*.json
+*.key
+*.log
+*.old # Binaries for programs and plugins
+*.out
+*.p12
+*.pem
+*.pprof
+*.prof
+*.so
+*.sqlite
+*.sqlite3
+*.swo
+*.swp
+*.temp
+*.test
+*.tmp
+*.txt
+*.xml
+*.yaml.bak
+*_backup.*
+*_backup/
+*_bak.*
+*_bak/
 *_old.*
-*.old 
+*_old/
+*~
+.DS_Store
+.Spotlight-V100
+.Trashes
+.air.toml
+.env
+.env.*.local
+.env.local
+.gitmodule.*
+.idea/
+.mcp/
+.vscode/
+/bin/
+/build/
+/cache/
+/dist/
+/go-port-rocket
+/tmp/
+/vendor/
+Taskfile.yml
+Thumbs.db
+config.json
+config.yaml
+config.yml
+coverage.html
+coverage.out
+coverage.txt
+debug
+debug.exe
+go.work
+result.*
+secrets.yaml
+secrets.yml
+templates-custom/
+tmp/
+vendor/
